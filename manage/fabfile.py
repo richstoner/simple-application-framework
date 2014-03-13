@@ -10,8 +10,8 @@ import os
 import pprint
 import ConfigParser
 
-from fabriccloud.base import *
 
+from fabriccloud.base import *
 
 def last():
     ''' Use the last target configuration saved
@@ -40,4 +40,9 @@ def save():
     parser.set('last', 'user', env.user)
     parser.set('last', 'provider', env.provider)
     parser.write(open('last.ini', 'w'))
+
+
+
+
+
 

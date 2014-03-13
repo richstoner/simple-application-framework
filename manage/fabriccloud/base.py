@@ -7,6 +7,8 @@ from frameworks import *
 from webservers import *
 from analysis import *
 
+
+
 #region fabric methods
 
 def update(verbose=False):
@@ -14,6 +16,19 @@ def update(verbose=False):
     '''
     _updatePackages(verbose)
     _upgradePackages(verbose)
+
+
+def rsync(verbose=False):
+    '''
+    '''
+    if 'p' not in env.keys():
+        env.p = _importProvider('')
+        env.provider = 'vagrant'
+        env.p.setDefaults()
+
+    env.p.sync()
+
+
 
 
 def info():

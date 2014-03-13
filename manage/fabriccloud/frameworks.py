@@ -1,6 +1,8 @@
 __author__ = 'stonerri'
 
+from fabric.contrib.files import *
 from base import *
+import os
 
 #region external commands - exposed to fabric
 
@@ -21,7 +23,14 @@ def installFlask(verbose=False):
              _python_cmd('pip install %s' % each_package, verbose)
 
 
+def enableFlaskApp(appname):
 
+    if exists(os.path.join('/vagrant/server', 'flaskapp', appname)):
+
+        print 'found'
+
+    else:
+        print 'invalid app name'
 
 
 

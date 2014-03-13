@@ -17,3 +17,7 @@ def setDefaults():
 
 def systemInformation():
     pass
+
+
+def sync():
+    print 'vagrant gets sync for free'
