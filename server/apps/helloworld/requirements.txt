@@ -1,0 +1,4 @@
+flask
+flask-oauth
+sqlalchemy
+gunicorn

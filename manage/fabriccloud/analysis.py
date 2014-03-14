@@ -39,7 +39,7 @@ def updateConda(verbose=False):
 
 
 def installRabbitMQ(verbose=False):
-    ''' Installs Celery, rabbitMQ, and flower
+    ''' Installs RabbitMQ
     '''
     with settings(warn_only=True):
 
@@ -53,19 +53,108 @@ def installRabbitMQ(verbose=False):
 
 
 
-def installCelery(verbose=False):
-    ''' Installs Celery, rabbitMQ, and flower
+
+def installElasticsearch(verbose=False):
+    ''' Installs elasticsearch
     '''
+
     with settings(warn_only=True):
 
         packages = [
-            'celery',
-            'flower'
+            'openjdk-7-jre-headless'
         ]
 
-        for each_package in packages:
-             _python_cmd('pip install %s' % each_package, verbose)
+        packagelist = ' '.join(packages)
 
+        _remote_cmd('sudo apt-get -y install %s' % packagelist, verbose)
+        _remote_cmd('wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.deb', verbose)
+        _remote_cmd('dpkg -i elasticsearch-1.0.1.deb', verbose)
+        _remote_cmd('sudo service elasticsearch start', verbose)
+
+
+
+def enableApp(appname):
+
+    if exists(os.path.join('/vagrant/server', 'apps', appname)):
+
+        #region nginx configuration
+
+        # link nginx site to sites-available & sites-enabled
+        nginx_source_path = os.path.join('/vagrant/server', 'apps', appname, 'nginx.conf')
+
+        if exists(nginx_source_path):
+
+            nginx_sites_avail = '/etc/nginx/sites-available/%s' % appname
+            nginx_sites_enable = '/etc/nginx/sites-enabled/%s' % appname
+
+            if exists(nginx_sites_enable) or exists(nginx_sites_avail):
+                print(red('%s already enabled' %appname))
+
+            else:
+
+                run('sudo ln -s %s %s' % (nginx_source_path, nginx_sites_avail))
+                run('sudo ln -s %s %s' % (nginx_source_path, nginx_sites_enable))
+
+            run('sudo service nginx configtest')
+            run('sudo service nginx restart')
+
+        #endregion
+
+
+
+        #region pip configuration
+
+        if exists(os.path.join('/vagrant/server', 'apps', appname, 'requirements.txt')):
+
+            _python_cmd('pip install -r %s' % os.path.join('/vagrant/server', 'apps', appname, 'requirements.txt'),
+                        True)
+
+
+        #endregion
+
+
+
+        #region supervisor configuration
+
+        supervisor_config = os.path.join('/vagrant/server', 'apps', appname, 'supervisor.conf')
+
+        if exists(supervisor_config):
+
+            supervisor_enable = '/etc/supervisor/conf.d/%s.conf' % appname
+
+            if exists(supervisor_enable):
+                print(red('%s super config already enabled' % appname))
+
+            else:
+                run('sudo ln -s %s %s' % (supervisor_config, supervisor_enable))
+
+            sudo('supervisorctl reread')
+            sudo('supervisorctl add %s' % appname)
+            sudo('supervisorctl stop %s' % appname)
+
+        #endregion
+
+    else:
+        print 'invalid app name'
+
+
+
+def disableApp(appname):
+
+    nginx_sites_avail = '/etc/nginx/sites-available/%s' % appname
+    nginx_sites_enable = '/etc/nginx/sites-enabled/%s' % appname
+    supervisor_enable = '/etc/supervisor/conf.d/%s.conf' % appname
+
+    links_to_remove = [nginx_sites_avail, nginx_sites_enable, supervisor_enable]
+
+    sudo('supervisorctl stop %s' % appname)
+    sudo('supervisorctl remove %s' % appname)
+
+    for link in links_to_remove:
+        sudo('rm %s' % link)
+
+    run('sudo service nginx configtest')
+    run('sudo service nginx restart')
 
 
 
@@ -93,7 +182,7 @@ def _remote_cmd(cmd, verbose=False):
 
 def _python_cmd(cmd, verbose=False):
 
-    with prefix('export PATH="~/miniconda/envs/server/bin:$PATH"'):
+    with prefix('export PATH="/home/flaskuser/miniconda/envs/server/bin:$PATH"'):
 
         if verbose:
             with settings(warn_only=True):

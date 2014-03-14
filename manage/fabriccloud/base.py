@@ -3,10 +3,8 @@ __author__ = 'stonerri'
 from fabric.api import *
 from fabric.colors import *
 
-from frameworks import *
 from webservers import *
 from analysis import *
-
 
 
 #region fabric methods
@@ -102,6 +100,28 @@ def configureSupervisor(verbose=False):
 
 
 
+def restartAll():
+
+    run('sudo service nginx restart')
+    run('sudo supervisorctl reload')
+
+
+
+def printssh():
+    ''' prints a simple ssh command to terminal & the clipboard
+    '''
+
+    print 'ssh -i %s ubuntu@%s' % (localkeypath, env.host_string)
+    local('echo "ssh -i %s ubuntu@%s" | pbcopy ' % (localkeypath, env.host_string))
+
+def printhttp():
+    ''' prints a simple http command to terminal & the clipboard
+    '''
+
+    print 'http://%s' % (env.host_string)
+    local('echo "http://%s" | pbcopy ' % (env.host_string))
+
+
 #endregion
 
 #region internal methods
@@ -134,6 +154,7 @@ def _remote_cmd(cmd, verbose=False):
 
 def _systemInformation():
 
+    print(green(_remote_cmd('whoami')))
     print(red(_remote_cmd('uname -a')))
     print(blue(_remote_cmd('lsb_release -a')))
 
