@@ -1,5 +1,9 @@
 __author__ = 'stonerri'
 
+from fabric.api import *
+from fabric.colors import *
+from fabric.contrib.files import *
+
 from base import *
 
 #region externals
