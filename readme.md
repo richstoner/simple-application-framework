@@ -1,4 +1,6 @@
-# Flask Application Framework
+# Simple Application Framework
+
+An easy way to deploy and manage python-based processes. Once setup, it's trivial to deploy a flask application to the host, handling nginx + supervisor + pip configuration along the way.
 
 #### source
 
