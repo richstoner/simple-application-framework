@@ -1,0 +1,176 @@
+[
+  {
+    "step": 0,
+    "title": "Identify lesion",
+    "classification": "lesion",
+    "type": "advanced",
+    "next": 1,
+    "options": []
+  },
+  {
+    "step": 1,
+    "title": "Identify normal skin",
+    "classification": "normal",
+    "type": "autopbn",
+    "next": 2,
+    "options": []
+  },
+  {
+    "step": 2,
+    "title": "Is the lesion entirely composed of one structure and one color?",
+    "classification": "lesion",
+    "type": "select",
+    "next": 4,
+    "options": [
+      {
+        "title": "Lines, Reticular",
+        "type": "select",
+        "options": []
+      },
+      {
+        "title": "Lines, Parallel",
+        "type": "select",
+        "options": [
+          {
+            "title": "Furrow",
+            "type": "select",
+            "options": []
+          },
+          {
+            "title": "Ridge",
+            "type": "select",
+            "options": []
+          },
+          {
+            "title": "Fibrillar",
+            "type": "select",
+            "options": []
+          }
+        ]
+      },
+      {
+        "title": "Clods",
+        "type": "select",
+        "options": [
+          {
+            "title": "Cobblestone Clods",
+            "type": "review",
+            "options": []
+          },
+          {
+            "title": "Regular (Round / Oval) Clods",
+            "type": "review",
+            "options": []
+          }
+        ]
+      },
+      {
+        "title": "Homogeneous",
+        "type": "review",
+        "options": []
+      },
+      {
+        "title": "No",
+        "type": "gotostep",
+        "value": 4,
+        "options": []
+      }
+    ]
+  },
+  {
+    "step": 3,
+    "title": "Do you see another recognizable pattern?",
+    "classification": "lesion",
+    "type": "select",
+    "next": 4,
+    "options": [
+      {
+        "title": "Peripheral reticular",
+        "classification": "lesion",
+        "type": "select",
+        "options": [
+          {
+            "title": "Central structureless",
+            "classification": "lesion",
+            "type": "select",
+            "options": []
+          },
+          {
+            "title": "Central clods",
+            "classification": "lesion",
+            "type": "select",
+            "options": []
+          }
+        ]
+      },
+      {
+        "title": "Peripheral clods",
+        "type": "select",
+        "options": [
+          {
+            "title": "Peripheral clods, central retricular",
+            "type": "select",
+            "options": []
+          },
+          {
+            "title": "Peripheral clods, central structureless",
+            "type": "select",
+            "options": []
+          },
+          {
+            "title": "Peripheral clods, central clods",
+            "type": "select",
+            "options": []
+          }
+        ]
+      },
+      {
+        "title": "Starbust",
+        "type": "select",
+        "options": []
+      },
+      {
+        "title": "No",
+        "type": "gotostep",
+        "value": 6,
+        "options": []
+      }
+    ]
+  },
+  {
+    "step": 4,
+    "title": "Are there any additional details you would like to add?",
+    "classification": "lesion",
+    "type": "choice",
+    "next": 4,
+    "options": [
+      {
+        "title": "Yes",
+        "type": "gotostep",
+        "value": 5,
+        "options": []
+      },
+      {
+        "title": "No",
+        "type": "gotostep",
+        "value": 6,
+        "options": []
+      }
+    ]
+  },
+  {
+    "step": 5,
+    "title": "Annotate remaining details",
+    "classification": "lesion",
+    "type": "selectpbn",
+    "next": 6,
+    "options": []
+  },
+  {
+    "step": 6,
+    "title": "Done annotating?",
+    "type": "end",
+    "default": "",
+    "options": []
+  }
+]

@@ -8,8 +8,8 @@ app = Flask(__name__)
 # add the celery tasks as an import
 import sys
 sys.path.append('../../tasks')
+from tasks import *
 
-from tasks import add
 import time
 import json
 
