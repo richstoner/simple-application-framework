@@ -94,9 +94,9 @@ def configureSupervisor(verbose=False):
     with settings(warn_only=True):
 
         put('config/supervisord.conf.web', 'supervisord.conf')
-        _remote_cmd('mv supervisord.conf /etc/supervisor/supervisord.conf', verbose)
-        _remote_cmd('service supervisor stop', verbose)
-        _remote_cmd('service supervisor start', verbose)
+        _remote_cmd('sudo mv supervisord.conf /etc/supervisor/supervisord.conf', verbose)
+        _remote_cmd('sudo service supervisor stop', verbose)
+        _remote_cmd('sudo service supervisor start', verbose)
 
 
 
