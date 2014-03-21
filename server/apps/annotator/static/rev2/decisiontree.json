@@ -11,7 +11,7 @@
     "step": 1,
     "title": "Identify normal skin",
     "classification": "normal",
-    "type": "autopbn",
+    "type": "rpdefine",
     "next": 2,
     "options": []
   },
@@ -24,8 +24,30 @@
     "options": [
       {
         "title": "Lines, Reticular",
-        "type": "select",
-        "options": []
+        "type": "review",
+        "options": [
+          {
+            "title": "Are there any additional details you would like to add?",
+            "type": "choice",
+            "options": [
+              {
+                "title": "Yes",
+                "type": "gotostep",
+                "value": 4
+              },
+              {
+                "title": "No",
+                "type": "gotostep",
+                "value": 3
+              },
+              {
+                "title": "Go Back",
+                "type": "gotostep",
+                "value": 2
+              }
+            ]
+          }
+        ]
       },
       {
         "title": "Lines, Parallel",
@@ -33,18 +55,84 @@
         "options": [
           {
             "title": "Furrow",
-            "type": "select",
-            "options": []
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 3
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
           },
           {
             "title": "Ridge",
-            "type": "select",
-            "options": []
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 3
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
           },
           {
             "title": "Fibrillar",
-            "type": "select",
-            "options": []
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 3
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -55,24 +143,90 @@
           {
             "title": "Cobblestone Clods",
             "type": "review",
-            "options": []
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 3
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
           },
           {
             "title": "Regular (Round / Oval) Clods",
             "type": "review",
-            "options": []
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 3
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       {
         "title": "Homogeneous",
         "type": "review",
-        "options": []
+        "options": [
+          {
+            "title": "Are there any additional details you would like to add?",
+            "type": "choice",
+            "options": [
+              {
+                "title": "Yes",
+                "type": "gotostep",
+                "value": 4
+              },
+              {
+                "title": "No",
+                "type": "gotostep",
+                "value": 3
+              },
+              {
+                "title": "Go Back",
+                "type": "gotostep",
+                "value": 2
+              }
+            ]
+          }
+        ]
       },
       {
         "title": "No",
         "type": "gotostep",
-        "value": 4,
+        "value": 3,
         "options": []
       }
     ]
@@ -92,14 +246,58 @@
           {
             "title": "Central structureless",
             "classification": "lesion",
-            "type": "select",
-            "options": []
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 3
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
           },
           {
             "title": "Central clods",
             "classification": "lesion",
-            "type": "select",
-            "options": []
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 3
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -109,25 +307,113 @@
         "options": [
           {
             "title": "Peripheral clods, central retricular",
-            "type": "select",
-            "options": []
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 3
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
           },
           {
             "title": "Peripheral clods, central structureless",
-            "type": "select",
-            "options": []
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 3
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
           },
           {
             "title": "Peripheral clods, central clods",
-            "type": "select",
-            "options": []
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 3
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       {
         "title": "Starbust",
-        "type": "select",
-        "options": []
+        "type": "review",
+        "options": [
+          {
+            "title": "Are there any additional details you would like to add?",
+            "type": "choice",
+            "options": [
+              {
+                "title": "Yes",
+                "type": "gotostep",
+                "value": 4
+              },
+              {
+                "title": "No",
+                "type": "gotostep",
+                "value": 3
+              },
+              {
+                "title": "Go Back",
+                "type": "gotostep",
+                "value": 2
+              }
+            ]
+          }
+        ]
       },
       {
         "title": "No",
@@ -139,35 +425,14 @@
   },
   {
     "step": 4,
-    "title": "Are there any additional details you would like to add?",
-    "classification": "lesion",
-    "type": "choice",
-    "next": 4,
-    "options": [
-      {
-        "title": "Yes",
-        "type": "gotostep",
-        "value": 5,
-        "options": []
-      },
-      {
-        "title": "No",
-        "type": "gotostep",
-        "value": 6,
-        "options": []
-      }
-    ]
-  },
-  {
-    "step": 5,
     "title": "Annotate remaining details",
     "classification": "lesion",
     "type": "selectpbn",
-    "next": 6,
+    "next": 5,
     "options": []
   },
   {
-    "step": 6,
+    "step": 5,
     "title": "Done annotating?",
     "type": "end",
     "default": "",

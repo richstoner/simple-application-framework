@@ -48,7 +48,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
         var olViewer = function(viewer_options) {
 
-            console.log('Creating OLViewer with opts', viewer_options, this);
+//            console.log('Creating OLViewer with opts', viewer_options, this);
 
             var self = this;
 
@@ -67,10 +67,10 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
 
             // annotations added that need to be saved
-            this.clearTemporary();
+            this.clearTemporaryAnnotations();
+
 
             // annotations previously saved
-
             this.saved_annotations = [];
 
             var styleFunction = (function() {
@@ -213,6 +213,15 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
               stroke: new ol.style.Stroke({color: '#fff', width: 2})
             });
 
+            var sStyle = new ol.style.Stroke({
+                color: 'rgba(255, 255, 255, 0.5)',
+                width: 2
+            });
+
+            var fStyle = new ol.style.Fill({
+                 color: 'rgba(0, 0, 255, 0.1)'
+            });
+
 
             this.map.on('postcompose', function(event) {
 
@@ -221,10 +230,23 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
               vectorContext.setImageStyle(imageStyle);
 
-//              vectorContext.drawFeature(self.featureListFromAnnotation(self.temporary_annotations));
-//
+              vectorContext.setFillStrokeStyle(fStyle, sStyle);
+
+//              vectorContext.drawMultiPointGeometry(
+//                  new ol.geom.MultiPoint(self.temporary_annotations.polygons), null);
+
               vectorContext.drawMultiPointGeometry(
-                  new ol.geom.MultiPoint(self.temporary_annotations.polygons), null);
+                  new ol.geom.MultiPoint(self.temporary_annotations.lines), null);
+
+//              vectorContext.drawLineStringGeometry(
+//                  new ol.geom.LineString(self.temporary_annotations.polygons), null);
+
+              vectorContext.drawLineStringGeometry(
+                  new ol.geom.LineString(self.temporary_annotations.lines), null);
+
+              vectorContext.drawPolygonGeometry(
+                  new ol.geom.Polygon([self.temporary_annotations.polygons]), null);
+
 
 
 //              vectorContext.drawMultiPolygonGeometry(
@@ -233,9 +255,13 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 ////              vectorContext.drawMultiPointGeometry(
 ////                  new ol.geom.MultiPoint(self.temporary_annotations.polygons), null);
 ////
-//              vectorContext.drawMultiPointGeometry(
-//                  new ol.geom.MultiPoint(self.temporary_annotations.lines), null);
-//
+
+
+//              vectorContext.drawMultiLineStringGeometry(
+//                  new ol.geom.MultiLineString(self.temporary_annotations.lines), null);
+
+//LineString
+
 
               self.map.requestRenderFrame();
             });
@@ -252,7 +278,6 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
             // this.map.on('moveend', onMoveEnd);
     
             // add zoom slider
-
 //            var zoomslider = new ol.control.ZoomSlider();
 //            this.map.addControl(zoomslider);
         }
@@ -279,9 +304,10 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
             },
 
-            hasSavedAnnotations : function() {
+            hasLayerAnnotations : function() {
                 return this.saved_annotations.length > 0;
             },
+
 
 
 
@@ -299,8 +325,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
                     af_feature.setGeometry(new ol.geom.Polygon([annotation.polygons]))
                     features_list.push(af_feature)
-                };
-
+                }
 
 				if (annotation.lines.length > 0) {
 
@@ -311,7 +336,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                     l_feature.setGeometry(new ol.geom.Polygon([annotation.lines]))
                     features_list.push(l_feature)
 
-                };
+                }
 
                 return features_list;
 
@@ -332,13 +357,13 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
             	// }
             	// var temporary_annotations = $rootScope.imageviewer.saveTemporaryAnnotations($scope.step_config.classification)
 
-            	console.log('temp', this.saved_annotations);
-
-            	this.clearTemporary();
+            	this.clearTemporaryAnnotations();
             },
 
             saveTemporaryAnnotations : function (classification){
                 // Moves the temporary annotation to the saved annotation state
+
+                console.log('Saving temporary annotation to SavedAnnotationList');
 
                 this.temporary_annotations.createdate = new Date().valueOf();
                 this.temporary_annotations.classification = classification
@@ -351,7 +376,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
                 this.saved_annotations.push(this.temporary_annotations)
 
-				this.clearTemporary();
+				this.clearTemporaryAnnotations();
             },
 
 
@@ -364,6 +389,8 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                 return s;
 
             },
+
+
 
             setAnnotations : function(annotations){
 
@@ -413,7 +440,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
             },
 
-            clearTemporary : function(){
+            clearTemporaryAnnotations : function(){
 
 				this.temporary_annotations = {
 	                polygons : [],
@@ -424,6 +451,12 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 	                createdate : -1
 	            };
 
+            },
+
+            clearLayerAnnotations : function(step){
+                console.log('clear?', step);
+                this.vector_source.clear();
+                this.saved_annotations = [];
             },
 
             acceptPainting : function(){
@@ -515,7 +548,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                     var canvas = event.context.canvas;
 
                     self.segmentannotator = new SLICSegmentAnnotator(canvas, {
-                        regionSize: 50,
+                        regionSize: 80,
                         container: document.getElementById('annotatorcontainer'),
                         backgroundColor: [0,0,0],
                         // annotation: 'annotation.png' // optional existing annotation data.
@@ -982,7 +1015,7 @@ var appController = derm_app.controller('ApplicationController', ['$scope', '$ro
         $rootScope.image_list = [];
         $rootScope.image_index = undefined;
 
-        var useRandomStart = false;
+        var useRandomStart = true;
         if(useRandomStart){
             $rootScope.startingIndex =  Math.floor(175 * Math.random());
         }
@@ -993,7 +1026,7 @@ var appController = derm_app.controller('ApplicationController', ['$scope', '$ro
 
         $timeout(function(){
             $rootScope.ApplicationInit();
-        }, 300);
+        }, 150);
 
 
         // main application, gives a bit of a delay before loading everything
@@ -1002,12 +1035,11 @@ var appController = derm_app.controller('ApplicationController', ['$scope', '$ro
              $rootScope.debug  = $location.url().indexOf('debug') > -1;
 
              // load subject list from the query
-             var shouldShuffle = false;
+             var shouldShuffle = true;
 
              imageList.fromDB(current_user, $rootScope.startingIndex, 10, shouldShuffle).then(function(d){
 
                 $rootScope.image_list = d;
-                console.log(d);
 
              });
 
@@ -1088,8 +1120,8 @@ var appController = derm_app.controller('ApplicationController', ['$scope', '$ro
 
 
 
-var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScope', '$timeout', '$sanitize', '$http',
-    function ($scope, $rootScope, $timeout, $sanitize, $http) {
+var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScope', '$timeout', '$sanitize', '$http', '$modal', '$log',
+    function ($scope, $rootScope, $timeout, $sanitize, $http, $modal, $log) {
 
         console.log('Initialized annotation tool.');
 
@@ -1115,7 +1147,7 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
         $scope.annotations = undefined;
 
-        $scope.magicwand_tolerance = 20;
+        $scope.magicwand_tolerance = 35;
         $scope.regionpaint_size = 70;
 
 
@@ -1153,7 +1185,7 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
                  });            		
 
             	
-            	console.log('annotations?', $scope.annotations);
+//            	console.log('annotations?', $scope.annotations);
             };
         });
 
@@ -1270,9 +1302,13 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
             // if we have the step config, use it to define next step
             if($scope.step_config){
 
-//                console.log($scope.step_config.next);
-                $scope.gotoStep($scope.step_config.next);
+                if($scope.step_config.next != $scope.step){
 
+                    $scope.gotoStep($scope.step_config.next);
+                }
+                else {
+                    console.log('already at this step');
+                }
             }
             else {
 
@@ -1322,119 +1358,271 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         }
 
 
-        $scope.resetStep = function(){
-
-        	$scope.clearPoints();
 
 
-            // if we're returning from a selectadvanced workflow, keep stack and add 
-            if ($scope.select_last){
-
-            	console.log('completed annotation');
-
-                $scope.select_stack.push($scope.select_last)
-
-               	console.log($scope.step_options);
-
-				$rootScope.imageviewer.saveSelectionStack($scope.select_stack);
-
-            	$scope.select_last = undefined;
 
 
+
+
+        // initial function when a step is loaded
+        $scope.loadStep = function(){
+
+            // get current step configuration
+            $scope.step_config = $scope.getCurrentStepConfig();
+
+            // clear viewer current and temporary annotations
+            $scope.clearStep();
+
+            // load previous annotations if there are any
+            var stepAnnotations = $scope.getStepAnnotations();
+
+            if (stepAnnotations) {
+
+                $rootScope.imageviewer.setAnnotations(stepAnnotations);
+
+                for(var i=0; i<stepAnnotations.length;i++){
+                    if(stepAnnotations[i].select.length > 0){
+                        $scope.select_stack = stepAnnotations[i].select;
+                    }
+                }
             }
             else {
 
-	            $scope.step_config = $scope.getCurrentStepConfig();
+                // this step doesn't have annotations, do appropriate step selection processing steps (aka auto)
 
-	            if ($scope.step_config.default != "") {
-					$rootScope.imageviewer.setDrawMode($scope.step_config.default);	
-	            }
-	            else {
-	            	$rootScope.imageviewer.setDrawMode('navigate');	
-	            }
 
-            	$scope.step_options = $scope.step_config.options;
-            	$scope.step_base = $scope.step_config.step;
-
-            	$scope.select_stack = [];	
             }
 
-            $scope.tool_bar_state = $scope.step_config.type; // load defaults, will adjust as navigating tree
+            // set imageviewer to current step configuration
+            if ($scope.step_config.default != "") {
+                $rootScope.imageviewer.setDrawMode($scope.step_config.default);
+            }
+            else {
+                $rootScope.imageviewer.setDrawMode('navigate');
+            }
+
+            // set some UI helpers
+            $scope.step_options = $scope.step_config.options;
+            $scope.step_base = $scope.step_config.step;
+
+
+            console.log('Finished loading step', $scope.step_config.step);
+
         }
+
+
+
+        $scope.clearStep = function(){
+
+
+            // if no annotations, do nothing.
+
+            // if only saved annotations, do nothing (for now)
+
+            // if stable imageviewer annotations, clear them
+
+//            $scope.clearStableAnnotations();
+
+            // if temporary imageviewer annotations, clear them
+            $scope.clearTempAnnotations();
+
+            // if stack exists, clear it
+            $scope.clearStackAnnotations();
+
+            // return to original step definition
+            $scope.tool_bar_state = $scope.step_config.type;
+
+        }
+
+
+
+
+
+
+
+
+
+
+        // saved annotations refers to the annotation stack maintained by this controller
+        $scope.clearSavedAnnotations = function(){
+
+
+
+        }
+
+        // this will clear the
+        $scope.clearStableAnnotations = function(){
+
+            $rootScope.imageviewer.clearLayerAnnotations();
+
+
+        }
+
+        // This will clear the image viewer temporary annotations
+        $scope.clearTempAnnotations = function(){
+
+            $rootScope.imageviewer.clearTemporaryAnnotations();
+
+        }
+
+        // This clears the selection stack for overall pattern
+        $scope.clearStackAnnotations = function(){
+
+            // clear the selection stack
+            $scope.select_stack = [];
+            $scope.select_last = undefined;
+            $scope.step_base = $scope.step_config.step;
+            $scope.step_options = $scope.step_config.options;
+
+        }
+
+
+        // This will save the current image viewer annotations to this controller
+        $scope.saveViewerAnnotations = function(){
+
+            if ($rootScope.imageviewer.hasTemporaryAnnotations()){
+
+                console.log('Saving temporary annotations to stable')
+
+                $rootScope.imageviewer.saveTemporaryAnnotations($scope.step_config.classification)
+
+            }
+
+
+            if ($rootScope.imageviewer.hasLayerAnnotations()){
+
+                console.log('Saving stable annotations to controller')
+
+                $scope.saveStepAnnotation($rootScope.imageviewer.getSavedAnnotations(), $scope.step);
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        $scope.resetStep = function(){
+//
+//            //
+//            if($scope.stepHasAnnotations($scope.step) || $rootScope.imageviewer.hasSavedAnnotations()){
+//
+//                $rootScope.imageviewer.clearTemporary();
+//                $rootScope.imageviewer.clearSaved()
+//
+//            }
+//            else {
+//
+//                $rootScope.imageviewer.clearTemporary();
+//
+//            }
+//
+//
+//
+//
+//            // if we're returning from a selectadvanced workflow, keep stack and add
+//            if ($scope.select_last){
+//
+//            	console.log('completed annotation');
+//
+//                $scope.select_stack.push($scope.select_last)
+//
+//               	console.log($scope.step_options);
+//
+//				$rootScope.imageviewer.saveSelectionStack($scope.select_stack);
+//
+//            	$scope.select_last = undefined;
+//
+//
+//            }
+//            else {
+//
+//                // not in selectadvanced, just reset things
+//
+//	            $scope.step_config = $scope.getCurrentStepConfig();
+//
+//	            if ($scope.step_config.default != "") {
+//					$rootScope.imageviewer.setDrawMode($scope.step_config.default);
+//	            }
+//	            else {
+//	            	$rootScope.imageviewer.setDrawMode('navigate');
+//	            }
+//
+//            	$scope.step_options = $scope.step_config.options;
+//            	$scope.step_base = $scope.step_config.step;
+//
+//            	$scope.select_stack = [];
+//            }
+//
+//            $scope.tool_bar_state = $scope.step_config.type; // load defaults, will adjust as navigating tree
+//        }
 
 
 
 
         $scope.gotoStep = function(step){
 
-            if (step >= 0 && step < $scope.totalSteps) {
+            if (step >= 0 && step < $scope.totalSteps-1) {
 
-            	if ($rootScope.imageviewer.hasSavedAnnotations()){
-            		$scope.saveStepAnnotation($rootScope.imageviewer.getSavedAnnotations(), $scope.step);
-                }
+                // pre step change transition
+                $scope.saveViewerAnnotations();
 
                 $scope.step = step;
-                $scope.resetStep();
 
-                var stepAnnotations = $scope.getStepAnnotations()
-                
-                console.log('step annotations', stepAnnotations);
-
-                if (stepAnnotations) {
-
-                	$rootScope.imageviewer.setAnnotations(stepAnnotations);	
-
-                	for(var i=0; i<stepAnnotations.length;i++){
-                		if(stepAnnotations[i].select.length > 0){
-                			$scope.select_stack = stepAnnotations[i].select;	
-                		}
-                	}
-                }
-                else {
-
-                    // this step doesn't have annotations, do appopriate step selection processing steps (aka auto)
-                    console.log($scope.step_config);
-
-                    if($scope.step_config.type == 'autopbn'){
-
-
-                        console.log('zoom to full size')
-
-                        $scope.runRegionPaint();
-
-
-
-                    }
-
-
-                }
-
+                $scope.loadStep();
 
             }
-            else if (step == $scope.totalSteps) {
-
+            else if (step == $scope.totalSteps-1) {
 
             	console.log($scope.getCurrentAnnotation());
 
             	var msg ={};
 
-
 				msg['user_id'] = $rootScope.user_id;
 				msg['annotation'] = $scope.getCurrentAnnotation()
 
-				// msg['image_id'] = $rootScope.u;
                 var self = this;
-                // interesting hack to get the UI to update without external scopy applys
 
                 var annotation_url = 'annotation/'
-
                 $http.post(annotation_url, msg).success(function(response){
 
-
-                	console.log(response);
+                	console.log('Post response:', response);
 
                 	$scope.step = -1;
-                	
+                    $scope.step_config = undefined;
+
+
                     // self.temporary_annotations.lines.push(response.point.click)
 
                     // // only store last two points if we're doing lines of symmetry
@@ -1443,9 +1631,9 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 	                   //  if(self.temporary_annotations.lines.length == 3){
 	                   //      self.temporary_annotations.lines.splice(0,1);
 	                   //  }
-	                    	
+
                     // };
-                    
+
                 });
 
 
@@ -1456,15 +1644,10 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
 
 
+// Point list / perimeter methods
 
-        $scope.startLines = function(){
-
-			$rootScope.imageviewer.setDrawMode('lines');
-
-        }
 
         $scope.startPointList = function(){
-
         	$scope.tool_bar_state = 'pldefine';
         	$rootScope.imageviewer.setDrawMode('pointlist');
         }
@@ -1472,20 +1655,14 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
 
 
-        $scope.startMagicWand = function(){
-            $scope.tool_bar_state = 'mwdefine';
-            $rootScope.imageviewer.setDrawMode('autofill');
-        }
 
-        $scope.acceptMagicWand = function(){
-            $scope.tool_bar_state = 'mwaccept';   
-        }
 
+// Paint by numbers methods
 
         $scope.startRegionPaint = function(){
 
         	$scope.tool_bar_state = 'rpdefine';
-            $rootScope.imageviewer.setDrawMode('paintbrush');	
+            $rootScope.imageviewer.setDrawMode('paintbrush');
         }
 
         $scope.runRegionPaint = function(){
@@ -1500,7 +1677,6 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 			$scope.tool_bar_state = 'rpreview';
             $rootScope.imageviewer.acceptPainting();
 
-
         }
 
         $scope.cancelRegionPaint = function(){
@@ -1511,28 +1687,156 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         	$scope.resetStep();
         }
 
-        $scope.clearPoints = function(){
-
-        	$rootScope.imageviewer.clearTemporary();
-        };
 
 
-		$scope.saveCurrentPointsAsPolygon = function(){
 
-		     if ($rootScope.applicationReady)
-		     {
-		     	var temporary_annotations = $rootScope.imageviewer.saveTemporaryAnnotations($scope.step_config.classification)
+// Magic wand methods
 
 
-                $scope.nextStep();
+        $scope.startMagicWand = function(){
+            $scope.tool_bar_state = 'mwdefine';
+            $rootScope.imageviewer.setDrawMode('autofill');
+        }
 
-//		     	$scope.resetStep();
-
-		        return temporary_annotations;
 
 
-		     }
-		}
+
+// Universal annotation methods
+
+
+        // converts a temporary annotation into a valid annotation in the imageviewer
+        $scope.acceptRegion = function(){
+
+            $rootScope.imageviewer.saveTemporaryAnnotations($scope.step_config.classification)
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        $scope.acceptMagicWand = function(){
+//            $scope.tool_bar_state = 'mwaccept';
+//        }
+
+
+
+
+
+
+
+
+
+
+
+//                $scope.resetStep();
+
+//                var stepAnnotations = $scope.getStepAnnotations()
+//
+//                console.log('step annotations', stepAnnotations);
+//
+//                if (stepAnnotations) {
+//
+//                	$rootScope.imageviewer.setAnnotations(stepAnnotations);
+//
+//                	for(var i=0; i<stepAnnotations.length;i++){
+//                		if(stepAnnotations[i].select.length > 0){
+//                			$scope.select_stack = stepAnnotations[i].select;
+//                		}
+//                	}
+//                }
+//                else {
+//
+//                    // this step doesn't have annotations, do appopriate step selection processing steps (aka auto)
+//                    console.log($scope.step_config);
+//
+//                    if($scope.step_config.type == 'autopbn'){
+//
+//
+//                        console.log('zoom to full size')
+//
+//                        $scope.runRegionPaint();
+//
+//
+//
+//                    }
+//
+//
+//                }
+
+//
+//            }
+
+//        }
+
+
+
+//        $scope.startLines = function(){
+//			$rootScope.imageviewer.setDrawMode('lines');
+//        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        $scope.clearPoints = function(){
+//
+//        	$rootScope.imageviewer.clearTemporary();
+//        };
+//
+//
+//        $scope.clearSavedPoints = function(step){
+//            $rootScope.imageviewer.clearSavedStep(step);
+//        }
+
+
+//
+//		$scope.saveCurrentPointsAsPolygon = function(){
+//
+//		     if ($rootScope.applicationReady)
+//		     {
+//
+//		     	var temporary_annotations = $rootScope.imageviewer.saveTemporaryAnnotations($scope.step_config.classification)
+//
+//                console.log('temp', temporary_annotations);
+//
+////                $scope.nextStep();
+//
+//                 $scope.resetStep();
+//
+//		        return temporary_annotations;
+//
+//		     }
+//		}
 
 
 
@@ -1566,31 +1870,78 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 				$rootScope.imageviewer.saveSelectionStack($scope.select_stack);
 	        	$scope.tool_bar_state = option_to_select.type;
 
-			}
-			else if (option_to_select.type == 'selectadvanced') {
-
-				$scope.select_last = select_single;
-
-				// $rootScope.imageviewer.saveSelectionStack($scope.select_stack);
-
-				$scope.step_options = option_to_select.options;
-				
-				$scope.step_base = $scope.step_base + '/' + (key+1);
-
-	        	$scope.tool_bar_state = option_to_select.type;
-
+                $scope.openModalWithOptions(option_to_select);
 
 			}
-			else if(option_to_select.type == 'next') {
+            else if (option_to_select.type == 'gotostep'){
 
-				console.log('proceeding to next step');
+                console.log(option_to_select.value);
+                $scope.gotoStep(option_to_select.value);
 
-				$scope.nextStep();
+            }
 
-			}
+
+//			else if (option_to_select.type == 'selectadvanced') {
+//
+//				$scope.select_last = select_single;
+//
+//				// $rootScope.imageviewer.saveSelectionStack($scope.select_stack);
+//
+//				$scope.step_options = option_to_select.options;
+//
+//				$scope.step_base = $scope.step_base + '/' + (key+1);
+//
+//	        	$scope.tool_bar_state = option_to_select.type;
+//
+//
+//			}
+//			else if(option_to_select.type == 'next') {
+//
+//				console.log('proceeding to next step');
+//
+//				$scope.nextStep();
+//
+//			}
 
 		}
 
+
+        var ModalInstanceCtrl = function ($scope, $modalInstance, options) {
+
+            $scope.base = options;
+            $scope.selectOption = function(opt){
+                $modalInstance.close(opt);
+            }
+
+        };
+
+
+
+        $scope.openModalWithOptions = function(options){
+
+            console.log(options)
+
+            $scope.modal_options = options.options[0]
+
+            var modalInstance = $modal.open({
+              templateUrl: 'myModalContent.html',
+              controller: ModalInstanceCtrl,
+              resolve: {
+                options: function () {
+                  return $scope.modal_options;
+                }
+              }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+
+                console.log(selectedItem)
+
+            }, function () {
+              $log.info('Modal dismissed at: ' + new Date());
+            });
+
+        }
 
         // state functions 
 
@@ -1607,6 +1958,13 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         }
 
 
+
+        // if there are any annotations, you can proceed
+        $scope.hasAnnotations = function(){
+            return ($scope.hasTemporaryAnnotations() || $scope.hasLayerAnnotations());
+        }
+
+
         //temporary annotations = points that need to be converted into a polygon
         $scope.hasTemporaryAnnotations = function(){
 
@@ -1618,12 +1976,10 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         }
 
         // saved annotations = points that have been converted... NOT TO BE CONFUSED WITH STEP annotations
-        $scope.hasSavedAnnotations = function(){
+        $scope.hasLayerAnnotations = function(){
             if ($rootScope.applicationReady)
             {
-            	console.log($rootScope.imageviewer.hasSavedAnnotations())
-
-                return $rootScope.imageviewer.hasSavedAnnotations();
+                return $rootScope.imageviewer.hasLayerAnnotations();
             }
             return false;
         }
@@ -1645,7 +2001,11 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 	            	}
 
 
-            	};
+            	}
+//                else {
+//                    console.log('annotation doesnt exist');
+//                }
+
             }
             return false;
         }

@@ -28,7 +28,8 @@ def sync():
         'manage/.git/',
         'manage/.vagrant/',
         'manage/.idea/',
-        'manage/.DS_Store'
+        'manage/.DS_Store',
+        'server/apps/annotator/venv'
     ]
 
     rsync_project('/vagrant', local_dir='../', exclude=exclude_list)

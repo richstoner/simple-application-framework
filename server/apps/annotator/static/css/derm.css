@@ -1,6 +1,6 @@
     body {
         background: #272822 !important;
-        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+        font-family: "Avenir", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
         font-weight: 300;
         color: #ccc;
     }
@@ -8,7 +8,7 @@
 
 
     h2, h3, h4 {
-        font-family: "HelveticaNeue-CondensedBold", Helvetica, Arial, sans-serif; 
+        font-family: "Avenir", "HelveticaNeue-CondensedBold", Helvetica, Arial, sans-serif;
         color: #fff;
     }
 
@@ -167,9 +167,10 @@
         /*margin-top: 3px;*/
         margin-bottom: 5px;
 
-        height: 85px;
-        width: 85px;
-        margin: 3px;
+        height: 90px;
+        width: 90px;
+        margin: 2px;
+        margin-left:3px;
         border: 1px solid #999;
 
         /*margin: 1px;*/
@@ -177,17 +178,25 @@
     }
 
     .optionimage {
-        height: 85px;
-        width: 85px;
+        height: 88px;
+        width: 88px;
     }
 
 
+    .lowertoolbar
+    {
+        padding: 2px;
+        margin: 5px;
+
+
+    }
 
     .btncontainer {
         max-height: 28px;
         max-width: 40px;
         float: left;
         margin-left: 4px;
+        background-color: #fff;
     }
 
     .btnimage {
@@ -196,7 +205,18 @@
 
     }
 
+    .btn:hover {
+        color: #eee;
+    }
 
+
+    .modal-content {
+        background-color: rgb(39, 40, 34);
+    }
+
+    .modal-body {
+        text-align: center;
+    }
 
 
 
@@ -233,7 +253,7 @@
         background: #000;
         color: #fff;
 
-        height: 40px;
+        height: 50px;
         font-weight: 300;
         padding: 6px;
         margin-top: 10px;
@@ -250,6 +270,7 @@
     }
 
     .isicuser {
+        margin-top: 8px;
 
     }
 
