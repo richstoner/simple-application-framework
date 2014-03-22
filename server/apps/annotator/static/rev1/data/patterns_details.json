@@ -1,0 +1,65 @@
+{
+	"pseudopod": {
+		"diagramUrl": "pattern_detail_set/v2/details/resized/pseudopod.png",
+		"defaultColor": "green",
+		"defaultShape": "poi"
+	},
+	"circle_in_circle":{
+		"diagramUrl": "pattern_detail_set/v2/details/resized/circle_in_circle.png", 
+		"defaultColor": "green",
+		"defaultShape": "circle"
+		
+	},
+	"blue_clods_ovoids_nest":{
+		"diagramUrl": "pattern_detail_set/v2/details/resized/blue_clods-blue_ovoid_nests.png", 
+		"defaultColor": "green",
+		"defaultShape": "poi"
+	},
+	"globule_in_globule":{
+		"diagramUrl": "pattern_detail_set/v2/details/resized/globule_in_globule.png",
+		"defaultColor": "green",
+		"defaultShape": "circle"
+		},
+	"networked":{
+		"diagramUrl": "pattern_detail_set/v2/details/resized/networked.png", 
+		"defaultColor": "green",
+		"defaultShape": "rect"
+	},
+	"grey_dots_peppering":{
+		"diagramUrl": "pattern_detail_set/v2/details/resized/grey_dots-peppering.png", 
+		"defaultColor": "green",
+		"defaultShape": "rect"
+	},
+	"parallel_lines":{
+		"diagramUrl": "pattern_detail_set/v2/details/resized/parallel_lines.png", 
+		"defaultColor": "yellow",
+		"defaultShape": "rect"
+	},
+	"radial_lines_central_dot-spoke-wheels":{
+		"diagramUrl": "pattern_detail_set/v2/details/resized/radial_lines_central_dot-spoke-wheels.png", 
+		"defaultColor": "orange",
+		"defaultShape": "rect"
+	},
+	"eraser_region":{
+		"diagramUrl": "pattern_detail_set/v2/details/resized/eraser.png", 
+		"defaultColor": "orange",
+		"defaultShape": "rect"
+	},
+	"ruler_region":{
+		"diagramUrl": "pattern_detail_set/v2/details/resized/Ruler-icon.png", 
+		"defaultColor": "orange",
+		"defaultShape": "rect"
+	},
+	"colored_fiducial":{
+		"diagramUrl": "pattern_detail_set/v2/details/resized/colored_stickers.png", 
+		"defaultColor": "orange",
+		"defaultShape": "rect"
+	},
+	"NA": {
+		"diagramUrl": "harald_toplevel_patterns/NA.png"
+	}
+}
+
+
+
+

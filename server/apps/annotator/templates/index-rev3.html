@@ -15,7 +15,7 @@
 <script type="text/javascript" src="static/js/pf-segmentation.js"></script>
 <script type="text/javascript" src="static/js/slic-segmentation.js"></script>
 <script type="text/javascript" src="static/js/segment-annotator.js"></script>
-<script type="text/javascript" src="static/js/dermapp-revise.js"></script>
+<script type="text/javascript" src="static/js/dermapp-rev3.js"></script>
 
 <link rel=stylesheet type=text/css href="static/css/ol.css"/>
 <link rel=stylesheet type=text/css href="static/css/derm.css"/>
@@ -53,10 +53,15 @@
                     <!-- </div> -->
 
                     <!--<div>-->
+
                         <div class="isichead">
                             <span class="isictitle pull-left">ISIC Annotation Tool</span>
-                            <span class="isicuser pull-right">User: {{g.user.user_email}}
-                                [<a href="{{ url_for('logout') }}">sign out</a>]</span>
+                                <span class="isicuser pull-right">
+                                    <a class="btn btn-mini btn-inverse"
+                                       href="{{ url_for('logout') }}">
+                                        Signed in as {{g.user.user_email}} (sign out)
+                                    </a>
+                                </span>
                             <div class="clearfix"></div>
                         </div>
 
@@ -66,36 +71,17 @@
 
 
                         <script type="text/ng-template" id="myModalContent.html" class="modalbase">
-                            <!--<div class="modal-header">-->
-                                <!--<h3>I'm a modal!</h3>-->
-                            <!--</div>-->
-                            <!--<div class="modal-body">-->
-                                <!--<h3>{{selected | json}}</h3>-->
-                                <!--<ul>-->
-                                    <!--<li ng-repeat="opt in options">-->
-                                        <!--<a ng-click="selected.option = opt">{{ opt.title }}</a>-->
-                                    <!--</li>-->
-                                <!--</ul>-->
-                                <!--Selected: <b>{{ selected.option.title }}</b>-->
-                            <!--</div>-->
                             <div class="modal-body">
 
                                 <div>{{base.title}}</div>
-                                <div class="btn-group">
+                                <div class="btn-group choiceoption" ng-repeat="opt in base.options">
                                     <div class="btn btn-primary"
-                                         ng-repeat="opt in base.options"
                                          ng-click="selectOption(opt)">
                                         {{opt.title}}
-
-
                                     </div>
 
                                 </div>
                             </div>
-                            <!--<div class="modal-footer">-->
-                                <!--<button class="btn btn-primary" ng-click="ok()">OK</button>-->
-                                <!--<button class="btn btn-warning" ng-click="cancel()">Cancel</button>-->
-                            <!--</div>-->
                         </script>
 
                     <div ng-class="showIfStep(-1) ? 'step-header step-active' : 'step-header'">
@@ -109,9 +95,20 @@
                             <div class="imagePreview">
                                 
                                 <div class="imagePreviewInner">
-                                    <div class="" ng-repeat="(key, value) in image_list">
-                                        <img class="imagethumb" ng-click='selectImage(key)' src="{{value.thumbnail}}"/>
+
+                                    <div class='wrapper' ng-repeat="(key, value) in image_list">
+
+                                        <img class="imagethumb" ng-click='selectImage(key)'
+                                             src="{{value.thumbnail}}"/>
+
+                                        <div class='description' ng-show="imageHasAnnotations(key)">
+
+                                            <p class='description_content'><i class="fa fa-check"></i></p>
+
+                                        </div>
+
                                     </div>
+
                                 </div>
                             </div>
 
@@ -195,10 +192,10 @@
                                       ng-click="clearStep()">
                                      <i class="fa fa-backward"></i></div>
 
-                                <div class="btn"
+                                <div class="btn btn-primary"
                                       ng-click="increaseParameter()">
                                      <i class="fa fa-chevron-up"></i></div>
-                                 <div class="btn"
+                                 <div class="btn btn-primary"
                                       ng-click="decreaseParameter()">
                                      <i class="fa fa-chevron-down"></i></div>
 
@@ -442,10 +439,21 @@
     {% raw %}
 
 
-      <div class="container">
+      <div class="container-fluid">
 
-          <div class="row">
-            <div class="span12">
+          <div class="row-fluid">
+              <div class="offset1 span10">
+                  <iframe src="//player.vimeo.com/video/89748248" width="100%" height="750px" frameborder="0" we
+                          bkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href="http://vimeo.com/89748248">ISIC Annotator - beta 3</a> from <a href="http://vimeo.com/wholeslide">Rich Stoner</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+              </div>
+
+
+          </div>
+
+
+
+          <div class="row-fluid">
+            <div class="offset1 span10">
               <h4>Pathology Image viewer for Whole Slide Images</h4>
               <p><a href="http://mskcc.digitalslidearchive.net">Pathology and Dermoscopic Lesion Viewer</a></p>
 

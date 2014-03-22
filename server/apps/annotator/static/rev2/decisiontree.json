@@ -38,7 +38,7 @@
               {
                 "title": "No",
                 "type": "gotostep",
-                "value": 3
+                "value": 5
               },
               {
                 "title": "Go Back",
@@ -69,7 +69,7 @@
                   {
                     "title": "No",
                     "type": "gotostep",
-                    "value": 3
+                    "value": 5
                   },
                   {
                     "title": "Go Back",
@@ -96,7 +96,7 @@
                   {
                     "title": "No",
                     "type": "gotostep",
-                    "value": 3
+                    "value": 5
                   },
                   {
                     "title": "Go Back",
@@ -123,7 +123,7 @@
                   {
                     "title": "No",
                     "type": "gotostep",
-                    "value": 3
+                    "value": 5
                   },
                   {
                     "title": "Go Back",
@@ -156,7 +156,7 @@
                   {
                     "title": "No",
                     "type": "gotostep",
-                    "value": 3
+                    "value": 5
                   },
                   {
                     "title": "Go Back",
@@ -183,7 +183,7 @@
                   {
                     "title": "No",
                     "type": "gotostep",
-                    "value": 3
+                    "value": 5
                   },
                   {
                     "title": "Go Back",
@@ -212,7 +212,7 @@
               {
                 "title": "No",
                 "type": "gotostep",
-                "value": 3
+                "value": 5
               },
               {
                 "title": "Go Back",
@@ -260,12 +260,12 @@
                   {
                     "title": "No",
                     "type": "gotostep",
-                    "value": 3
+                    "value": 5
                   },
                   {
                     "title": "Go Back",
                     "type": "gotostep",
-                    "value": 2
+                    "value": 3
                   }
                 ]
               }
@@ -288,12 +288,12 @@
                   {
                     "title": "No",
                     "type": "gotostep",
-                    "value": 3
+                    "value": 5
                   },
                   {
                     "title": "Go Back",
                     "type": "gotostep",
-                    "value": 2
+                    "value": 3
                   }
                 ]
               }
@@ -321,12 +321,12 @@
                   {
                     "title": "No",
                     "type": "gotostep",
-                    "value": 3
+                    "value": 5
                   },
                   {
                     "title": "Go Back",
                     "type": "gotostep",
-                    "value": 2
+                    "value": 3
                   }
                 ]
               }
@@ -348,12 +348,12 @@
                   {
                     "title": "No",
                     "type": "gotostep",
-                    "value": 3
+                    "value": 5
                   },
                   {
                     "title": "Go Back",
                     "type": "gotostep",
-                    "value": 2
+                    "value": 3
                   }
                 ]
               }
@@ -375,12 +375,12 @@
                   {
                     "title": "No",
                     "type": "gotostep",
-                    "value": 3
+                    "value": 5
                   },
                   {
                     "title": "Go Back",
                     "type": "gotostep",
-                    "value": 2
+                    "value": 3
                   }
                 ]
               }
@@ -404,12 +404,12 @@
               {
                 "title": "No",
                 "type": "gotostep",
-                "value": 3
+                "value": 5
               },
               {
                 "title": "Go Back",
                 "type": "gotostep",
-                "value": 2
+                "value": 3
               }
             ]
           }
@@ -418,7 +418,7 @@
       {
         "title": "No",
         "type": "gotostep",
-        "value": 6,
+        "value": 5,
         "options": []
       }
     ]
@@ -435,6 +435,7 @@
     "step": 5,
     "title": "Done annotating?",
     "type": "end",
+    "next": 6,
     "default": "",
     "options": []
   }

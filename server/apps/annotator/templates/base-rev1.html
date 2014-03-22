@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+{% if g.user %}
+{% raw %}
+<html lang="en" ng-app="DermApp">
+{% endraw %}
+{% else %}
+<html lang="en">
+{% endif %}
+<head>
+	<meta charset="utf-8">
+	<title>DERMAnnotator Revised</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+    <link rel=stylesheet type=text/css
+          href="static/rev1/flatstrap/assets/css/bootstrap.min.css">
+
+    <link rel=stylesheet type=text/css href="static/rev1/flatstrap/assets/css/bootstrap-responsive.min.css">
+
+	<style type="text/css">
+		body {
+            margin: 0px;
+            padding: 0px;
+
+            /*padding-top: 5px;*/
+            /*padding-bottom: 10px;*/
+        }
+
+        .container-fluid {
+            padding: 0px !important;
+        }
+
+        /*.topBar {*/
+            /*height: 20px !important;*/
+            /*padding: 5px !important;*/
+            /*padding-left: 10px !important;*/
+            /*border-bottom: #bbb 1px solid;*/
+        /*}*/
+
+/*        .topBar a {
+            color: #ccc;
+        }
+*/
+
+        .settingsDropDown {
+
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            height: 40px;
+            z-index: 6000;
+
+        }
+
+      #note {
+            position: absolute;
+            z-index: 6001;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #fde073;
+            text-align: center;
+            line-height: 2.5;
+            overflow: hidden;
+            -webkit-box-shadow: 0 0 5px black;
+            -moz-box-shadow:    0 0 5px black;
+            box-shadow:         0 0 5px black;
+        }
+
+
+	</style>
+
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+    <link rel=stylesheet type=text/css href="static/rev1/font-awesome/css/font-awesome.css">
+
+	<!-- Le fav and touch icons -->
+	<link rel="shortcut icon" href="http://twitter.github.com/bootstrap/assets/images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="http://twitter.github.com/bootstrap/assets/images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="http://twitter.github.com/bootstrap/assets/images/apple-touch-icon-114x114.png">
+
+
+    <script src="static/rev1/js/jquery.min.js"></script>
+    <script src="static/rev1/bootstrap/js/bootstrap.min.js"></script>
+
+
+
+
+    {% block head %}
+
+    {% endblock %}
+
+</head>
+
+<body>
+
+
+        {% with errors = get_flashed_messages() %}
+
+            {% if errors %}
+
+                <div id="note">
+                   {% for message in errors %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+
+              <script>
+               $("#note").delay(1000).fadeOut(500);
+              </script>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+    <div class="settingsDropDown">
+
+    {% if g.user %}
+
+    {% endif %}
+
+        <div class="dropup">
+            <button class="btn btn-large btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;<span class="caret"></span></button>
+            <ul class="dropdown-menu">
+
+                    {% if g.user %}
+
+                        {% if g.user.user_role == 'admin' %}
+                            <li><a>Signed in as {{ g.user.user_email }}</a></li>
+                            <li><a>You are an Admin</a></li>
+                            <li class="divider"></li>
+                            <li><a href="admin">Admin page</a></li>
+                            <li><a href="test">API test page</a></li>
+                            <li class="divider"></li>
+                        {% endif %}
+
+                        <li><a href="/profile"><i class="icon-cog"></i> Preferences</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{{ url_for('logout') }}"><i class="icon-off"></i> Logout</a></li>
+                    </ul>
+
+                    {% else %}
+                    <li><a href="{{ url_for('login') }}">Sign in with Google</a></li>
+                    
+                    {% endif %}
+            </ul>
+        </div>
+
+    </div>
+
+
+	<div>
+
+
+		{% block body %}
+
+
+
+        {% endblock %}
+
+	</div>
+
+
+
+
+
+    {% block postjs %}
+
+    {% endblock %}
+
+</body>
+
+</html>
+
+

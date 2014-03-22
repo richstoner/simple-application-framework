@@ -63,7 +63,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
             this.last_click_location = undefined;
             this.last_job_id = undefined;
-            this.fill_tolerance = 20;
+            this.fill_tolerance = 50;
 
 
             // annotations added that need to be saved
@@ -1147,7 +1147,7 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
         $scope.annotations = undefined;
 
-        $scope.magicwand_tolerance = 35;
+        $scope.magicwand_tolerance = 50;
         $scope.regionpaint_size = 70;
 
 
@@ -1614,6 +1614,8 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
                 var self = this;
 
+
+
                 var annotation_url = 'annotation/'
                 $http.post(annotation_url, msg).success(function(response){
 
@@ -1622,6 +1624,15 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
                 	$scope.step = -1;
                     $scope.step_config = undefined;
 
+
+                    var c_count = 0;
+                    for(var i = 0; i < $scope.annotations.length; i++){
+                        if(Object.keys($scope.annotations[i].step).length >0){
+                            c_count += 1
+                        }
+                    }
+
+                    $scope.completedImages = c_count;
 
                     // self.temporary_annotations.lines.push(response.point.click)
 
@@ -1933,9 +1944,13 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
               }
             });
 
-            modalInstance.result.then(function (selectedItem) {
+            modalInstance.result.then(function (selectedOption) {
 
-                console.log(selectedItem)
+                console.log(selectedOption);
+
+                // assuming we have steps to go to
+
+                $scope.gotoStep(selectedOption.value);
 
             }, function () {
               $log.info('Modal dismissed at: ' + new Date());
@@ -1964,6 +1979,18 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
             return ($scope.hasTemporaryAnnotations() || $scope.hasLayerAnnotations());
         }
 
+        $scope.imageHasAnnotations = function(index){
+
+            if ($rootScope.applicationReady)
+            {
+                var current_annotation = $scope.annotations[index];
+
+                if(current_annotation){
+                    return (Object.keys(current_annotation.step).length > 0);
+                }
+            }
+            return false;
+        }
 
         //temporary annotations = points that need to be converted into a polygon
         $scope.hasTemporaryAnnotations = function(){

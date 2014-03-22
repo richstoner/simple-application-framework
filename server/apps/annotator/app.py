@@ -142,7 +142,160 @@ def index():
 
     if g.user is not None:
         print g.user
-    return render_template('index-revise.html')
+    return render_template('index-rev4.html')
+
+
+@app.route('/rev1')
+def index_rev1():
+
+    result = add.delay(4, 1)
+
+    if g.user is not None:
+        print g.user
+    return render_template('index-rev1.html')
+
+
+
+@app.route('/rev3')
+def index_rev3():
+
+    result = add.delay(4, 3)
+
+    if g.user is not None:
+        print g.user
+    return render_template('index-rev3.html')
+
+
+@app.route('/rev4')
+def index_rev4():
+
+    result = add.delay(4, 3)
+
+    if g.user is not None:
+        print g.user
+    return render_template('index-rev4.html')
+
+
+
+@app.route('/fillrev1', methods=['GET', 'POST'])
+def fill_rev1():
+
+    msg = {}
+    msg['status'] = 'start'
+
+    if request.method == 'GET':
+        print 'get test'
+
+    elif request.method == 'POST':
+        # import pprint
+        # pprint.pprint(json.loads(request.data))
+
+        opdata = json.loads(request.data)
+
+        import cv2
+        import urllib
+        import numpy as np
+
+        print opdata['image']['url']
+
+        req = urllib.urlopen(opdata['image']['url'])
+        arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
+        img = cv2.imdecode(arr,-1) # 'load it as it is'
+        # imgray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+        h, w = img.shape[:2]
+        mask = np.zeros((h+2, w+2), np.uint8)
+
+        lo = 60
+        hi = 80
+
+        # lo = 30
+        # hi = 100
+
+        connectivity = 4
+        flags = connectivity
+        flags |= cv2.FLOODFILL_FIXED_RANGE
+
+        seed_pt = (int(opdata['click']['relative'][0] * w), int(opdata['click']['relative'][1] * h))
+
+        print 'seed', seed_pt
+
+        cv2.floodFill(img, mask, seed_pt, (255,190,00), (lo,lo,lo), (hi,hi,hi), flags)
+
+        # imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+        # ret,thresh = cv2.threshold(imgray,127,255,0)
+
+        cv2.circle(img, seed_pt, 2, (0, 0, 255), -1)
+
+        contours = cv2.findContours(mask,cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+        # cv2.drawContours(image, contours, contourIdx, color[, thickness[, lineType[, hierarchy[, maxLevel[, offset]]]]]) None
+
+        cv2.drawContours(img, contours[0], 0, (255,0,0), 1, 8)
+        cv2.imwrite('output.jpg', img)
+
+        class NumPyArangeEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, np.ndarray):
+                    return obj.tolist() # or map(int, obj)
+                return json.JSONEncoder.default(self, obj)
+        print len(contours[0][0])
+
+        outer = json.dumps(contours[0][0], cls=NumPyArangeEncoder)
+        # inner = json.dumps(contours[0][1], cls=NumPyArangeEncoder)
+
+        del img, mask
+
+
+        msg['contour'] = {
+            'outer' : outer
+            # 'inner' : inner
+        }
+
+
+        # the points are now relative to the subimage we've obtained them from
+        # so we need to scale it back up
+
+
+        # divide subimage actual by what it is natively
+        inverse_rel_width = w / float(opdata['image']['region']['size'][0])
+        inverse_rel_height = h / float(opdata['image']['region']['size'][1])
+
+        # inverse_rel_height = 1
+        # inverse_rel_width = 1
+
+
+        offset_x = opdata['image']['region']['origin'][0]
+        offset_y = opdata['image']['region']['origin'][1]
+
+        xform = {
+            'scale' : [inverse_rel_width, inverse_rel_height],
+            'offset' : [offset_x, offset_y]
+            }
+
+        print xform
+
+
+        print w,h, opdata['image']['region']['size']
+
+        msg['xform'] = json.dumps(xform)
+
+
+        # json_data =
+
+        # print json_data
+
+        # job = q.enqueue(createFormRQ, json_data)
+
+        # import time
+        # while job.return_value is None:
+        #     time.sleep(0.5)
+
+
+        # msg['job'] = job.id
+        # msg['result'] = job.return_value
+
+    return json.dumps(msg)
+
 
 
 @app.route('/admin')
