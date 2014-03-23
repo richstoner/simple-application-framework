@@ -17,7 +17,7 @@ def update(verbose=False):
 
 
 def rsync(verbose=False):
-    '''
+    ''' Synchronizes the root folder with /vagrant on the remote host (emulates a vagrant config)
     '''
     if 'p' not in env.keys():
         env.p = _importProvider('')
@@ -101,6 +101,8 @@ def configureSupervisor(verbose=False):
 
 
 def restartAll():
+    """ Restarts nginx and supervisor
+    """
 
     run('sudo service nginx restart')
     run('sudo supervisorctl reload')

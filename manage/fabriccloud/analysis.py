@@ -26,6 +26,13 @@ def testConda(verbose=False):
     _remote_cmd('conda info', verbose)
 
 
+def installCondaBase(verbose=False):
+    ''' Creates a new server environment to ~/miniconda/envs/server
+    '''
+
+    _remote_cmd('conda create -n py27 server ', verbose)
+
+
 def installAnaconda(verbose=False):
     ''' Installs python dependencies for anaconda tools to ~/miniconda/envs/server
     '''
@@ -78,6 +85,10 @@ def installElasticsearch(verbose=False):
 
 
 def enableApp(appname):
+    """
+    Takes an app located in the server/apps folder and configures nginx, supervisor, and pip to run it
+    """
+
 
     if exists(os.path.join('/vagrant/server', 'apps', appname)):
 
@@ -144,6 +155,9 @@ def enableApp(appname):
 
 
 def disableApp(appname):
+    """
+    Disables an app, provided as by parameter
+    """
 
     nginx_sites_avail = '/etc/nginx/sites-available/%s' % appname
     nginx_sites_enable = '/etc/nginx/sites-enabled/%s' % appname
@@ -172,7 +186,7 @@ def disableApp(appname):
 
 def _remote_cmd(cmd, verbose=False):
 
-    with prefix('export PATH="~/miniconda/bin:$PATH"'):
+    with prefix('export PATH="/home/flaskuser/miniconda/bin:$PATH"'):
 
         if verbose:
             with settings(warn_only=True):
