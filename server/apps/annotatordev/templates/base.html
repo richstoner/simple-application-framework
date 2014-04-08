@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+{% if g.user %}
+{% raw %}
+<html lang="en" ng-app="DermApp">
+{% endraw %}
+{% else %}
+<html lang="en">
+{% endif %}
+<head>
+	<meta charset="utf-8">
+	<title>ISIC Dermoscopic Annotation Tool</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="description" content="ISIC Image annotator">
+	<meta name="author" content="Rich Stoner, David Gutman">
+
+    <link rel=stylesheet type=text/css
+          href="static/bower_components/flatstrap/dist/css/bootstrap.min.css">
+
+    <!--<link rel=stylesheet type=text/css-->
+          <!--href="static/css/bootstrap-responsive.min.css">-->
+
+    <link rel=stylesheet type=text/css href="static/bower_components/font-awesome/css/font-awesome.min.css">
+
+
+	<style type="text/css">
+		body {
+            margin: 0px;
+            padding: 0px;
+
+            /*padding-top: 5px;*/
+            /*padding-bottom: 10px;*/
+        }
+
+        .container-fluid {
+            padding: 0px !important;
+        }
+
+        /*.topBar {*/
+            /*height: 20px !important;*/
+            /*padding: 5px !important;*/
+            /*padding-left: 10px !important;*/
+            /*border-bottom: #bbb 1px solid;*/
+        /*}*/
+
+/*        .topBar a {
+            color: #ccc;
+        }
+*/
+
+        .settingsDropDown {
+
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            height: 40px;
+            z-index: 6000;
+
+        }
+
+      #note {
+            position: absolute;
+            z-index: 6001;
+            color: #000;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #fde073;
+            text-align: center;
+            line-height: 2.5;
+            overflow: hidden;
+            -webkit-box-shadow: 0 0 5px black;
+            -moz-box-shadow:    0 0 5px black;
+            box-shadow:         0 0 5px black;
+        }
+
+
+	</style>
+
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+
+	<!-- Le fav and touch icons -->
+	<link rel="shortcut icon" href="http://twitter.github.com/bootstrap/assets/images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="http://twitter.github.com/bootstrap/assets/images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="http://twitter.github.com/bootstrap/assets/images/apple-touch-icon-114x114.png">
+
+    <script src="static/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="static/bower_components/flatstrap/dist/js/bootstrap.min.js"></script>
+
+
+    {% block head %}
+
+    {% endblock %}
+
+</head>
+
+<body>
+
+
+        {% with errors = get_flashed_messages() %}
+
+            {% if errors %}
+
+                <div id="note">
+                   {% for message in errors %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+
+              <script>
+               $("#note").delay(1000).fadeOut(500);
+              </script>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+
+
+
+
+    {% if g.user %}
+
+
+
+    {% else %}
+
+        <div class="isichead">
+            <span class="isictitle pull-left">ISIC Annotation Tool</span>
+            <span class="isicuser pull-left" style="margin-left: 25px;"><a class="btn btn-mini btn-inverse"
+                                                                           href="/login">Sign in</a></span>
+            <span class="isicuser pull-left" style="margin-left: 25px;"><a class="btn btn-mini btn-inverse"
+                                                                            href="/guest">Sign in as Guest</a></span>
+            <div class="clearfix"></div>
+        </div>
+
+
+    {% endif %}
+
+
+	<div>
+
+
+		{% block body %}
+
+        {% endblock %}
+
+	</div>
+
+
+
+
+
+    {% block postjs %}
+
+    {% endblock %}
+
+</body>
+
+</html>
+
+

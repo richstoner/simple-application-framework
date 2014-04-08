@@ -1,0 +1,47 @@
+{
+	"class1_1": {
+		"diagramUrl": "icon_set_11_1_2013/1_1.jpg",
+		"subPatterns":[
+			"icon_set_11_1_2013/1_1_1.jpg",
+			"icon_set_11_1_2013/1_1_2.jpg",
+			"icon_set_11_1_2013/1_1_3.jpg",
+			"icon_set_11_1_2013/1_1_4.jpg",
+			"icon_set_11_1_2013/NA.png"
+		]
+	},
+	"class1_2":{
+		"diagramUrl": "icon_set_11_1_2013/1_2.jpg", 
+		"subPatterns":[
+			"icon_set_11_1_2013/1_2_1.jpg",
+			"icon_set_11_1_2013/1_2_2.jpg",
+			"icon_set_11_1_2013/1_2_3.jpg",
+			"icon_set_11_1_2013/NA.png"
+		]
+	},
+	"class2":{
+		"diagramUrl": "icon_set_11_1_2013/2.jpg", 
+		"subPatterns":[]
+	},
+	"class3":{
+		"diagramUrl": "icon_set_11_1_2013/3.jpg", 
+		"subPatterns":[]
+	},
+	"class4":{
+		"diagramUrl": "icon_set_11_1_2013/4.jpg", 
+		"subPatterns":[
+			"icon_set_11_1_2013/4_1.jpg",
+			"icon_set_11_1_2013/4_2.jpg",
+			"icon_set_11_1_2013/4_3.jpg",
+			"icon_set_11_1_2013/4_4.jpg",
+			"icon_set_11_1_2013/4_5.jpg",
+			"icon_set_11_1_2013/4_6.jpg",			
+			"icon_set_11_1_2013/NA.png"
+		]
+	},
+	"NA": {
+		"diagramUrl": "icon_set_11_1_2013/x.jpg",
+		"subPatterns":[]
+	}
+}
+
+

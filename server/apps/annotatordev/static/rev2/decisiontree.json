@@ -1,0 +1,442 @@
+[
+  {
+    "step": 0,
+    "title": "Identify lesion",
+    "classification": "lesion",
+    "type": "advanced",
+    "next": 1,
+    "options": []
+  },
+  {
+    "step": 1,
+    "title": "Identify normal skin",
+    "classification": "normal",
+    "type": "rpdefine",
+    "next": 2,
+    "options": []
+  },
+  {
+    "step": 2,
+    "title": "Is the lesion entirely composed of one structure and one color?",
+    "classification": "lesion",
+    "type": "select",
+    "next": 4,
+    "options": [
+      {
+        "title": "Lines, Reticular",
+        "type": "review",
+        "options": [
+          {
+            "title": "Are there any additional details you would like to add?",
+            "type": "choice",
+            "options": [
+              {
+                "title": "Yes",
+                "type": "gotostep",
+                "value": 4
+              },
+              {
+                "title": "No",
+                "type": "gotostep",
+                "value": 5
+              },
+              {
+                "title": "Go Back",
+                "type": "gotostep",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Lines, Parallel",
+        "type": "select",
+        "options": [
+          {
+            "title": "Furrow",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Ridge",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Fibrillar",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Clods",
+        "type": "select",
+        "options": [
+          {
+            "title": "Cobblestone Clods",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Regular (Round / Oval) Clods",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Homogeneous",
+        "type": "review",
+        "options": [
+          {
+            "title": "Are there any additional details you would like to add?",
+            "type": "choice",
+            "options": [
+              {
+                "title": "Yes",
+                "type": "gotostep",
+                "value": 4
+              },
+              {
+                "title": "No",
+                "type": "gotostep",
+                "value": 5
+              },
+              {
+                "title": "Go Back",
+                "type": "gotostep",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "No",
+        "type": "gotostep",
+        "value": 3,
+        "options": []
+      }
+    ]
+  },
+  {
+    "step": 3,
+    "title": "Do you see another recognizable pattern?",
+    "classification": "lesion",
+    "type": "select",
+    "next": 4,
+    "options": [
+      {
+        "title": "Peripheral reticular",
+        "classification": "lesion",
+        "type": "select",
+        "options": [
+          {
+            "title": "Central structureless",
+            "classification": "lesion",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Central clods",
+            "classification": "lesion",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Peripheral clods",
+        "type": "select",
+        "options": [
+          {
+            "title": "Peripheral clods, central retricular",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Peripheral clods, central structureless",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Peripheral clods, central clods",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Starbust",
+        "type": "review",
+        "options": [
+          {
+            "title": "Are there any additional details you would like to add?",
+            "type": "choice",
+            "options": [
+              {
+                "title": "Yes",
+                "type": "gotostep",
+                "value": 4
+              },
+              {
+                "title": "No",
+                "type": "gotostep",
+                "value": 5
+              },
+              {
+                "title": "Go Back",
+                "type": "gotostep",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "No",
+        "type": "gotostep",
+        "value": 5,
+        "options": []
+      }
+    ]
+  },
+  {
+    "step": 4,
+    "title": "Annotate remaining details",
+    "classification": "lesion",
+    "type": "selectpbn",
+    "next": 5,
+    "options": []
+  },
+  {
+    "step": 5,
+    "title": "Done annotating?",
+    "type": "end",
+    "next": 6,
+    "default": "",
+    "options": []
+  }
+]

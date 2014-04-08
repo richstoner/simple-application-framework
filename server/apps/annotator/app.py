@@ -12,8 +12,9 @@ import os
 # https://code.google.com/apis/console
 
 # add the celery tasks as an import
-import sys
-sys.path.append('../../tasks')
+# import sys
+# sys.path.append('../../tasks')
+
 from tasks import *
 
 
