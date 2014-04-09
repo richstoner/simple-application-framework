@@ -176,6 +176,8 @@ p.description_content{
     }
 
 
+
+
     .advancedoptions {
         margin-top:10px;
         padding-top:10px;
@@ -335,13 +337,13 @@ p.description_content{
     }
 
 
-    .step-header:hover {
-        background-color: #1a191c;
+    /*.step-header:hover {*/
+        /*background-color: #1a191c;*/
 
-        -webkit-box-shadow: 1px 7px 11px 2px rgba(0,0,0,0.7);
-        -moz-box-shadow: 1px 7px 11px 2px rgba(0,0,0,0.7);
-        box-shadow: 1px 7px 11px 2px rgba(0,0,0,0.7);
-    }
+        /*-webkit-box-shadow: 1px 7px 11px 2px rgba(0,0,0,0.7);*/
+        /*-moz-box-shadow: 1px 7px 11px 2px rgba(0,0,0,0.7);*/
+        /*box-shadow: 1px 7px 11px 2px rgba(0,0,0,0.7);*/
+    /*}*/
 
     .step-content {
         padding-top:6px;

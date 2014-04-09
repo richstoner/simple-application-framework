@@ -1401,7 +1401,12 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
                     // set imageviewer to current step configuration
                 if ($scope.step_config.default != "") {
+
                     $rootScope.imageviewer.setDrawMode($scope.step_config.default);
+
+
+
+
                 }
                 else {
                     $rootScope.imageviewer.setDrawMode('navigate');
@@ -1629,6 +1634,7 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
             	var msg ={};
 
 				msg['user_id'] = $rootScope.user_id;
+                msg['image'] = $scope.active_image;
 				msg['annotation'] = $scope.getCurrentAnnotation()
 
                 var self = this;
@@ -1873,7 +1879,6 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
 
 		$scope.selectOption = function(key, option_to_select) {
-
 
 
 			var selected_url = 'static/rev2/' + $scope.step_base + '/' + (key+1) + '.jpg'

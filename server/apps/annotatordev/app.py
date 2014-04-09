@@ -18,6 +18,7 @@ db = MongoClient('mongodb://dermoscopic.com:27017')['dermoscopic']
 
 user_collection = db['users']
 image_collection = db['images']
+annotation_collection = db['annotations']
 
 
 # You must configure these 3 values from Google APIs console
@@ -404,13 +405,13 @@ def segment():
 
         msg['contourstr'] = contour_string
 
-#
-#
-#
-#
-#
-#     return json.dumps(msg)
-#
+
+
+
+
+
+    return json.dumps(msg)
+
 
 
 
@@ -856,61 +857,83 @@ def segment():
 #     return '{}'
 #
 #
-# ##### Create a new annotation
-# #
-# #	/annotation
-# #
-# #Method: POST
-# #Contents:
-# #
-# #	{
-# #		image_id: the image id in the database
-# #		user_id: the user id in the database
-# #		details: {
-# #			normal: an array of annotations
-# #			lesion: an array of annotations
-# #			patterns: an array of annotations
-# #			details: an array of annotations
-# #		}
-# #	}
-# #
-# #Returns a json response. If successfully added to db, returns {status:'success'} and the annotation's id in the db.
-#
-# @app.route('/annotation/', methods=['POST'])
-# def annotationCreateEndPoint():
-#
-#     # verify logged in
-#     if g.user is not None:
-#
-#         if request.method == 'POST':
-#
-#             print request.data
-#
-#             json_data = json.loads(request.data)
-#
-#             # annotation = Annotation()
-#
-#             # # annotation.user_id = json_data['user_id']
-#             # annotation.image_id = json_data['image_id']
-#             # annotation.details = json.dumps(json_data['details'])
-#
-#             # db_session.add(annotation)
-#             # db_session.commit()
-#
-#             response_dict = {}
-#             response_dict['status'] = 'success'
-#             # response_dict['new_id'] = annotation.id
-#
-#             return json.dumps(response_dict)
-#
-#     else:
-#         return '{}'
-#
 
 
 
 
+##### Create a new annotation
+#
+#	/annotation
+#
+#Method: POST
+#Contents:
+#
+#	{
+#		image_id: the image id in the database
+#		user_id: the user id in the database
+#		details: {
+#			normal: an array of annotations
+#			lesion: an array of annotations
+#			patterns: an array of annotations
+#			details: an array of annotations
+#		}
+#	}
+#
+#Returns a json response.
+@app.route('/annotation/', methods=['POST'])
+def annotationCreateEndPoint():
 
+    # verify logged in
+    if g.user is not None:
+
+        response_dict = {}
+
+        if request.method == 'POST':
+
+            json_data = json.loads(request.data)
+
+            # print json_data
+
+            image_data = json_data['image']
+            image_from_db = image_collection.find_one({'record_id': image_data['record_id']})
+
+            if image_from_db:
+
+                # create an annotation
+
+                annotation = {}
+
+                annotation['image_record_id'] = image_data['record_id']
+                annotation['user_id'] = json_data['user_id']
+                annotation['annotation'] = json_data['annotation']
+
+                annotation_id = annotation_collection.insert(annotation)
+
+                if 'annotations' not in image_from_db.keys():
+                    image_from_db['annotation'] = []
+
+
+                # downcast to string otherwise we won't be able to grab it via our API
+                image_from_db['annotation'].append(str(annotation_id))
+
+                image_collection.save(image_from_db)
+
+
+
+                response_dict['status'] = 'Annotation saved successfully'
+
+            else:
+
+                response_dict['stauts'] = "Database error, could not save annotation"
+
+        else:
+
+            response_dict['status'] = 'Invalid method'
+
+        return json.dumps(response_dict)
+
+    else:
+        return '{}'
 
 
 
@@ -985,12 +1008,21 @@ def after_request(response):
 
 
 
+@app.route('/review')
+def review():
+
+    result = add.delay(4, 1)
+
+    if g.user is not None:
+        print g.user
+    return render_template('review.html')
+
+
+
 @app.route('/')
 def index():
 
     # result = add.delay(4, 4)
-
-    print 'ello'
 
     if g.user is not None:
         print g.user
