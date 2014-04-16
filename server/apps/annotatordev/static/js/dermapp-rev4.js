@@ -703,7 +703,6 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                 if(tl[0] > 0) {
                     newWidth -= tl[0]
                     origin_x = tl[0]
-                    click_x_offset
                 };
 
                 var newHeight = this.nativeSize.h;
@@ -733,13 +732,12 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                 }
 
                 // var url_to_use = this.data_url + '&WID=400&RGN=0.25,0.25,0.5,0.5&CVT=jpeg'
-                
                 var url_to_use = this.data_url + dataurl(rel, 500);
 
                 var subimage = {}
                 subimage.origin = [origin_x, origin_y]
                 subimage.size = [newWidth, newHeight]
-
+                subimage.rel = rel;
                 var origimage = {}
                 origimage.origin = [0,0]
                 origimage.size = [this.nativeSize.w, this.nativeSize.h]
@@ -771,22 +769,22 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                     var outer = JSON.parse(response.result.contour.outer);
                     // var inner = JSON.parse(response.contour.inner);
 
-                    var transform = JSON.parse(response.result.xform);
+//                    var transform = JSON.parse(response.result.xform);
 
                     // self.segmentation_list = [];
                     self.temporary_annotations.polygons = []
 
-                    var applyTransform = function(pt, _transform){
-                        var px = (pt[0] / _transform.scale[0]) + _transform.offset[0];
-                        var py = - (pt[1] / _transform.scale[1]) + _transform.offset[1];
-                        return [px, py];
-                    }
-
+//                    var applyTransform = function(pt, _transform){
+//                        var px = (pt[0] / _transform.scale[0]) + _transform.offset[0];
+//                        var py = - (pt[1] / _transform.scale[1]) + _transform.offset[1];
+//                        return [px, py];
+//                    }
+//
                     for (var j =0; j < outer.length; j++)
                     {
-                        var c = applyTransform(outer[j][0], transform);
-
-                        self.temporary_annotations.polygons.push(c)
+//                        var c = applyTransform(outer[j][0], transform);
+//
+                        self.temporary_annotations.polygons.push(outer[j][0])
                     }
 
                     // console.log(self.temporary_annotations.polygons);
@@ -798,8 +796,6 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                     // }
 
                 });
-
-
 
             },
 
@@ -847,6 +843,8 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
             setDrawMode : function(draw_mode) {
 
                 this.draw_mode = draw_mode;
+
+                console.log(this.draw_mode);
 
                 if (draw_mode == 'navigate') {
                 } else if (draw_mode == 'paintbrush') {
@@ -1098,18 +1096,42 @@ var appController = derm_app.controller('ApplicationController', ['$scope', '$ro
 
 
 
+//
+//var kup = derm_appdirective('ngOnkeyup', function() {
+//    return {
+//      restrict: 'A',
+//      scope: {
+//        func: '&ngOnkeyup'
+//      },
+//      link: function( scope, elem, attrs ) {
+//        elem.bind('keyup', scope.func);
+//      }
+//    };
+//});
+//
 
 
 
 
 
 
-
-
-
-
-
-
+//$('body').keydown(function (e) {
+//
+//    var scope = angular.element($("#angular_id")).scope();
+//
+//    scope.safeApply(function(){
+//
+//
+//
+//    });
+//
+//    console.log(e);
+////    $scope.$apply(function () {
+////        $scope.changeIndex(e);
+////    })
+//});
+//
+//
 
 
 
@@ -1684,6 +1706,8 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         	$scope.tool_bar_state = 'pldefine';
         	$rootScope.imageviewer.setDrawMode('pointlist');
         }
+
+
 
 
 

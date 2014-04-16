@@ -283,27 +283,27 @@ google = oauth.remote_app('google',
 #
 #     return d
 #
-# #
-# @app.route('/point', methods=['GET', 'POST'])
-# def addPoint():
 #
-#     import json
-#
-#     msg = {}
-#     msg['status'] = 'start'
-#
-#     if request.method == 'GET':
-#         print 'get test'
-#
-#     elif request.method == 'POST':
-#         # import pprint
-#
-#         opdata = json.loads(request.data)
-#
-#         msg['point'] = opdata
-#
-#     # print msg
-#     return json.dumps(msg)
+@app.route('/point', methods=['GET', 'POST'])
+def addPoint():
+
+    import json
+
+    msg = {}
+    msg['status'] = 'start'
+
+    if request.method == 'GET':
+        print 'get test'
+
+    elif request.method == 'POST':
+        # import pprint
+
+        opdata = json.loads(request.data)
+
+        msg['point'] = opdata
+
+    # print msg
+    return json.dumps(msg)
 
 
 #
@@ -909,9 +909,11 @@ def annotationCreateEndPoint():
 
                 annotation_id = annotation_collection.insert(annotation)
 
-                if 'annotations' not in image_from_db.keys():
+                if 'annotation' not in image_from_db.keys():
                     image_from_db['annotation'] = []
 
+                # print 'annotations:'
+                # print image_from_db['annotation']
 
                 # downcast to string otherwise we won't be able to grab it via our API
                 image_from_db['annotation'].append(str(annotation_id))
@@ -972,7 +974,7 @@ def fill():
 
         # result = fillImage.delay(json.loads(request.data))
 
-        result = fillImage(json.loads(request.data))
+        result = fillImage2(json.loads(request.data))
 
         msg['result'] = result
 
@@ -984,7 +986,7 @@ def fill():
 @app.before_request
 def before_request():
 
-    print session
+    # print session
 
     g.user = None
     if 'id' in session:
@@ -992,8 +994,8 @@ def before_request():
 
         # g.user = User.query.get(session['id'])
 
-    print 'user:'
-    print g.user
+    # print 'user:'
+    # print g.user
 
 
 @app.after_request
@@ -1013,8 +1015,8 @@ def review():
 
     result = add.delay(4, 1)
 
-    if g.user is not None:
-        print g.user
+    # if g.user is not None:
+    #     print g.user
     return render_template('review.html')
 
 
@@ -1024,8 +1026,8 @@ def index():
 
     # result = add.delay(4, 4)
 
-    if g.user is not None:
-        print g.user
+    # if g.user is not None:
+    #     print g.user
 
     return render_template('index-rev4.html')
 
@@ -1123,8 +1125,8 @@ def authorized(resp):
     user_data['last_oauth'] = resp['access_token']
     user_data['last_secret'] = resp['id_token']
 
-    print user_data
-
+    # print user_data
+    #
     user = user_collection.find_one({'email': user_data['email']})
 
     # user = User.query.filter_by(user_email=user_data['email']).first()
@@ -1138,8 +1140,8 @@ def authorized(resp):
         # user = User(user_data['email'])
         # db_session.add(user)
 
-        print user
-
+        # print user
+    #
     # now set their most recent auth values
     # user.oauth_token = resp['access_token']
     # user.oauth_secret = resp['id_token']
@@ -1150,7 +1152,7 @@ def authorized(resp):
     # it is used to resolve the user prior to each request (wow this app is DB read heavy)
     session['id'] = str(user['id'])
 
-    print 'saving session id as %s' % session['id']
+    # print 'saving session id as %s' % session['id']
 
     flash('You were signed in')
 

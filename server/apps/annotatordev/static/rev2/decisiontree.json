@@ -12,7 +12,8 @@
     "step": 1,
     "title": "Identify normal skin",
     "classification": "normal",
-    "type": "rpdefine",
+    "type": "pldefine",
+    "default" : "pointlist",
     "next": 2,
     "options": []
   },
