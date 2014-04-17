@@ -20,6 +20,85 @@
 <link rel=stylesheet type=text/css href="static/css/ol.css"/>
 <link rel=stylesheet type=text/css href="static/css/derm.css"/>
 
+<style>
+    nav {
+	/*margin: 100px auto;*/
+	/*text-align: center;*/
+}
+
+nav ul ul {
+	display: none;
+}
+
+	nav ul li:hover > ul {
+		display: block;
+	}
+
+
+nav ul {
+	background: #efefef;
+	/*background: linear-gradient(top, #efefef 0%, #bbbbbb 100%);*/
+	/*background: -moz-linear-gradient(top, #efefef 0%, #bbbbbb 100%);*/
+	/*background: -webkit-linear-gradient(top, #efefef 0%,#bbbbbb 100%);*/
+	/*box-shadow: 0px 0px 9px rgba(0,0,0,0.15);*/
+	/*padding: 0 20px;*/
+	/*border-radius: 10px;*/
+	list-style: none;
+	position: relative;
+	display: inline-table;
+    padding: 0px !important;
+}
+	nav ul:after {
+		content: ""; clear: both; display: block;
+	}
+
+	nav ul li {
+		float: left;
+	}
+
+
+    nav ul li:hover {
+        background: #4b545f;
+        /*background: linear-gradient(top, #4f5964 0%, #5f6975 40%);*/
+        /*background: -moz-linear-gradient(top, #4f5964 0%, #5f6975 40%);*/
+        /*background: -webkit-linear-gradient(top, #4f5964 0%,#5f6975 40%);*/
+    }
+
+    nav ul li:hover a {
+        color: #fff;
+    }
+
+    nav ul li a {
+        display: block;
+        border: 1px solid #cc0000;
+        /*padding: 25px 40px;*/
+        /*color: #757575; text-decoration: none;*/
+    }
+
+    nav ul ul {
+        /*background: #5f6975; */
+        /*border-radius: 0px; padding: 0;*/
+        position: absolute; top: 100%;
+    }
+    nav ul ul li {
+        float: none;
+        /*border-top: 1px solid #6b727c;*/
+        /*border-bottom: 1px solid #575f6a; */
+        position: relative;
+    }
+    nav ul ul li a {
+        /*padding: 15px 40px;*/
+        /*color: #fff;*/
+    }
+    nav ul ul li a:hover {
+        /*background: #4b545f;*/
+    }
+
+	nav ul ul ul {
+		position: absolute; left: 100%; top:0;
+	}
+</style>
+
 {% endblock %}
 
 {% block body %}
@@ -280,10 +359,44 @@
                             <div class="btn-group"
                                 ng-show="compareState('selectpbn', tool_bar_state)">
 
-                                <div class="btn" disabled>
-                                    [todo: Multilabel paint by number]
-                                </div>
 
+                                <nav>
+                                    <ul>
+                                        <li ng-repeat="(base_key, value) in step_options">
+                                            <a href="#">
+                                                <img class="optionimage" src="static/rev3/4/{{base_key+1}}.jpg"/>
+                                            </a>
+
+                                            <ul ng-show="value.options">
+                                                <li ng-repeat="(sub_key, sub_value) in value.options">
+                                                    <a href="#">
+                                                        <img class="optionimage"
+                                                             src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}.jpg"/>
+                                                    </a>
+
+                                                    <ul ng-show="sub_value.options">
+                                                        <li ng-repeat="(sub_sub_key, sub_sub_value) in sub_value.options">
+                                                            <a href="#">
+                                                                <img class="optionimage"
+                                                                     src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}.jpg"/>
+                                                            </a>
+                                                        </li>
+
+                                                        <ul ng-show="sub_sub_value.options">
+                                                            <li ng-repeat="(sub_subsub_key, sub_sub_sub_value) in sub_sub_value.options">
+                                                                <a href="#">
+                                                                    <img class="optionimage"
+                                                                         src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}/{{sub_sub_sub_key+1}}.jpg"/>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+                                </nav>
 
                             </div>
 
@@ -450,7 +563,7 @@
                                     ng-repeat="(key, value) in step_options">
 
                                         <div class="" href="#" ng-click="selectOption(key, value )">
-                                            <img class="optionimage" src="static/rev2/{{step_base}}/{{key+1}}.jpg"/>
+                                            <img class="optionimage" src="static/rev3/{{step_base}}/{{key+1}}.jpg"/>
                                         </a>
                                 </div>
                             </div>

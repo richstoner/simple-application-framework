@@ -553,6 +553,206 @@
             ]
           }
          ]
+      },
+      {
+        "title": "Dots & Clods",
+        "classification": "lesion",
+        "type": "selectdrop",
+        "options": [
+          {
+            "title": "Dots",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": [
+              {
+                "title": "Atypical Dots",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              },
+              {
+                "title": "Dots, Four square",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              },
+              {
+                "title": "Dots, Circle",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              },
+              {
+                "title": "Dots, Lines",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              }
+            ]
+          },
+          {
+            "title": "Clods",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": [
+              {
+                "title": "Atypical Clods",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Structureless",
+        "classification": "lesion",
+        "type": "selectdrop",
+        "options": [
+          {
+            "title": "Structureless",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          },
+          {
+            "title": "Blue-White Veil",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          },
+          {
+            "title": "Pseudonetwork",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          },
+          {
+            "title": "Peripheral brown structureless area",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          }
+        ]
+      },
+      {
+        "title": "Vessels",
+        "classification": "lesion",
+        "type": "selectdrop",
+        "options": [
+          {
+            "title": "Dots",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          },
+          {
+            "title": "Clods",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          },
+          {
+            "title": "Lines",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": [
+              {
+                "title": "Straight",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              },
+              {
+                "title": "Looped",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": [
+                  {
+                    "title": "Looped with white Halo",
+                    "classification": "lesion",
+                    "type": "selectdrop",
+                    "options": []
+                  }
+                ]
+              },
+              {
+                "title": "Curved",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              },
+              {
+                "title": "Serpentine",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              },
+              {
+                "title": "Helical",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              },
+              {
+                "title": "Coiled",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              },
+              {
+                "title": "Branched",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "options": []
+              }
+            ]
+          },
+          {
+            "title": "Milky-red area",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          },
+          {
+            "title": "Polymorphous vessels",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          }
+        ]
+      },
+      {
+        "title": "Other",
+        "classification": "lesion",
+        "type": "selectdrop",
+        "options": [
+          {
+            "title": "Shiny white lines",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          },
+          {
+            "title": "Circles",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          },
+          {
+            "title": "Pseudopods",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          },
+          {
+            "title": "Sharply demarcated scalloped border",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
+          }
+        ]
       }
     ]
   },
