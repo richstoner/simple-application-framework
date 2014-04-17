@@ -235,8 +235,8 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 //              vectorContext.drawMultiPointGeometry(
 //                  new ol.geom.MultiPoint(self.temporary_annotations.polygons), null);
 
-              vectorContext.drawMultiPointGeometry(
-                  new ol.geom.MultiPoint(self.temporary_annotations.lines), null);
+//              vectorContext.drawMultiPointGeometry(
+//                  new ol.geom.MultiPoint(self.temporary_annotations.lines), null);
 
 //              vectorContext.drawLineStringGeometry(
 //                  new ol.geom.LineString(self.temporary_annotations.polygons), null);
@@ -308,6 +308,20 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                 return this.saved_annotations.length > 0;
             },
 
+
+            moveToFeature: function(feature){
+
+
+                var featuresExtent = ol.extent.createEmpty();
+
+                console.log(feature);
+                console.log(feature.getGeometry());
+                console.log(ol.extent);
+
+                ol.extent.extend(featuresExtent, feature.getGeometry().getExtent());
+
+                this.map.getView().fitExtent(featuresExtent, this.map.getSize());
+            },
 
 
 
@@ -1088,53 +1102,10 @@ var appController = derm_app.controller('ApplicationController', ['$scope', '$ro
                 var activeImage = $rootScope.getActiveImage();
                 $rootScope.imageviewer.clearCurrentImage();
                 $rootScope.imageviewer.loadImageWithURL(activeImage.dzi_source);
-            };
+            }
         });
 
 }]);
-
-
-
-
-//
-//var kup = derm_appdirective('ngOnkeyup', function() {
-//    return {
-//      restrict: 'A',
-//      scope: {
-//        func: '&ngOnkeyup'
-//      },
-//      link: function( scope, elem, attrs ) {
-//        elem.bind('keyup', scope.func);
-//      }
-//    };
-//});
-//
-
-
-
-
-
-
-//$('body').keydown(function (e) {
-//
-//    var scope = angular.element($("#angular_id")).scope();
-//
-//    scope.safeApply(function(){
-//
-//
-//
-//    });
-//
-//    console.log(e);
-////    $scope.$apply(function () {
-////        $scope.changeIndex(e);
-////    })
-//});
-//
-//
-
-
-
 
 
 
@@ -1168,10 +1139,8 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         $scope.select_last = undefined;
 
         $scope.annotations = undefined;
-
         $scope.magicwand_tolerance = 50;
         $scope.regionpaint_size = 70;
-
 
 
         $rootScope.$watch('image_index', function(newValue, originalValue) {
@@ -1421,23 +1390,28 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
             if($scope.step_config){
 
-                    // set imageviewer to current step configuration
+                // set imageviewer to current step configuration
                 if ($scope.step_config.default != "") {
 
                     $rootScope.imageviewer.setDrawMode($scope.step_config.default);
-
-
-
 
                 }
                 else {
                     $rootScope.imageviewer.setDrawMode('navigate');
                 }
 
+                if($scope.step_config.zoom == "lesion"){
+
+                    console.log('test')
+
+                    var bounds = $scope.getLesionBoundary();
+
+                }
+
+
                 // set some UI helpers
                 $scope.step_options = $scope.step_config.options;
                 $scope.step_base = $scope.step_config.step;
-
 
                 console.log('Finished loading step', $scope.step_config.step);
 
@@ -1476,6 +1450,65 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
 
 
+        $scope.getLesionBoundary = function(){
+
+
+        	var currentAnnotation = $scope.getCurrentAnnotation();
+
+
+            console.log(features);
+
+            var step_zero = currentAnnotation.step[0];
+
+            var lesion_zero = step_zero[0]
+
+            var features = $rootScope.imageviewer.featureListFromAnnotation(lesion_zero);
+
+            console.log(features);
+
+            var first_feature = features[0]
+
+            $rootScope.imageviewer.moveToFeature(first_feature);
+
+//
+//            var minpt = { x : 100000, y: 100000 }
+//            var maxpt = { x : -100000, y: -10000 }
+//
+//
+//            for(var pt in lesion_zero){
+//
+////                console.log(lesion_zero[pt]);
+//
+//                if(lesion_zero[pt][0] < minpt.x) {
+//                   minpt.x = lesion_zero[pt][0]
+//                }
+//
+//                // remember y is flipped in annotation coords
+//                if((-1) * lesion_zero[pt][1] <  minpt.y) {
+//                    minpt.y = (-1) * lesion_zero[pt][1]
+//                }
+//
+//
+//                if(lesion_zero[pt][0] > maxpt.x) {
+//                   maxpt.x = lesion_zero[pt][0]
+//                }
+//
+//                // remember y is flipped in annotation coords
+//                if((-1) * lesion_zero[pt][1] >  maxpt.y) {
+//                    maxpt.y = (-1) * lesion_zero[pt][1]
+//                }
+//
+//
+//            }
+//
+////            console.log(step_zero);
+////            console.log(minpt, maxpt)
+//
+//            $rootScope.imageviewer.moveToBounds([maxpt.x, - maxpt.y, minpt.x, - minpt.y]);
+//
+//            return { min: minpt, max: maxpt};
+
+        }
 
 
 
@@ -1905,7 +1938,7 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 		$scope.selectOption = function(key, option_to_select) {
 
 
-			var selected_url = 'static/rev2/' + $scope.step_base + '/' + (key+1) + '.jpg'
+			var selected_url = 'static/rev3/' + $scope.step_base + '/' + (key+1) + '.jpg'
 
 			console.log('selected url', selected_url)
 
@@ -2458,7 +2491,7 @@ var decisionTree = derm_app.factory('decisionTree', function($http) {
       return promise;
     },
     fromLocal: function() {
-        var url = 'static/rev2/decisiontree.json';
+        var url = 'static/rev3/decisiontree.json';
             var promise = $http.get(url).then(function (response) {
           return response.data;
         });
