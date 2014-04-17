@@ -21,19 +21,14 @@
 <link rel=stylesheet type=text/css href="static/css/derm.css"/>
 
 <style>
-    nav {
-	/*margin: 100px auto;*/
-	/*text-align: center;*/
-}
 
 nav ul ul {
 	display: none;
 }
 
-	nav ul li:hover > ul {
-		display: block;
-	}
-
+nav ul li:hover > ul {
+    display: block;
+}
 
 nav ul {
 	background: #efefef;
@@ -65,12 +60,12 @@ nav ul {
     }
 
     nav ul li:hover a {
-        color: #fff;
+        border: 1px solid #f00;
     }
 
     nav ul li a {
         display: block;
-        border: 1px solid #cc0000;
+        border: 1px solid #000;
         /*padding: 25px 40px;*/
         /*color: #757575; text-decoration: none;*/
     }
@@ -87,6 +82,7 @@ nav ul {
         position: relative;
     }
     nav ul ul li a {
+        border: 1px solid #555;
         /*padding: 15px 40px;*/
         /*color: #fff;*/
     }
@@ -374,27 +370,39 @@ nav ul {
                                                              src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}.jpg"/>
                                                     </a>
 
+
                                                     <ul ng-show="sub_value.options">
                                                         <li ng-repeat="(sub_sub_key, sub_sub_value) in sub_value.options">
                                                             <a href="#">
                                                                 <img class="optionimage"
                                                                      src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}.jpg"/>
                                                             </a>
-                                                        </li>
 
-                                                        <ul ng-show="sub_sub_value.options">
-                                                            <li ng-repeat="(sub_subsub_key, sub_sub_sub_value) in sub_sub_value.options">
-                                                                <a href="#">
-                                                                    <img class="optionimage"
-                                                                         src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}/{{sub_sub_sub_key+1}}.jpg"/>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
+                                                            <ul ng-show="sub_sub_value.options">
+                                                                <li ng-repeat="(sub_sub_sub_key, sub_sub_sub_value) in sub_sub_value.options">
+                                                                    <a href="#">
+                                                                        <img class="optionimage"
+                                                                             src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}/{{sub_sub_sub_key+1}}.jpg"/>
+                                                                    </a>
+
+                                                                    <ul ng-show="sub_sub_sub_value.options">
+
+                                                                        <li ng-repeat="(s_sub_sub_sub_key, s_sub_sub_sub_value) in sub_sub_sub_value.options">
+                                                                            <a href="#">
+                                                                                <img class="optionimage"
+                                                                                     src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}/{{sub_sub_sub_key+1}}/{{s_sub_sub_sub_key+1}}.jpg"/>
+                                                                            </a>
+                                                                        </li>
+
+                                                                    </ul>
+
+                                                                </li>
+                                                            </ul>
+                                                        </li>
                                                     </ul>
                                                 </li>
                                             </ul>
                                         </li>
-
                                     </ul>
                                 </nav>
 
