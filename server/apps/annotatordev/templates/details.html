@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+
+
+<script src="static/bower_components/angular/angular.min.js"></script>
+<script src="static/bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="static/bower_components/mousetrap/mousetrap.min.js"></script>
+<script src="static/bower_components/angular-mousetrap/src/keypress.js"></script>
+<script src="static/bower_components/FileSaver/FileSaver.js"></script>
+
+<script src="static/js/details.js"></script>
+
+<style>
+    body {
+        background: #272822 !important;
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-weight: 300;
+        color: #fff;
+    }
+
+    .imagewrap {
+        float:left;
+        margin-bottom: 1px;
+        background: #fff;
+    }
+
+
+
+    .imagethumb {
+        width: inherit;
+        height: 200px;
+    }
+
+
+    .imgcontainer {
+        -moz-column-count: 6;
+        -moz-column-gap: 10px;
+
+        -webkit-column-count: 6;
+        -webkit-column-gap: 10px;
+
+
+        column-count: 6;
+        column-gap: 5px;
+        column-width: 250px;
+        width: 100%;
+
+    }
+
+
+    @media (max-width: 1100px) {
+
+        /*this is the narrow version*/
+
+        .imgcontainer {
+            -moz-column-count: 4;
+            -moz-column-gap: 10px;
+            -webkit-column-count: 4;
+            -webkit-column-gap: 10px;
+
+            column-count: 4;
+            column-gap: 10px;
+            /*column-width: 250px;*/
+            width: 100%;
+
+        }
+
+        .imagethumb {
+            width: inherit;
+           height: 155px;
+        }
+	}
+
+
+    .imgcontainer div {
+        display: inline-block;
+        width: 100%;
+
+        /*min-height: 200px;*/
+        background-color: black;
+    }
+
+    #overlayImage {
+        width: 400px;
+        position: absolute;
+        border: 1px solid #666;
+    }
+
+    .previewimage {
+        width: 398px;
+    }
+
+    .imageflagged {
+        /*border: 5px solid #000;*/
+        opacity:0.4;
+        filter:alpha(opacity=40); /* For IE8 and earlier */
+    }
+
+    .navbar {
+        margin-bottom: 0px !important;
+    }
+
+    .bigrow {
+        padding: 10px;
+    }
+
+    .whitetext {
+        color: #fff;
+    }
+
+    div.wrapper{
+    float:left; /* important */
+    position:relative; /* important(so we can absolutely position the description div */
+    }
+
+    div.description{
+        position:absolute; /* absolute position (so we can position it where we want)*/
+
+        bottombottom:0px; /* position will be on bottom */
+
+        left:0px;
+        width:100%;
+        /* styling bellow */
+        background-color:black;
+        font-family: 'tahoma';
+        font-size:15px;
+        color:white;
+        opacity:0.6; /* transparency */
+        filter:alpha(opacity=60); /* IE transparency */
+    }
+    p.description_content{
+        /*padding:10px;*/
+
+        margin:0px;
+    }
+
+    .optionimage {
+        width: 100px;
+        margin-right: 10px;
+        border: 1px solid #000;
+    }
+
+
+
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+{% if g.user %}
+
+    <input id="user_email" type="hidden" value="{{ g.user.user_email }}"/>
+    <input id="user_id" type="hidden" value="{{ g.user.id }}"/>
+
+{% raw %}
+
+    <div id="angular_id" ng-controller="ApplicationController">
+
+        <div class="container-fluid">
+        <div class="row bigrow">
+            <div class="col-sm-12">
+
+                <h2>Current details</h2>
+
+                <p><a href="static/rev3/decisiontree.json">JSON definition</a></p>
+
+                <ul>
+                    <li ng-repeat="(base_key, value) in step_options">
+                    <a href="#">
+                        <img class="optionimage" src="static/rev3/4/{{base_key+1}}.jpg"/>
+                        {{value.title}} - static/rev3/4/{{base_key+1}}.jpg
+                    </a>
+
+                    <ul ng-show="value.options">
+                        <li ng-repeat="(sub_key, sub_value) in value.options">
+                            <a href="#">
+                                <img class="optionimage"
+                                     src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}.jpg"/>
+                                {{sub_value.title}} - static/rev3/4/{{base_key+1}}/{{sub_key+1}}.jpg
+                            </a>
+
+
+                            <ul ng-show="sub_value.options">
+                                <li ng-repeat="(sub_sub_key, sub_sub_value) in sub_value.options">
+                                    <a href="#">
+                                        <img class="optionimage"
+                                             src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}.jpg"/>
+                                        {{sub_sub_value.title}} - static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}.jpg
+                                    </a>
+
+                                    <ul ng-show="sub_sub_value.options">
+                                        <li ng-repeat="(sub_sub_sub_key, sub_sub_sub_value) in sub_sub_value.options">
+                                            <a href="#">
+                                                <img class="optionimage"
+                                                     src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}/{{sub_sub_sub_key+1}}.jpg"/>
+                                                {{sub_sub_sub_value.title}} - static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}/{{sub_sub_sub_key+1}}.jpg
+                                            </a>
+
+                                            <ul ng-show="sub_sub_sub_value.options">
+
+                                                <li ng-repeat="(s_sub_sub_sub_key, s_sub_sub_sub_value) in sub_sub_sub_value.options">
+                                                    <a href="#">
+                                                        <img class="optionimage"
+                                                             src="static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}/{{sub_sub_sub_key+1}}/{{s_sub_sub_sub_key+1}}.jpg"/>
+                                                        {{s_sub_sub_sub_value.title}} - static/rev3/4/{{base_key+1}}/{{sub_key+1}}/{{sub_sub_key+1}}/{{sub_sub_sub_key+1}}/{{s_sub_sub_sub_key+1}}.jpg
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+
+                                            <br><br>
+
+                                        </li>
+                                    </ul>
+
+                                    <br><br>
+
+
+                                </li>
+                            </ul>
+
+                            <br><br>
+                        </li>
+                    </ul>
+
+                        <br><br>
+                    </li>
+                </ul>
+
+                <br><br>
+
+            </div>
+        </div>
+    </div>
+
+
+  {% endraw %}
+
+  {% endif %}
+
+{% endblock %}
+
+
+{% block postjs %}
+{% endblock %}

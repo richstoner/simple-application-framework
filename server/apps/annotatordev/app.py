@@ -1020,6 +1020,14 @@ def review():
     return render_template('review.html')
 
 
+@app.route('/details')
+def details():
+
+    # if g.user is not None:
+    #     print g.user
+    return render_template('details.html')
+
+
 
 @app.route('/')
 def index():
