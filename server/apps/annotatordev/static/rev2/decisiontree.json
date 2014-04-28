@@ -751,6 +751,12 @@
             "classification": "lesion",
             "type": "selectdrop",
             "options": []
+          },
+          {
+            "title": "Ulceration",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "options": []
           }
         ]
       }
