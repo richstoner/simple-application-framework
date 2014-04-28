@@ -1135,12 +1135,16 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         $scope.step_options = undefined;
         $scope.step_base = '';
 
+        $scope.select_detail = -1;
+
         $scope.select_stack = [];
         $scope.select_last = undefined;
 
         $scope.annotations = undefined;
         $scope.magicwand_tolerance = 50;
         $scope.regionpaint_size = 70;
+
+
 
 
         $rootScope.$watch('image_index', function(newValue, originalValue) {
@@ -1784,13 +1788,10 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
 // Magic wand methods
 
-
         $scope.startMagicWand = function(){
             $scope.tool_bar_state = 'mwdefine';
             $rootScope.imageviewer.setDrawMode('autofill');
         }
-
-
 
 
 // Universal annotation methods
@@ -1932,6 +1933,12 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
 
 
+
+        $scope.selectDetail = function(detailobj){
+            console.log(detailobj);
+
+            $scope.select_detail = detailobj;
+        }
 
 
 
