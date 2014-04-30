@@ -165,18 +165,44 @@
             <div class="lowertoolbar">
 
                 <div class="btn-group">
-                    <div ng-show="totalSteps"
-                            class="btn btn-inverse">
-                            {{tool_bar_state}}
-                    </div>
 
-                   <div class="btn-group">
+                    <div class="btn-group">
                     <div type="button" class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
-                      Steps
+                      Info
                       <span class="caret"></span>
                     </div>
                     <ul class="dropdown-menu">
-                      <li ng-repeat="(k,v) in decision_tree"><a href="#">{{v.title}}</a></li>
+
+                      <li role="presentation" class="dropdown-header">Current State</li>
+                      <li><a href="#">{{tool_bar_state}}</a></li>
+                      <li role="presentation" class="divider"></li>
+
+
+
+                      <li role="presentation" class="dropdown-header">User</li>
+                      <li><a href="#">{{user_id}}</a></li>
+                      <li><a href="#">{{user_email}}</a></li>
+
+                      <li role="presentation" class="divider"></li>
+
+                      <li role="presentation" class="dropdown-header">Image</li>
+                      <li><a href="#">{{active_image.Study_num}}</a></li>
+
+                      <li role="presentation" class="dropdown-header">Annotations</li>
+                      <li><a href="#">Count: {{active_image.annotation.length}}</a></li>
+
+                          <li role="presentation" class="divider"></li>
+
+                    </ul>
+                  </div>
+
+                   <div class="btn-group">
+                    <div type="button" class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
+                      Go to Step
+                      <span class="caret"></span>
+                    </div>
+                    <ul class="dropdown-menu">
+                      <li ng-repeat="(k,v) in decision_tree"><a href="#" ng-click="gotoStep(k)">{{v.title}}</a></li>
                     </ul>
                   </div>
                 </div>

@@ -6,10 +6,10 @@
 // SegmentAnnotator constructor.
 SegmentAnnotator = function(segmentation, options) {
   if (typeof options === 'undefined') options = {};
-  this.backgroundColor = options.backgroundColor || [255, 255, 255];
+  this.backgroundColor = options.backgroundColor || [0, 0, 0];
   this.highlightAlpha = options.highlightAlpha || 0;
-  this.fillAlpha = options.fillAlpha || 40;
-  this.boundaryAlpha = options.boundaryAlpha || 64;
+  this.fillAlpha = options.fillAlpha || 0;
+  this.boundaryAlpha = options.boundaryAlpha || 128;
 
   // Variables.
   this.width = segmentation.width;

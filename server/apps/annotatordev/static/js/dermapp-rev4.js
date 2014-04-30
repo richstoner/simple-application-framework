@@ -1321,6 +1321,7 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
             else {evt.returnValue = false}
 
             console.log('decrease value');
+
             $scope.decreaseParameter();
 //            $rootScope.debug = !$rootScope.debug;
             $scope.$apply();
@@ -1339,12 +1340,8 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
                 $scope.totalSteps = $rootScope.decision_tree.length;
 
-
-
             }
         });
-
-
 
 
         // Accessors
@@ -1352,7 +1349,7 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         $scope.getCurrentStepConfig = function(){
             if ($scope.step >= 0) {
                 return $rootScope.decision_tree[$scope.step]    
-            };
+            }
 
             return undefined;
         }
@@ -1361,7 +1358,7 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         	if($rootScope.applicationReady){
         		if ($scope.annotations) {
         			return $scope.annotations[$scope.image_index];	
-        		};
+        		}
         	}
         	return undefined;
         }
@@ -1405,12 +1402,10 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
             }
             else {
                 console.log('next', $scope.step+1)
+
                 $scope.gotoStep($scope.step+1);
 
             }
-
-
-
 
         }
 
@@ -1437,8 +1432,6 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
                 $scope.imageviewer.setFillParameter($scope.magicwand_tolerance);
                 $scope.imageviewer.regenerateFill();
             }
-
-
         }
 
         $scope.decreaseParameter = function(){
@@ -1511,8 +1504,6 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
                 }
 
                 if($scope.step_config.zoom == "lesion"){
-
-                    console.log('test')
 
                     var feature = $scope.getLesionFeature();
                     $rootScope.imageviewer.moveToFeature(feature);
@@ -1860,6 +1851,11 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         $scope.runRegionPaint = function(){
 
         	$scope.tool_bar_state = 'rppaint';
+
+            var feature = $scope.getLesionFeature();
+            $rootScope.imageviewer.moveToFeature(feature);
+
+
         	$rootScope.imageviewer.startPainting();
 
         }
