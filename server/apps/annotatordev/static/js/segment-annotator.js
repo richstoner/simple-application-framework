@@ -6,10 +6,11 @@
 // SegmentAnnotator constructor.
 SegmentAnnotator = function(segmentation, options) {
   if (typeof options === 'undefined') options = {};
-  this.backgroundColor = options.backgroundColor || [192, 192, 192];
-  this.highlightAlpha = options.highlightAlpha || 40;
+  this.backgroundColor = options.backgroundColor || [255, 255, 255];
+  this.highlightAlpha = options.highlightAlpha || 0;
   this.fillAlpha = options.fillAlpha || 40;
-  this.boundaryAlpha = options.boundaryAlpha || 128;
+  this.boundaryAlpha = options.boundaryAlpha || 64;
+
   // Variables.
   this.width = segmentation.width;
   this.height = segmentation.height;
@@ -118,12 +119,15 @@ SegmentAnnotator.prototype.removeLabel = function(index) {
 
 // Set the alpha value for the image layer.
 SegmentAnnotator.prototype.setImageAlpha = function(alpha) {
-  if (alpha === undefined)
+  if (alpha === undefined) {
     alpha = 255;
+  }
   var context = this.layers.image.canvas.getContext('2d'),
       data = this.layers.image.image.data;
   for (var i = 3; i < data.length; i += 4)
+  {
     data[i] = alpha;
+  }
   context.putImageData(this.layers.image.image, 0, 0);
   return this;
 };
@@ -131,7 +135,9 @@ SegmentAnnotator.prototype.setImageAlpha = function(alpha) {
 // Set the alpha value for the segment boundary.
 SegmentAnnotator.prototype.setBoundaryAlpha = function(alpha) {
   if (alpha === undefined)
+  {
     alpha = this.boundaryAlpha;
+  }
   this._setAnnotationAlpha(alpha, true);
   return this;
 };
@@ -161,6 +167,7 @@ SegmentAnnotator.prototype.getAnnotation = function() {
   var canvas = document.createElement('canvas');
   canvas.width = this.width;
   canvas.height = this.height;
+
   var context = canvas.getContext('2d'),
       imageData = context.getImageData(0, 0, canvas.width, canvas.height),
       data = imageData.data;
@@ -519,6 +526,10 @@ SegmentAnnotator.prototype._initializeContainer = function(container) {
     this.container = container;
   else {
     this.container = document.createElement('div');
+
+    // start hidden
+    this.container.hidden = true;
+
     document.body.appendChild(this.container);
   }
   this.container.innerHTML = '';

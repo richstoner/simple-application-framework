@@ -1,0 +1,812 @@
+[
+  {
+    "step": 0,
+    "title": "Identify lesion",
+    "classification": "lesion",
+    "type": "mwdefine",
+    "default" : "autofill",
+    "next": 1,
+    "options": []
+  },
+  {
+    "step": 1,
+    "title": "Identify normal skin",
+    "classification": "normal",
+    "type": "pldefine",
+    "default" : "pointlist",
+    "next": 2,
+    "options": []
+  },
+  {
+    "step": 2,
+    "title": "Is the lesion entirely composed of one structure and one color?",
+    "classification": "lesion",
+    "type": "select",
+    "zoom": "lesion",
+    "next": 4,
+    "options": [
+      {
+        "title": "Lines, Reticular",
+        "type": "review",
+        "options": [
+          {
+            "title": "Are there any additional details you would like to add?",
+            "type": "choice",
+            "options": [
+              {
+                "title": "Yes",
+                "type": "gotostep",
+                "value": 4
+              },
+              {
+                "title": "No",
+                "type": "gotostep",
+                "value": 5
+              },
+              {
+                "title": "Go Back",
+                "type": "gotostep",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Lines, Parallel",
+        "type": "select",
+        "options": [
+          {
+            "title": "Furrow",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Ridge",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Fibrillar",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Clods",
+        "type": "select",
+        "options": [
+          {
+            "title": "Cobblestone Clods",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Regular (Round / Oval) Clods",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Homogeneous",
+        "type": "review",
+        "options": [
+          {
+            "title": "Are there any additional details you would like to add?",
+            "type": "choice",
+            "options": [
+              {
+                "title": "Yes",
+                "type": "gotostep",
+                "value": 4
+              },
+              {
+                "title": "No",
+                "type": "gotostep",
+                "value": 5
+              },
+              {
+                "title": "Go Back",
+                "type": "gotostep",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "No",
+        "type": "gotostep",
+        "value": 3,
+        "options": []
+      }
+    ]
+  },
+  {
+    "step": 3,
+    "title": "Do you see another recognizable pattern?",
+    "classification": "lesion",
+    "type": "select",
+    "zoom": "lesion",
+    "next": 4,
+    "options": [
+      {
+        "title": "Peripheral reticular",
+        "classification": "lesion",
+        "type": "select",
+        "options": [
+          {
+            "title": "Central structureless",
+            "classification": "lesion",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Central clods",
+            "classification": "lesion",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Peripheral clods",
+        "type": "select",
+        "options": [
+          {
+            "title": "Peripheral clods, central retricular",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Peripheral clods, central structureless",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Peripheral clods, central clods",
+            "type": "review",
+            "options": [
+              {
+                "title": "Are there any additional details you would like to add?",
+                "type": "choice",
+                "options": [
+                  {
+                    "title": "Yes",
+                    "type": "gotostep",
+                    "value": 4
+                  },
+                  {
+                    "title": "No",
+                    "type": "gotostep",
+                    "value": 5
+                  },
+                  {
+                    "title": "Go Back",
+                    "type": "gotostep",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Starbust",
+        "type": "review",
+        "options": [
+          {
+            "title": "Are there any additional details you would like to add?",
+            "type": "choice",
+            "options": [
+              {
+                "title": "Yes",
+                "type": "gotostep",
+                "value": 4
+              },
+              {
+                "title": "No",
+                "type": "gotostep",
+                "value": 5
+              },
+              {
+                "title": "Go Back",
+                "type": "gotostep",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "No",
+        "type": "gotostep",
+        "value": 5,
+        "options": []
+      }
+    ]
+  },
+  {
+    "step": 4,
+    "title": "Annotate remaining details",
+    "classification": "lesion",
+    "type": "selectpbn",
+    "fullscreen" : true,
+    "zoom": "lesion",
+    "next": 5,
+    "options": [
+      {
+        "title": "Lines",
+        "classification": "lesion",
+        "type": "selectdrop",
+        "value" : 10,
+        "options": [
+          {
+            "title": "Reticular",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 20,
+            "options": [
+              {
+                "title": "Regular",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 21,
+                "options": []
+              },
+              {
+                "title": "Thick",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 22,
+                "options": []
+              },
+              {
+                "title": "Thin",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 23,
+                "options": []
+              },
+              {
+                "title": "Atypical",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 24,
+                "options": []
+              },
+              {
+                "title": "Negative Network",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 25,
+                "options": []
+              }
+            ]
+          },
+          {
+            "title": "Radial",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 30,
+            "options": [
+              {
+                "title": "Radial lines connected to a common base",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 31,
+                "options": []
+              },
+              {
+                "title": "Radial lines converging to a central dot",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 32,
+                "options": []
+              },
+              {
+                "title": "Radial lines, peripheral",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 33,
+                "options": []
+              }
+            ]
+          },
+          {
+            "title": "Branched",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 40,
+            "options": []
+          },
+          {
+            "title": "Parallel and straight",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 50,
+            "options": [
+              {
+                "title": "Furrows",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 51,
+                "options": []
+              },
+              {
+                "title": "Ridges",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 52,
+                "options": []
+              },
+              {
+                "title": "Fibrallar",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 53,
+                "options": []
+              }
+            ]
+          },
+          {
+            "title": "Curved",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 60,
+            "options": [
+              {
+                "title": "Thick",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 61,
+                "options": []
+              },
+              {
+                "title": "Thin",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 62,
+                "options": []
+              }
+            ]
+          }
+         ]
+      },
+      {
+        "title": "Dots & Clods",
+        "classification": "lesion",
+        "type": "selectdrop",
+        "value" : 70,
+        "options": [
+          {
+            "title": "Dots",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 71,
+            "options": [
+              {
+                "title": "Atypical Dots",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 72,
+                "options": []
+              },
+              {
+                "title": "Dots, Four square",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 73,
+                "options": []
+              },
+              {
+                "title": "Dots, Circle",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 74,
+                "options": []
+              },
+              {
+                "title": "Dots, Lines",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 75,
+                "options": []
+              }
+            ]
+          },
+          {
+            "title": "Clods",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 76,
+            "options": [
+              {
+                "title": "Atypical Clods",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 77,
+                "options": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Structureless",
+        "classification": "lesion",
+        "type": "selectdrop",
+        "value" : 80,
+        "options": [
+          {
+            "title": "Blue-White Veil",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 81,
+            "options": []
+          },
+          {
+            "title": "Pseudonetwork",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 82,
+            "options": []
+          },
+          {
+            "title": "Peripheral brown structureless area",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 83,
+            "options": []
+          }
+        ]
+      },
+      {
+        "title": "Vessels",
+        "classification": "lesion",
+        "type": "selectdrop",
+        "value" : 100,
+        "options": [
+          {
+            "title": "Dots",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 101,
+            "options": []
+          },
+          {
+            "title": "Clods",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 102,
+            "options": []
+          },
+          {
+            "title": "Lines",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 110,
+            "options": [
+              {
+                "title": "Straight",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 111,
+                "options": []
+              },
+              {
+                "title": "Looped",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 112,
+                "options": [
+                  {
+                    "title": "Looped with white Halo",
+                    "classification": "lesion",
+                    "type": "selectdrop",
+                    "value" : 113,
+                    "options": []
+                  }
+                ]
+              },
+              {
+                "title": "Curved",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 114,
+                "options": []
+              },
+              {
+                "title": "Serpentine",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 115,
+                "options": []
+              },
+              {
+                "title": "Helical",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 116,
+                "options": []
+              },
+              {
+                "title": "Coiled",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 117,
+                "options": []
+              },
+              {
+                "title": "Branched",
+                "classification": "lesion",
+                "type": "selectdrop",
+                "value" : 118,
+                "options": []
+              }
+            ]
+          },
+          {
+            "title": "Milky-red area",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 120,
+            "options": []
+          },
+          {
+            "title": "Polymorphous vessels",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 130,
+            "options": []
+          }
+        ]
+      },
+      {
+        "title": "Other",
+        "classification": "lesion",
+        "type": "selectdrop",
+        "value" : 140,
+        "options": [
+          {
+            "title": "Shiny white lines",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 150,
+            "options": []
+          },
+          {
+            "title": "Circles",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 151,
+            "options": []
+          },
+          {
+            "title": "Pseudopods",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 152,
+            "options": []
+          },
+          {
+            "title": "Sharply demarcated scalloped border",
+            "classification": "lesion",
+            "type": "selectdrop",
+            "value" : 153,
+            "options": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "step": 5,
+    "title": "Done annotating?",
+    "type": "end",
+    "next": 6,
+    "default": "",
+    "options": []
+  }
+]

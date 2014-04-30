@@ -36,6 +36,61 @@ var colorNameToHex = function(colour)
     return false;
 }
 
+var _labels = [
+    { name: 'background', color: [255, 255, 255]},
+    { name: '10', color: [251, 0, 13] },
+    { name: '20', color: [251, 1, 13] },
+    { name: '21', color: [251, 2, 13] },
+    { name: '22', color: [251, 3, 13] },
+    { name: '23', color: [251, 4, 13] },
+    { name: '24', color: [251, 5, 13] },
+    { name: '25', color: [251, 6, 13] },
+    { name: '30', color: [251, 7, 13] },
+    { name: '31', color: [251, 8, 13] },
+    { name: '32', color: [251, 9, 13] },
+    { name: '33', color: [251, 10, 13] },
+    { name: '40', color: [251, 11, 13] },
+    { name: '50', color: [251, 12, 13] },
+    { name: '51', color: [251, 13, 13] },
+    { name: '52', color: [251, 14, 13] },
+    { name: '53', color: [251, 15, 13] },
+    { name: '60', color: [251, 16, 13] },
+    { name: '61', color: [251, 17, 13] },
+    { name: '62', color: [251, 18, 13] },
+    { name: '70', color: [236, 252, 0] },
+    { name: '71', color: [236, 252, 1] },
+    { name: '72', color: [236, 252, 2] },
+    { name: '73', color: [236, 252, 3] },
+    { name: '74', color: [236, 252, 4] },
+    { name: '75', color: [236, 252, 5] },
+    { name: '76', color: [236, 252, 6] },
+    { name: '77', color: [236, 252, 7] },
+    { name: '80', color: [126, 0, 169] },
+    { name: '81', color: [126, 1, 169] },
+    { name: '82', color: [126, 2, 169] },
+    { name: '83', color: [126, 3, 169] },
+    { name: '100', color: [20, 209, 0] },
+    { name: '101', color: [20, 209, 1] },
+    { name: '102', color: [20, 209, 2] },
+    { name: '110', color: [20, 209, 3] },
+    { name: '111', color: [20, 209, 4] },
+    { name: '112', color: [20, 209, 5] },
+    { name: '113', color: [20, 209, 6] },
+    { name: '114', color: [20, 209, 7] },
+    { name: '115', color: [20, 209, 8] },
+    { name: '116', color: [20, 209, 9] },
+    { name: '117', color: [20, 209, 10] },
+    { name: '118', color: [20, 209, 11] },
+    { name: '120', color: [20, 209, 12] },
+    { name: '130', color: [20, 209, 13] },
+    { name: '140', color: [0, 140, 255] },
+    { name: '150', color: [1, 140, 255] },
+    { name: '151', color: [2, 140, 255] },
+    { name: '152', color: [3, 140, 255] },
+    { name: '153', color: [4, 140, 255] }
+];
+
+
 
 
 
@@ -229,7 +284,6 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
               var frameState = event.frameState;
 
               vectorContext.setImageStyle(imageStyle);
-
               vectorContext.setFillStrokeStyle(fStyle, sStyle);
 
 //              vectorContext.drawMultiPointGeometry(
@@ -311,16 +365,15 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
             moveToFeature: function(feature){
 
-
                 var featuresExtent = ol.extent.createEmpty();
-
-                console.log(feature);
-                console.log(feature.getGeometry());
-                console.log(ol.extent);
 
                 ol.extent.extend(featuresExtent, feature.getGeometry().getExtent());
 
                 this.map.getView().fitExtent(featuresExtent, this.map.getSize());
+//                console.log(feature);
+//                console.log(feature.getGeometry());
+//                console.log(ol.extent);
+
             },
 
 
@@ -426,7 +479,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
 	            	this.saved_annotations = annotations;
 
-            	};
+            	}
             },
 
             addPoint : function(click_coords){
@@ -447,7 +500,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 	                        self.temporary_annotations.lines.splice(0,1);
 	                    }
 	                    	
-                    };
+                    }
                     
                 });
 
@@ -468,19 +521,24 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
             },
 
             clearLayerAnnotations : function(step){
-                console.log('clear?', step);
                 this.vector_source.clear();
                 this.saved_annotations = [];
             },
+//
+//            setAnnotationLabel : function(label){
+//
+//                this.segmentannotator
+//
+//            },
 
             acceptPainting : function(){
 
                 var annotation = this.segmentannotator.getAnnotation();
 
                 var extent = this.map.getView().calculateExtent(this.map.getSize());
-                var tr = ol.extent.getTopRight(extent)
-                var tl = ol.extent.getTopLeft(extent)
-                var bl = ol.extent.getBottomLeft(extent)
+                var tr = ol.extent.getTopRight(extent);
+                var tl = ol.extent.getTopLeft(extent);
+                var bl = ol.extent.getBottomLeft(extent);
 
                 var segmenturl = 'segment'
 
@@ -495,7 +553,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                     self.temporary_annotations.polygons = []
 
                     var contours = JSON.parse(response.contourstr);
-                    console.log(contours[0]);
+//                    console.log(contours[0]);
 
                     self.temporary_annotations.polygons = contours[0].slice()
 
@@ -544,6 +602,52 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
             },
 
 
+
+            selectAnnotationLabel : function(detailvalue){
+
+                this.segmentannotator.setCurrentLabel(detailvalue.toString());
+
+            },
+
+            hidePaintLayerIfVisible : function(){
+
+                console.log('here.... now');
+
+                if(this.segmentannotator){
+
+                    if(!this.segmentannotator.container.hidden){
+
+                        // it's instantiated
+                        console.log(this.segmentannotator)
+                        this.segmentannotator.container.hidden = true;
+
+                        this.map.unfreezeRendering();
+
+                    }
+                }
+            },
+
+            showPaintLayerIfVisible : function(){
+
+                if(this.segmentannotator){
+
+                    if(this.segmentannotator.container.hidden){
+
+                        // it's instantiated
+                        console.log(this.segmentannotator)
+                        this.segmentannotator.container.hidden = false;
+
+                        this.map.unfreezeRendering();
+                        this.map.requestRenderFrame();
+
+                        return true;
+
+                    }
+                }
+
+                return false;
+            },
+
             startPainting : function(){
 
             // if ('download' in exportPNGElement) {
@@ -561,26 +665,26 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
                     var canvas = event.context.canvas;
 
-                    self.segmentannotator = new SLICSegmentAnnotator(canvas, {
-                        regionSize: 80,
-                        container: document.getElementById('annotatorcontainer'),
-                        backgroundColor: [0,0,0],
-                        // annotation: 'annotation.png' // optional existing annotation data.
-                        labels: [
-                          {name: 'background', color: [255, 255, 255]},
-                          'lesion',
-                          'normal',
-                          'other'
-                          ],
-                        onload: function() {
-                          // initializeLegend(this);
-                          // initializeLegendAdd(this);
-                          // initializeButtons(this);
-                        }
-                      });
+                    if(self.segmentannotator){
+                        self.showPaintLayerIfVisible()
+                    }
+                    else {
 
+                        self.segmentannotator = new SLICSegmentAnnotator(canvas, {
+                            regionSize: 80,
+                            container: document.getElementById('annotatorcontainer'),
+                            backgroundColor: [0,0,0],
+                            // annotation: 'annotation.png' // optional existing annotation data.
+                            labels: _labels,
+                            onload: function() {
+                              // initializeLegend(this);
+                              // initializeLegendAdd(this);
+                              // initializeButtons(this);
+                            }
+                          });
+                    }
 
-                    self.segmentannotator.setCurrentLabel(3);
+                    self.segmentannotator.setCurrentLabel(0);
 
                     self.map.freezeRendering();
 
@@ -1118,9 +1222,7 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
         console.log('Initialized annotation tool.');
 
-
         $scope.draw_mode = 'navigate';
-
 
         $scope.completedImages = 0;
         $scope.totalItems = 0;
@@ -1145,13 +1247,11 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         $scope.regionpaint_size = 70;
 
 
-
-
         $rootScope.$watch('image_index', function(newValue, originalValue) {
 
             if ($rootScope.applicationReady) {
                 $scope.active_image = $rootScope.getActiveImage();
-            };
+            }
         });
 
 		$rootScope.$watch('image_list', function(newValue, originalValue) {
@@ -1161,7 +1261,6 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
             	$scope.totalItems = $rootScope.image_list.length;
 
             	$scope.annotations = [];
-
 
             	$.each($rootScope.image_list, function(n, image_data){
 
@@ -1177,11 +1276,10 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
                      };
 
                      $scope.annotations.push(placeholder_obj);
-                 });            		
-
+                 });
             	
 //            	console.log('annotations?', $scope.annotations);
-            };
+            }
         });
 
 
@@ -1325,6 +1423,13 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
             alert('help!');
         }
 
+        $scope.manualEdit = function(){
+
+            $scope.tool_bar_state = 'pldefine';
+            $rootScope.imageviewer.setDrawMode('pointlist');
+
+        }
+
         $scope.increaseParameter = function(){
 
             if($scope.tool_bar_state == 'mwdefine'){
@@ -1362,12 +1467,10 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         // initial function when a step is loaded
         $scope.loadStep = function(){
 
-
-
             // get current step configuration
             $scope.step_config = $scope.getCurrentStepConfig();
 
-            console.log($scope.step_config);
+//            console.log($scope.step_config);
 
             // clear viewer current and temporary annotations
             $scope.clearStep();
@@ -1389,10 +1492,13 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
                 // this step doesn't have annotations, do appropriate step selection processing steps (aka auto)
 
-
             }
 
+            $rootScope.imageviewer.hidePaintLayerIfVisible();
+
+
             if($scope.step_config){
+
 
                 // set imageviewer to current step configuration
                 if ($scope.step_config.default != "") {
@@ -1408,7 +1514,8 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
                     console.log('test')
 
-                    var bounds = $scope.getLesionBoundary();
+                    var feature = $scope.getLesionFeature();
+                    $rootScope.imageviewer.moveToFeature(feature);
 
                 }
 
@@ -1429,14 +1536,7 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
         $scope.clearStep = function(){
 
-
             // if no annotations, do nothing.
-
-            // if only saved annotations, do nothing (for now)
-
-            // if stable imageviewer annotations, clear them
-
-//            $scope.clearStableAnnotations();
 
             // if temporary imageviewer annotations, clear them
             $scope.clearTempAnnotations();
@@ -1449,16 +1549,14 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
                 $scope.tool_bar_state = $scope.step_config.type;
             }
 
-
         }
 
 
 
-        $scope.getLesionBoundary = function(){
+        $scope.getLesionFeature = function(){
 
 
         	var currentAnnotation = $scope.getCurrentAnnotation();
-
 
             console.log(features);
 
@@ -1470,9 +1568,11 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
             console.log(features);
 
-            var first_feature = features[0]
+            var first_feature = features[0];
 
-            $rootScope.imageviewer.moveToFeature(first_feature);
+            return first_feature;
+
+
 
 //
 //            var minpt = { x : 100000, y: 100000 }
@@ -1698,8 +1798,6 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
                 var self = this;
 
-
-
                 var annotation_url = 'annotation/'
                 $http.post(annotation_url, msg).success(function(response){
 
@@ -1782,6 +1880,8 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
         	$scope.resetStep();
         }
+
+
 
 
 
@@ -1936,10 +2036,10 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
         $scope.selectDetail = function(detailobj){
             console.log(detailobj);
-
             $scope.select_detail = detailobj;
-        }
 
+            $rootScope.imageviewer.selectAnnotationLabel(detailobj.value);
+        }
 
 
 		$scope.selectOption = function(key, option_to_select) {
@@ -2522,6 +2622,8 @@ function updateLayout() {
         $("#angular_id").height(window.innerHeight);
         $("#annotationView").height(window.innerHeight);
 
+        console.log(window.innerWidth, window.innerHeight);
+//1920 1106
     })
 }
 

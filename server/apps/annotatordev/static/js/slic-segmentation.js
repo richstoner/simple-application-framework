@@ -491,7 +491,7 @@
 
   window.SLICSegmentation = function(canvas_image, options) {
 
-    console.log("SLICSegmentation start");
+    console.log("SLICSegmentation started");
 
     if (typeof options === 'undefined') {
       options = {};
@@ -505,7 +505,6 @@
     if (options.minRegionSize === undefined){
       options.minRegionSize = options.regionSize * options.regionSize / 4;
     }
-
 
     var canvas = document.createElement('canvas');
     canvas.width = window.innerWidth;

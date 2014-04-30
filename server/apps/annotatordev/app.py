@@ -950,7 +950,17 @@ def imageEndPoint(start_index, count):
 
     if g.user is not None:
         import json
-        result = image_collection.find({}, {'_id': False}, limit=count, skip=start_index).sort("Study_num", 1)
+
+        # result = image_collection.find({}, {'_id': False}, limit=count, skip=start_index).sort("Study_num", 1)
+        query = {"study_id": { "$regex" : ".*uda.*" }}
+        filter = {'_id': False}
+
+
+        result = image_collection.find(query, filter, limit=count, skip=start_index).sort("Study_num", 1)
+
+
+        # {"study_id" : {$regex : ".*uda.*"}}).count()
+
         return json.dumps(list(result))
 
     else:

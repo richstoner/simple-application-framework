@@ -38,7 +38,7 @@
         color: #fff;
 
         width: 500px;
-        min-height: 200px;
+        min-height: 180px;
         /*padding-bottom: 10px;*/
         position: absolute;
         background: #272822;
@@ -86,41 +86,40 @@
         /*overflow-x: scroll;*/
         /*height: 65px;*/
         padding: 2px;
+        margin-left: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
         height: 200px;
         /*background: #f00;*/
     }
 
     .imagePreviewInner {
-        width: 475px;
+        width: 480px;
     }
 
 
 
-div.wrapper{
-    float:left; /* important */
-    position:relative; /* important(so we can absolutely position the description div */
-}
-div.description{
-    position:absolute; /* absolute position (so we can position it where we want)*/
-    bottombottom:0px; /* position will be on bottom */
-    left:0px;
-    width:100%;
-    /* styling bellow */
-    background-color:black;
-    font-family: 'tahoma';
-    font-size:15px;
-    color:white;
-    opacity:0.6; /* transparency */
-    filter:alpha(opacity=60); /* IE transparency */
-}
-p.description_content{
-    padding:10px;
-    margin:0px;
-}
-
-
-
-
+    div.wrapper{
+        float:left; /* important */
+        position:relative; /* important(so we can absolutely position the description div */
+    }
+    div.description{
+        position:absolute; /* absolute position (so we can position it where we want)*/
+        bottombottom:0px; /* position will be on bottom */
+        left:0px;
+        width:100%;
+        /* styling bellow */
+        background-color:black;
+        font-family: 'tahoma';
+        font-size:15px;
+        color:white;
+        opacity:0.6; /* transparency */
+        filter:alpha(opacity=60); /* IE transparency */
+    }
+    p.description_content{
+        padding:10px;
+        margin:0px;
+    }
 
 
     .imagethumb {
@@ -128,18 +127,16 @@ p.description_content{
         z-index: 1;
         height: 90px;
         width: 90px;
-        margin: 1px;
+        margin: 2px;
         border: 1px solid #999;
         float: left;
     }
-
-
 
     .imagedone {
         z-index: 2;
         height: 90px;
         width: 90px;
-        margin: 1px;
+        margin: 2px;
         border: 1px solid #999;
         float: left;
         position: relative;
@@ -179,8 +176,8 @@ p.description_content{
 
 
     .advancedoptions {
-        margin-top:10px;
-        padding-top:10px;
+        /*margin-top:5px;*/
+        padding-top:5px;
         width: 100%;
         float:left;
     }
@@ -225,13 +222,19 @@ p.description_content{
 
     .lowertoolbar
     {
-        padding: 2px;
-        margin: 5px;
-
-
+        background-color: rgb(62, 64, 54);
+        width: 100%;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        float:left;
     }
 
 
+    .lowertoolbar > div {
+        margin-left: 6px;
+        /*margin-right: 10px;*/
+        padding-right: 6px;
+    }
 
 
 
@@ -305,8 +308,8 @@ p.description_content{
         height: 50px;
         font-weight: 300;
         padding: 6px;
-        margin-top: 10px;
-        margin-bottom: 10px;
+        /*margin-top: 10px;*/
+        /*margin-bottom: 10px;*/
         padding-top:10px;
         padding-left: 10px;
         border-bottom: 1px solid #333;
@@ -326,10 +329,10 @@ p.description_content{
     .step-header {
         background: #000;
         color: #666;
-        font-size: 14pt;
+        font-size: 12pt;
         font-weight: 300;
-        margin-top:10px;
-        margin-bottom:10px;
+        /*margin-top:10px;*/
+        /*margin-bottom:10px;*/
         padding: 6px;
         padding-top:10px;
         padding-left: 10px;
@@ -346,22 +349,24 @@ p.description_content{
     /*}*/
 
     .step-content {
-        padding-top:6px;
-        padding-left: 10px;
-        padding-right: 10px;
-        padding-bottom: 5px;
+        padding-top: 7px;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-bottom: 7px;
     }
 
     .step-active
     {
         color: #fff;
-        background-color: #26323d;
-        font-weight: 500;
+        /*background-color: #26323d;*/
+        background-color: rgb(124, 127, 108);
+        /*font-weight: 500;*/
 
-        -webkit-box-shadow: 1px 7px 21px 2px rgba(0,0,0,0.7);
-        -moz-box-shadow: 1px 7px 21px 2px rgba(0,0,0,0.7);
-        box-shadow: 1px 7px 21px 2px rgba(0,0,0,0.7);
-        border: 0px;
+
+        /*-webkit-box-shadow: 1px 7px 21px 2px rgba(0,0,0,0.7);*/
+        /*-moz-box-shadow: 1px 7px 21px 2px rgba(0,0,0,0.7);*/
+        /*box-shadow: 1px 7px 21px 2px rgba(0,0,0,0.7);*/
+        /*border: 0px;*/
     }
 
 
