@@ -417,12 +417,18 @@ def segmentImage(input_parameters):
 
         imgstr = re.search(r'base64,(.*)', opdata['image']).group(1)
         tempimg = cStringIO.StringIO(imgstr.decode('base64'))
+
+
+
         tempimg.seek(0)
         cvimg = cv2.imdecode(np.asarray(bytearray(tempimg.read()), dtype=np.uint8), 1)
+
+        cv2.imwrite('inputimage.png', cvimg)
+
         imgray = cv2.cvtColor(cvimg,cv2.COLOR_BGR2GRAY)
         imgray = imgray*255
 
-        cv2.imwrite('segment.jpg', imgray)
+        cv2.imwrite('segment.png', imgray)
 
         # now have practical binary image
 

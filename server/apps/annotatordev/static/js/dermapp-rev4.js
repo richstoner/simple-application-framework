@@ -2,6 +2,12 @@
 'use strict';
 
 
+// what does the annotation metadata look like
+
+
+
+
+
 // putting the utilities in the main file
 var colorNameToHex = function(colour)
 {
@@ -36,8 +42,18 @@ var colorNameToHex = function(colour)
     return false;
 }
 
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
 var _labels = [
     { name: 'background', color: [255, 255, 255]},
+    { name: 'foreground', color: [255, 255, 255]},
     { name: '10', color: [251, 0, 13] },
     { name: '20', color: [251, 1, 13] },
     { name: '21', color: [251, 2, 13] },
@@ -110,100 +126,115 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
             // Instance variables
             this.image_source = undefined;
             this.image_layer = undefined;
-
             this.map = undefined;
-
-            this.draw_interaction = undefined;
             this.draw_mode = undefined;
-
             this.last_click_location = undefined;
             this.last_job_id = undefined;
             this.fill_tolerance = 50;
 
-
             // annotations added that need to be saved
             this.clearTemporaryAnnotations();
-
 
             // annotations previously saved
             this.saved_annotations = [];
 
             var styleFunction = (function() {
-              var styles = {};
-              var image = new ol.style.Circle({
-                radius: 1,
-                fill: null,
-                stroke: new ol.style.Stroke({color: 'orange', width: 2})
-              });
 
-              styles['Point'] = [new ol.style.Style({image: image})];
+                 return function(feature, resolution) {
 
-              styles['Polygon'] = [new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: 'blue',
-                  width: 3
-                }),
-                fill: new ol.style.Fill({
-                  color: 'rgba(0, 0, 255, 0.1)'
-                })
-              })];
-              styles['MultiLinestring'] = [new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: 'green',
-                  width: 3
-                })
-              })];
-              styles['MultiPolygon'] = [new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: 'blue',
-                  width: 1
-                }),
-                fill: new ol.style.Fill({
-                  color: 'rgba(255, 255, 0, 0.1)'
-                })
-              })];
-              styles['default'] = [new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: 'yellow',
-                  width: 3
-                }),
-                fill: new ol.style.Fill({
-                  color: 'rgba(255, 0, 0, 0.1)'
-                }),
-                image: image
-              })];
-
-
-              styles['normal'] = [new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: 'blue',
-                  width: 2
-                }),
-                fill: new ol.style.Fill({
-                  color: 'rgba(0, 0, 255, 0.2)'
-                })
-              })];
-              styles['symmetry'] = [new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: 'black',
-                  width: 3
-                })
-              })];
-              styles['lesion'] = [new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: 'red',
-                  width: 2
-                }),
-                fill: new ol.style.Fill({
-                  color: 'rgba(255, 0, 0, 0.2)'
-                })
-              })];              
-              
-              return function(feature, resolution) {
-                // console.log(feature)
-                return styles[feature.get('classification')] || styles['default'];
-              };
+                      return [new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                          color: feature.get('hexcolor'),
+    //                      color: 'black',
+                          width: 1
+                        }),
+                        fill: new ol.style.Fill({
+                            color: feature.get('rgbcolor')
+                        })
+                      })]
+                  };
             })();
+
+//              var styles = {};
+
+//              var image = new ol.style.Circle({
+//                radius: 1,
+//                fill: null,
+//                stroke: new ol.style.Stroke({color: 'orange', width: 2})
+//              });
+
+
+
+//              styles['Point'] = [new ol.style.Style({image: image})];
+//
+//              styles['Polygon'] = [new ol.style.Style({
+//                stroke: new ol.style.Stroke({
+//                  color: 'blue',
+//                  width: 3
+//                }),
+//                fill: new ol.style.Fill({
+//                  color: 'rgba(0, 0, 255, 0.1)'
+//                })
+//              })];
+//              styles['MultiLinestring'] = [new ol.style.Style({
+//                stroke: new ol.style.Stroke({
+//                  color: 'green',
+//                  width: 3
+//                })
+//              })];
+//              styles['MultiPolygon'] = [new ol.style.Style({
+//                stroke: new ol.style.Stroke({
+//                  color: 'blue',
+//                  width: 1
+//                }),
+//                fill: new ol.style.Fill({
+//                  color: 'rgba(255, 255, 0, 0.1)'
+//                })
+//              })];
+//
+//
+
+//
+//
+//              styles['normal'] = [new ol.style.Style({
+//                stroke: new ol.style.Stroke({
+//                  color: 'blue',
+//                  width: 2
+//                }),
+//                fill: new ol.style.Fill({
+//                  color: 'rgba(0, 0, 255, 0.2)'
+//                })
+//              })];
+//
+//              styles['symmetry'] = [new ol.style.Style({
+//                stroke: new ol.style.Stroke({
+//                  color: 'black',
+//                  width: 3
+//                })
+//              })];
+
+//              styles['default'] = [new ol.style.Style({
+//                stroke: new ol.style.Stroke({
+//                  color: 'yellow',
+//                  width: 3
+//                }),
+//                fill: new ol.style.Fill({
+//                  color: 'rgba(255, 0, 0, 0.1)'
+//                }),
+//                image: image
+//              })];
+//
+//              styles['lesion'] = [new ol.style.Style({
+//                stroke: new ol.style.Stroke({
+//                  color: 'red',
+//                  width: 2
+//                }),
+//                fill: new ol.style.Fill({
+//                  color: 'rgba(255, 0, 0, 0.2)'
+//                })
+//              })];
+//
+
 
 
 
@@ -224,8 +255,6 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
             
             
             // set map event handlers
-
-
 
             this.map.on('singleclick', function(evt) {
 
@@ -281,56 +310,24 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
             this.map.on('postcompose', function(event) {
 
               var vectorContext = event.vectorContext;
-              var frameState = event.frameState;
+//              var frameState = event.frameState;
 
               vectorContext.setImageStyle(imageStyle);
               vectorContext.setFillStrokeStyle(fStyle, sStyle);
 
-//              vectorContext.drawMultiPointGeometry(
-//                  new ol.geom.MultiPoint(self.temporary_annotations.polygons), null);
-
-//              vectorContext.drawMultiPointGeometry(
-//                  new ol.geom.MultiPoint(self.temporary_annotations.lines), null);
-
-//              vectorContext.drawLineStringGeometry(
-//                  new ol.geom.LineString(self.temporary_annotations.polygons), null);
-
-              vectorContext.drawLineStringGeometry(
+              if(self.temporary_annotations.lines.length > 0){
+                vectorContext.drawLineStringGeometry(
                   new ol.geom.LineString(self.temporary_annotations.lines), null);
+              }
 
-              vectorContext.drawPolygonGeometry(
-                  new ol.geom.Polygon([self.temporary_annotations.polygons]), null);
-
-
-
-//              vectorContext.drawMultiPolygonGeometry(
-//                  new ol.geom.Polygon(self.temporary_annotations.polygons), null);
-
-////              vectorContext.drawMultiPointGeometry(
-////                  new ol.geom.MultiPoint(self.temporary_annotations.polygons), null);
-////
-
-
-//              vectorContext.drawMultiLineStringGeometry(
-//                  new ol.geom.MultiLineString(self.temporary_annotations.lines), null);
-
-//LineString
-
-
-              self.map.requestRenderFrame();
+              if(self.temporary_annotations.polygons.length > 0){
+                  vectorContext.drawPolygonGeometry(
+                      new ol.geom.Polygon([self.temporary_annotations.polygons]), null);
+              }
+                self.map.render()
             });
 
 
-
-
-            // function onMoveEnd(evt) {
-            //   var map = evt.map;
-            //   var extent = map.getView().calculateExtent(map.getSize());
-            //   console.log(extent);
-            // }
-
-            // this.map.on('moveend', onMoveEnd);
-    
             // add zoom slider
 //            var zoomslider = new ol.control.ZoomSlider();
 //            this.map.addControl(zoomslider);
@@ -353,7 +350,6 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
             hasTemporaryAnnotations : function (){
 
                 var tempLength = this.temporary_annotations.polygons.length + Math.floor(this.temporary_annotations.lines.length / 2)+ this.temporary_annotations.points.length + this.temporary_annotations.select;
-                // console.log('Temp length', tempLength);
                 return tempLength > 0;
 
             },
@@ -362,18 +358,10 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                 return this.saved_annotations.length > 0;
             },
 
-
             moveToFeature: function(feature){
-
                 var featuresExtent = ol.extent.createEmpty();
-
                 ol.extent.extend(featuresExtent, feature.getGeometry().getExtent());
-
                 this.map.getView().fitExtent(featuresExtent, this.map.getSize());
-//                console.log(feature);
-//                console.log(feature.getGeometry());
-//                console.log(ol.extent);
-
             },
 
 
@@ -402,7 +390,6 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
                     l_feature.setGeometry(new ol.geom.Polygon([annotation.lines]))
                     features_list.push(l_feature)
-
                 }
 
                 return features_list;
@@ -411,18 +398,9 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
             saveSelectionStack : function(selection_stack){
 
-            	// if (this.saved_annotations.length > 0) {
-	            // 	var lastAnnotation = this.saved_annotations[this.saved_annotations.length];
-	            // 	lastAnnotation.select = selection_stack;
-            	// }
-            	// else {
-
-					this.temporary_annotations.select = selection_stack;
-            		this.temporary_annotations.classification = 'lesion';
-					this.saved_annotations.push(this.temporary_annotations);
-	
-            	// }
-            	// var temporary_annotations = $rootScope.imageviewer.saveTemporaryAnnotations($scope.step_config.classification)
+                this.temporary_annotations.select = selection_stack;
+                this.temporary_annotations.classification = 'lesion';
+                this.saved_annotations.push(this.temporary_annotations);
 
             	this.clearTemporaryAnnotations();
             },
@@ -461,11 +439,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
             setAnnotations : function(annotations){
 
-            	console.log('annotion to set', annotations)
-
             	if (annotations) {
-
-            		var feature_list = [];	   
 
             		for(var key in annotations){
 
@@ -474,42 +448,25 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 		                for(var i=0; i<features.length;i++){
 		                    this.vector_source.addFeature(features[i])
 		                }
-
             		}
 
 	            	this.saved_annotations = annotations;
-
             	}
             },
 
             addPoint : function(click_coords){
 
-                var pointurl = 'point'
-                var msg = {};
-                msg['click'] = click_coords
-                var self = this;
-                // interesting hack to get the UI to update without external scopy applys
-                $http.post(pointurl, msg).success(function(response){
-
-                    self.temporary_annotations.lines.push(response.point.click)
-
-                    // only store last two points if we're doing lines of symmetry
-                    if (self.draw_mode == 'lines') {
-
-	                    if(self.temporary_annotations.lines.length == 3){
-	                        self.temporary_annotations.lines.splice(0,1);
-	                    }
-	                    	
-                    }
-                    
-                });
-
-
+                this.temporary_annotations.lines.push(click_coords);
+                externalApply();
             },
 
             clearTemporaryAnnotations : function(){
 
+
+
+
 				this.temporary_annotations = {
+                    features : [],
 	                polygons : [],
 	                lines : [],	
 	                points : [],
@@ -524,22 +481,13 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                 this.vector_source.clear();
                 this.saved_annotations = [];
             },
-//
-//            setAnnotationLabel : function(label){
-//
-//                this.segmentannotator
-//
-//            },
 
             acceptPainting : function(){
 
                 var annotation = this.segmentannotator.getAnnotation();
-
                 var extent = this.map.getView().calculateExtent(this.map.getSize());
                 var tr = ol.extent.getTopRight(extent);
-                var tl = ol.extent.getTopLeft(extent);
                 var bl = ol.extent.getBottomLeft(extent);
-
                 var segmenturl = 'segment'
 
                 var msg = {};
@@ -550,53 +498,51 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                 // interesting hack to get the UI to update without external scopy applys
                 $http.post(segmenturl, msg).success(function(response){
 
-                    self.temporary_annotations.polygons = []
+                    console.log(response)
 
-                    var contours = JSON.parse(response.contourstr);
-//                    console.log(contours[0]);
+//                    self.temporary_annotations.features = [];
 
-                    self.temporary_annotations.polygons = contours[0].slice()
+                    self.vector_source.clear();
 
-                    delete self.segmentannotator;
+                    var f = new ol.format.GeoJSON()
 
-                    $('#annotatorcontainer').empty();
+                    for(var i=0;i<response.features.length;i++){
 
-                    self.map.unfreezeRendering();
-                    self.map.requestRenderFrame();
+                        var jsObject = JSON.parse(response.features[i])
+//                        console.log(jsObject['properties'])
 
-                    // console.log(self.temporary_annotations.autofill);
-                    // var inner = JSON.parse(response.contour.inner);
-                    
-                    // var transform = JSON.parse(response.xform);
-                    
-                    // self.segmentation_list = [];
-                    // self.temporary_annotations.autofill = []
+                        var label = _labels[parseInt(jsObject['properties']['labelindex'])]
+                        jsObject['properties']['label'] = label
 
-                    // var applyTransform = function(pt, _transform){
-                    //     var px = (pt[0] / _transform.scale[0]) + _transform.offset[0];
-                    //     var py = - (pt[1] / _transform.scale[1]) + _transform.offset[1];
-                    //     return [px, py];
-                    // }
+                        var hexcolor = rgbToHex(label['color'][0], label['color'][1], label['color'][2])
+                        var rgbcolor = 'rgba(' + label['color'][0] + ',' + label['color'][1] + ',' + label['color'][2] + ',0.2)';
 
-                    // for (var j =0; j < outer.length; j++)
-                    // {                        
-                    //     var c = applyTransform(outer[j][0], transform);
+                        jsObject['properties']['rgbcolor'] = rgbcolor;
+                        jsObject['properties']['hexcolor'] = hexcolor;
 
-                    //     self.temporary_annotations.autofill.push(c)
-                    // }
+                        var featobj = f.readFeature(jsObject);
 
-                    // for (var j =0; j < inner.length; j++)
-                    // {                        
-                    //     var c = applyTransform(inner[j][0], transform);
+                        console.log(featobj)
+                        console.log(featobj.getProperties())
 
-                    //     self.temporary_annotations.autofill.push(c)
-                    // }
-                    // self.temporary_annotations.lines.push(response.point.click)
+                        self.vector_source.addFeature(featobj)
 
-                    // if(self.temporary_annotations.lines.length == 3){
-                    //     self.temporary_annotations.lines.splice(0,1);
-                    // }
-                    
+                    }
+
+
+//                    console.log(self.temporary_annotations)
+//                    self.temporary_annotations.polygons = []
+//                    var contours = JSON.parse(response.contourstr);
+//                    self.temporary_annotations.polygons = contours[0].slice()
+
+                    self.segmentannotator.container.hidden = true;
+
+//                    delete self.segmentannotator;
+//                    $('#annotatorcontainer').empty();
+
+                    // manually request an updated frame async
+                    self.map.render()
+
                 });
 
             },
@@ -621,8 +567,6 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                         console.log(this.segmentannotator)
                         this.segmentannotator.container.hidden = true;
 
-                        this.map.unfreezeRendering();
-
                     }
                 }
             },
@@ -637,8 +581,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                         console.log(this.segmentannotator)
                         this.segmentannotator.container.hidden = false;
 
-                        this.map.unfreezeRendering();
-                        this.map.requestRenderFrame();
+                        this.map.render();
 
                         return true;
 
@@ -649,15 +592,6 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
             },
 
             startPainting : function(){
-
-            // if ('download' in exportPNGElement) {
-            //   exportPNGElement.addEventListener('click', function(e) {
-            //     map.once('postcompose', function(event) {
-            //       var canvas = event.context.canvas;
-            //       exportPNGElement.href = canvas.toDataURL('image/png');
-            //     });
-            //     map.render();
-            //   }, false);
 
                 var self = this;
 
@@ -671,7 +605,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                     else {
 
                         self.segmentannotator = new SLICSegmentAnnotator(canvas, {
-                            regionSize: 80,
+                            regionSize: 65,
                             container: document.getElementById('annotatorcontainer'),
                             backgroundColor: [0,0,0],
                             // annotation: 'annotation.png' // optional existing annotation data.
@@ -686,98 +620,7 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
 
                     self.segmentannotator.setCurrentLabel(0);
 
-                    self.map.freezeRendering();
-
-
-                //   // exportPNGElement.href = canvas.toDataURL('image/png');
                 });
-
-
-
-                // this.map.freezeRendering();
-                // this.map.render();
-
-
-
-                // var self = this;
-
-                // var extent = this.map.getView().calculateExtent(this.map.getSize());
-                // var tr = ol.extent.getTopRight(extent)
-                // var tl = ol.extent.getTopLeft(extent)
-                // var bl = ol.extent.getBottomLeft(extent)
-
-                // // think: if x is positive on left, subtract from total width
-                // // if x on right is greater than width, x = width
-
-                // var origin_x = 0;
-                // var origin_y = 0;
-
-                // var click_x_offset = 0;
-                // var click_y_offset = 0;
-
-                // var newWidth = this.nativeSize.w;
-
-                // if(tr[0] < this.nativeSize.w) {
-                //     newWidth = tr[0];
-                // };
-                // if(tl[0] > 0) {
-                //     newWidth -= tl[0]
-                //     origin_x = tl[0]
-                //     click_x_offset
-                // };
-
-                // var newHeight = this.nativeSize.h;
-                
-                // if(- bl[1] < this.nativeSize.h) {
-                //     newHeight = -bl[1];
-                // };
-                // if(tl[1] < 0) {
-                //     newHeight += tl[1]
-                //     origin_y = -tl[1];
-                // }                
-
-                // console.log(origin_x, origin_y, newWidth, newHeight);
-
-                // if (newWidth <= 0 || newHeight <= 0){
-                //     console.log('offscreen or invalid region')
-                // };
-
-                // var rel = []
-                // rel[0] = origin_x / this.nativeSize.w;
-                // rel[1] = origin_y / this.nativeSize.h;
-                // rel[2] = newWidth / this.nativeSize.w;
-                // rel[3] = newHeight / this.nativeSize.h;
-
-                // var dataurl = function(rel, width){
-                //     return '&WID=' + width + '&RGN=' + rel.join(',') + '&CVT=jpeg'
-                // }
-
-                // // var url_to_use = this.data_url + '&WID=400&RGN=0.25,0.25,0.5,0.5&CVT=jpeg'
-                
-                // var url_to_use = this.data_url + dataurl(rel, newWidth);
-
-
-                // new SLICSegmentAnnotator(url_to_use, {
-                //     regionSize: 70,
-                //     container: document.getElementById('annotatorcontainer'),
-                //     backgroundColor: [0,0,0],
-                //     // annotation: 'annotation.png' // optional existing annotation data.
-                //     labels: [
-                //       {name: 'background', color: [255, 255, 255]},
-                //       'lesion',
-                //       'normal',
-                //       'other'
-                //       ],
-                //     onload: function() {
-                //       // initializeLegend(this);
-                //       // initializeLegendAdd(this);
-                //       // initializeButtons(this);
-                //     }
-                //   });
-
-                // <a id="export-png" class="btn" download="map.png"><i class="icon-download"></i> Export PNG</a>
-        
-
             },
 
             setFillParameter : function(new_fill_tolerance){
@@ -922,38 +765,6 @@ var olViewer = derm_app.factory('olViewer', function(ol, $http, xmlParser) {
                 if(results.uuid == this.last_job_id){
 
                     console.log(results.result);
-//
-//                    console.log('use me', results)
-//
-//                    var result_url = 'http://localhost:5555/api/task/result/' + results.uuid
-//
-//                    $http.get(result_url, function(response){
-//
-//                        console.log(response)
-//
-//                        var outer = JSON.parse(response.contour.outer);
-//                        // var inner = JSON.parse(response.contour.inner);
-//
-//                        var transform = JSON.parse(response.xform);
-//
-//                        // self.segmentation_list = [];
-//                        self.temporary_annotations.polygons = []
-//
-//                        var applyTransform = function(pt, _transform){
-//                            var px = (pt[0] / _transform.scale[0]) + _transform.offset[0];
-//                            var py = - (pt[1] / _transform.scale[1]) + _transform.offset[1];
-//                            return [px, py];
-//                        }
-//
-//                        for (var j =0; j < outer.length; j++)
-//                        {
-//                            var c = applyTransform(outer[j][0], transform);
-//
-//                            self.temporary_annotations.polygons.push(c)
-//                        }
-//
-//                    })
-
                 }
 
             },
@@ -1855,7 +1666,6 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
             var feature = $scope.getLesionFeature();
             $rootScope.imageviewer.moveToFeature(feature);
 
-
         	$rootScope.imageviewer.startPainting();
 
         }
@@ -1865,8 +1675,6 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 			$scope.tool_bar_state = 'rpreview';
             $rootScope.imageviewer.acceptPainting();
 
-//            $scope.nextStep();
-
         }
 
         $scope.cancelRegionPaint = function(){
@@ -1875,6 +1683,17 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
         	$rootScope.imageviewer.clearTemporary();
 
         	$scope.resetStep();
+        }
+
+        $scope.navMode = function(){
+
+            $rootScope.imageviewer.hidePaintLayerIfVisible()
+        }
+
+        $scope.drawMode = function(){
+            var feature = $scope.getLesionFeature();
+            $rootScope.imageviewer.moveToFeature(feature);
+            $rootScope.imageviewer.showPaintLayerIfVisible()
         }
 
 
@@ -2188,11 +2007,25 @@ var annotationTool = derm_app.controller('AnnotationTool', ['$scope', '$rootScop
 
         // state functions 
 
-        $scope.showIfStep = function(step){            
+        $scope.showIfStep = function(step){
+
+//            if(step == 5){
+//                return false;
+//            }
+
             return parseInt(step) == $scope.step;
         }
 
         $scope.showIfStepGTE = function(step){
+
+            if($scope.step == 4){
+
+                if(step == 4){
+                    return true;
+                }
+                return false;
+            }
+
         	return parseInt(step) <= $scope.step;	
         }
 
@@ -2620,6 +2453,12 @@ function updateLayout() {
 
         console.log(window.innerWidth, window.innerHeight);
 //1920 1106
+    })
+}
+
+function externalApply() {
+    var scope = angular.element($("#angular_id")).scope();
+    scope.safeApply(function(){
     })
 }
 

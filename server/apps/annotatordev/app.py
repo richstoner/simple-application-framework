@@ -306,9 +306,162 @@ def addPoint():
     return json.dumps(msg)
 
 
-#
-@app.route('/segment', methods=['GET', 'POST'])
+@app.route('/segment', methods=['POST'])
 def segment():
+
+    import json
+
+    msg = {}
+    msg['status'] = 'start'
+
+    if request.method == 'POST':
+
+        import cv2
+        import numpy as np
+        from numpy import unique, squeeze
+        import Image
+        import cStringIO
+        import re
+        import geojson
+        from geojson import Polygon, Feature, FeatureCollection
+
+        opdata = json.loads(request.data)
+
+        print opdata
+
+
+        imgstr = re.search(r'base64,(.*)', opdata['image']).group(1)
+        tempimg = cStringIO.StringIO(imgstr.decode('base64'))
+        tempimg.seek(0)
+        cvimg = cv2.imdecode(np.asarray(bytearray(tempimg.read()), dtype=np.uint8), 1)
+        # cv2.imwrite('inputimage.png', cvimg)
+
+        # imgray = cv2.cvtColor(cvimg,cv2.COLOR_BGR2GRAY)
+        imgray = cvimg[:,:,2]
+        # cv2.imwrite('segment.png', imgray)
+
+        all_cnts = []
+        cntdict = {}
+
+        return_data = []
+
+        extent = opdata['extent']
+        tr = extent[0]
+        bl = extent[1]
+
+        native_width = tr[0] - bl[0]
+        native_height = -bl[1] + tr[1]
+
+        x_scale = native_width / imgray.shape[1]
+        y_scale = native_height / imgray.shape[0]
+
+        def contourToGeoString(cnt):
+            '''convert an opencv contour to a geojson-compatible representation'''
+
+            t_string = []
+            for pt in cnt:
+
+                px = np.round(pt[0] * x_scale) + bl[0]
+                py = -1*np.round(pt[1] * y_scale) + tr[1]
+
+                t_string.append((float(px), float(py)))
+
+            return t_string
+
+        unique_labels = unique(imgray)
+
+        print 'uniques %s' % (unique_labels)
+
+        # we're going to make an assumption: only consider a single hole in a polygon
+
+        for label in unique_labels:
+
+            working_img = imgray.copy()
+            working_img[working_img != label] = 0
+
+            # CV_RETR_CCOMP retrieves all of the contours and organizes them into a two-level
+            # hierarchy. At the top level, there are external boundaries of the components.
+            # At the second level, there are boundaries of the holes. If there is another contour
+            # inside a hole of a connected component, it is still put at the top level.
+
+            contours, hierarchy  = cv2.findContours(working_img, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
+
+            # hierarchy[i][0] , hiearchy[i][1] , hiearchy[i][2] , and hiearchy[i][3] are set
+            # to 0-based indices in contours of the next and previous contours at the same
+            # hierarchical level, the first child contour and the parent contour, respectively.
+            # If for the contour i there are no next, previous, parent, or nested contours,
+            # the corresponding elements of hierarchy[i] will be negative.
+
+            for n, cnt in enumerate(contours):
+
+                hei = hierarchy[0][n]
+        #         print hei
+
+                # create an array for this polygon
+                if str(label) not in cntdict.keys():
+                    cntdict[str(label)] = []
+
+                if hei[3] >= 0:
+                    print '%s: %d -> this contour has a parent: %d' % (label, n, hei[3])
+                    # this contour has a parent, do not add it directly
+                    pass
+
+
+                elif hei[2] < 0:
+                    # this contour has no children, just add it
+
+                    outer_poly = (contourToGeoString(squeeze(cnt)))
+
+        #             x_vals = np.round(ca[:,0] * x_scale) + bl[0]
+        #             y_vals = -1*np.round(ca[:,1] * y_scale) + tr[1]
+
+                    print '(add) %s: %d -> this contour (%d) has no children' % (label,n, len(outer_poly))
+
+
+                    print outer_poly
+
+                    geo = Polygon([outer_poly])
+                    feat = Feature(geometry=geo, id=len(all_cnts))
+                    feat['properties']['labelindex'] = str(label)
+
+
+                    cntdict[str(label)].append(feat)
+                    all_cnts.append(feat)
+
+                else:
+                    # contour's child is at contours[hei[2]]
+                    # add this contour and it's child
+
+                    outer_poly = contourToGeoString(squeeze(cnt))
+                    inner_poly = contourToGeoString(squeeze(contours[hei[2]]))
+
+                    print '(add) %s: %d -> this contour (%d) has a child: %d (%d)' % (label, n, len(outer_poly), hei[2], len(inner_poly))
+
+                    geo = Polygon([outer_poly, inner_poly])
+
+                    feat = Feature(geometry=geo, id=len(all_cnts))
+                    feat['properties']['labelindex'] = str(label)
+
+                    cntdict[str(label)].append(feat)
+
+                    all_cnts.append(feat)
+
+
+        for c in all_cnts:
+            return_data.append(geojson.dumps(c))
+
+        print 'There are %d features to return' % (len(return_data))
+
+        msg['features'] = return_data
+
+    return json.dumps(msg)
+
+
+
+
+#
+@app.route('/segmentold', methods=['GET', 'POST'])
+def segmentold():
 
     import json
 
@@ -334,10 +487,13 @@ def segment():
         tempimg = cStringIO.StringIO(imgstr.decode('base64'))
         tempimg.seek(0)
         cvimg = cv2.imdecode(np.asarray(bytearray(tempimg.read()), dtype=np.uint8), 1)
+
+        cv2.imwrite('inputimage.png', cvimg)
+
         imgray = cv2.cvtColor(cvimg,cv2.COLOR_BGR2GRAY)
         imgray = imgray*255
 
-        cv2.imwrite('segment.jpg', imgray)
+        cv2.imwrite('segment.png', imgray)
 
         # now have practical binary image
 

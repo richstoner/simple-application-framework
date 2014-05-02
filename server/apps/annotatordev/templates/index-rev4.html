@@ -23,6 +23,7 @@
 
     nav ul ul {
         display: none;
+
     }
 
     nav ul li:hover > ul {
@@ -332,50 +333,18 @@
             <!-- Region paint -->
 
 
-
-            <!--<div class="btn-group"-->
-                 <!--ng-show="compareState('rpdefine', tool_bar_state)">-->
-
-                 <!--<div class="btn btn-inverse"-->
-                     <!--ng-click="manualEdit()">-->
-                    <!--<i class="fa fa-edit"></i></div>-->
-
-
-                <!--<div class="btn btn-primary"-->
-                     <!--ng-click="runRegionPaint()">-->
-                    <!--Start-->
-                <!--</div>-->
-
-                <!--<div class="btn" disabled>-->
-                    <!--Region paint may take 30 sec-->
-                <!--</div>-->
-
-
-            <!--</div>-->
-
-
-            <!--<div class="btn-group"-->
-                 <!--ng-show="compareState('rppaint', tool_bar_state)">-->
-
-                <!--<div class="btn btn-inverse"-->
-                     <!--ng-click="clearStep()">-->
-                    <!--<i class="fa fa-backward"></i></div>-->
-
-
-                <!--<div class="btn btn-inverse" disabled>-->
-                    <!--Fill in region, then click "Done"-->
-                <!--</div>-->
-
-
-            <!--</div>-->
-
             <div class="btn-group"
                  ng-show="compareState('rppaint', tool_bar_state)">
 
                 <div class="btn"
-                     ng-click=""
+                     ng-click="navMode()"
                      ng-show="select_detail">
-                    <i class="fa fa-eraser"></i>
+                    <i class="fa fa-arrows"></i>
+                </div>
+                <div class="btn"
+                     ng-click="drawMode()"
+                     ng-show="select_detail">
+                    <i class="fa fa-pencil-square-o"></i>
                 </div>
 
                 <div class="btn btn-inverse" disabled>
@@ -391,18 +360,22 @@
                  ng-show="compareState('rpreview', tool_bar_state)">
 
                 <div class="btn btn-inverse" disabled>
-                    RP review
+                    Please review details
                 </div>
 
-
+                <div class="btn"
+                     ng-click="runRegionPaint()"
+                     ng-show="select_detail">
+                    <i class="fa fa-pencil-square-o"></i>
+                </div>
             </div>
 
             <div class="btn-group pull-right"
                  ng-show="compareState('rppaint', tool_bar_state)">
 
-                <div class="btn btn-success"
+                <div class="btn btn-primary"
                      ng-click="finishRegionPaint()">
-                    Done
+                    Confirm
                 </div>
             </div>
 
@@ -420,13 +393,11 @@
             <div class="btn-group"
                  ng-show="compareState('selectpbn', tool_bar_state)">
 
-                <div class="btn" disabled>
-                    In nav mode, tap draw to begin
-                </div>
 
-                <div class="btn btn-success"
+
+                <div class="btn btn-primary"
                         ng-click="runRegionPaint()">
-                        Draw
+                        Click to begin
                 </div>
 
             </div>
