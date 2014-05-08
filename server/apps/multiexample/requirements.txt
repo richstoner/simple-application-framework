@@ -1,0 +1,6 @@
+flask
+flask-oauth
+sqlalchemy
+gunicorn
+flower
+celery

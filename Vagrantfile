@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "private_network", ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -116,3 +116,29 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   #   chef.validation_client_name = "ORGNAME-validator"
 end
+
+# VAGRANTFILE_API_VERSION = "2"
+
+# Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+#   config.vm.define :derm do |derm_config|
+
+#     derm_config.vm.box = "precise64_base"
+
+#     derm_config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+#     derm_config.vm.network :private_network, ip: "192.168.100.15"
+
+#     # added to get the google oauth callback to work on a vagrant setup
+#     derm_config.vm.network "forwarded_port", guest: 80, host: 5000
+
+#     derm_config.vm.provider :virtualbox do |vb|
+
+#       vb.customize ["modifyvm", :id, "--memory", "2048"]
+#       vb.customize ["modifyvm", :id, "--cpus", "2"]
+#     end
+
+
+#   end
+
+# end
+

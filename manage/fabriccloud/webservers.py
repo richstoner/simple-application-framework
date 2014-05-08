@@ -30,7 +30,8 @@ def configureNginx(verbose=False):
     ''' Configures nginx to use the configuration file in ./manage/config
     '''
 
-    pass
+    _remote_cmd('sudo mv /etc/nginx/nginx.conf /etc/nginx/conf.old', verbose)
+    _remote_cmd('sudo ln -s /vagrant/manage/config/nginx.conf.default /etc/nginx/nginx.conf', verbose)
 
 
 def installApache(verbose=False):

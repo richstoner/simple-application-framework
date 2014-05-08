@@ -2,27 +2,26 @@
 
 An easy way to deploy and manage python-based processes. Once setup, it's trivial to deploy a flask application to the host, handling nginx + supervisor + pip configuration along the way.
 
-#### source
+Check out the helloworld app as an example: 
 
-frontend -> angular.js application provisioned with yeoman
+[https://github.com/richstoner/simple-application-framework/tree/master/server/apps/helloworld](https://github.com/richstoner/simple-application-framework/tree/master/server/apps/helloworld)
 
-server -> flask app
+
+
+
+#### folder structure
+
+server -> python apps and tasks
 
 manage -> provisioning tools
 
 
 
+
 #### structure on server
 
-/vagrant -> a clone of this directory.
+/vagrant -> a clone of this directory. rsync'able with fabric
 
-/home/flaskuser/miniconda/envs/server -> python virtual environment
-
-/home/flaskuser/flaskapp -> place flask application here
-
- app would consist of folder, configuration settings, and asset folders (static/templates)
-
-
-/home/flaskuser/celerytasks -> place processing tasks here
+/home/{{user}}/miniconda/envs/server -> python virtual environment
 
 
