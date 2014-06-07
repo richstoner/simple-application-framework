@@ -1,27 +1,19 @@
-# Simple Application Framework
+# steps to build a server
 
-An easy way to deploy and manage python-based processes. Once setup, it's trivial to deploy a flask application to the host, handling nginx + supervisor + pip configuration along the way.
+    fab provider:do info save
+    fab last info
+    fab last addUser:flaskuser
+    fab last update:v
+    fab last installBase:v
+    fab last installNginx:v
+    fab last installRabbitMQ:v
+    fab last configureSupervisor:v
+    fab last startNginx:v
+    fab last configureNginx:v
+    fab last installMongoDB:vre
 
-Check out the helloworld app as an example: 
-
-[https://github.com/richstoner/simple-application-framework/tree/master/server/apps/helloworld](https://github.com/richstoner/simple-application-framework/tree/master/server/apps/helloworld)
-
-
-
-
-#### folder structure
-
-server -> python apps and tasks
-
-manage -> provisioning tools
-
-
-
-
-#### structure on server
-
-/vagrant -> a clone of this directory. rsync'able with fabric
-
-/home/{{user}}/miniconda/envs/server -> python virtual environment
-
+    fab last user:flaskuser installConda:v
+    fab last user:flaskuser testConda:v
+    fab last user:flaskuser installAnaconda:v
+    fab last rsync
 
