@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fabriccloud.base &mdash; manage  documentation</title>
+  <title>fabriccloud.base &mdash; Simple Application Framework  documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   
 
   
-    <link rel="top" title="manage  documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
+    <link rel="top" title="Simple Application Framework  documentation" href="../../index.html"/>
+        <link rel="up" title="fabriccloud" href="../fabriccloud.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -43,7 +43,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
-        <a href="../../index.html" class="fa fa-home"> manage</a>
+        <a href="../../index.html" class="fa fa-home"> Simple Application Framework</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -57,10 +57,19 @@
         
         
             <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../fabfile.html">fabfile module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../fabriccloud.html">fabriccloud package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../fabriccloud.html#subpackages">Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#step-0-setup-a-remote-machine">Step 0: Setup a remote machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#step-1-provision-the-machine-with-core-components">Step 1: Provision the machine with core components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#step-2-install-additional-components">Step 2: Install additional components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#step-3-add-components-for-python-apps">Step 3: Add components for python apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#step-4-adding-an-app-from-git-and-running">Step 4: Adding an app from git and running</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../fabriccloud.html">FabricCloud Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../fabriccloud.html#module-fabriccloud">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fabriccloud.html#subpackages">Subpackages</a></li>
 </ul>
 </li>
 </ul>
@@ -75,7 +84,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">manage</a>
+        <a href="../../index.html">Simple Application Framework</a>
       </nav>
 
 
@@ -87,6 +96,8 @@
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
           <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../fabriccloud.html">fabriccloud</a> &raquo;</li>
       
     <li>fabriccloud.base</li>
       <li class="wy-breadcrumbs-aside">
@@ -272,19 +283,19 @@
 <span class="k">def</span> <span class="nf">_importProvider</span><span class="p">(</span><span class="n">provider_name</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">provider_name</span> <span class="o">==</span> <span class="s">&#39;do&#39;</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="n">green</span><span class="p">(</span><span class="s">&#39;Using digital ocean as provider&#39;</span><span class="p">))</span>
-        <span class="kn">from</span> <span class="nn">fabriccloud</span> <span class="kn">import</span> <span class="n">digitalocean</span> <span class="k">as</span> <span class="n">p</span>
+        <span class="kn">from</span> <span class="nn">..provider</span> <span class="kn">import</span> <span class="n">digitalocean</span> <span class="k">as</span> <span class="n">p</span>
 
     <span class="k">elif</span> <span class="n">provider_name</span> <span class="o">==</span> <span class="s">&#39;vagrant&#39;</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="n">green</span><span class="p">(</span><span class="s">&#39;Using vagrant as provider&#39;</span><span class="p">))</span>
-        <span class="kn">from</span> <span class="nn">fabriccloud</span> <span class="kn">import</span> <span class="n">vagrant</span> <span class="k">as</span> <span class="n">p</span>
+        <span class="kn">from</span> <span class="nn">..provider</span> <span class="kn">import</span> <span class="n">vagrant</span> <span class="k">as</span> <span class="n">p</span>
 
     <span class="k">elif</span> <span class="n">provider_name</span> <span class="o">==</span> <span class="s">&#39;aws&#39;</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="n">green</span><span class="p">(</span><span class="s">&#39;Using AWS as provider&#39;</span><span class="p">))</span>
-        <span class="kn">from</span> <span class="nn">fabriccloud</span> <span class="kn">import</span> <span class="n">aws</span> <span class="k">as</span> <span class="n">p</span>
+        <span class="kn">from</span> <span class="nn">..provider</span> <span class="kn">import</span> <span class="n">aws</span> <span class="k">as</span> <span class="n">p</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="n">yellow</span><span class="p">(</span><span class="s">&#39;No provider specified, using vagrant as default&#39;</span><span class="p">))</span>
-        <span class="kn">from</span> <span class="nn">fabriccloud</span> <span class="kn">import</span> <span class="n">vagrant</span> <span class="k">as</span> <span class="n">p</span>
+        <span class="kn">from</span> <span class="nn">..provider</span>  <span class="kn">import</span> <span class="n">vagrant</span> <span class="k">as</span> <span class="n">p</span>
 
     <span class="k">return</span> <span class="n">p</span>
 

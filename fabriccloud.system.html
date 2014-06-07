@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fabriccloud.system package &mdash; manage  documentation</title>
+  <title>fabriccloud.system package &mdash; Simple Application Framework  documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   
 
   
-    <link rel="top" title="manage  documentation" href="index.html"/>
-        <link rel="up" title="fabriccloud package" href="fabriccloud.html"/>
+    <link rel="top" title="Simple Application Framework  documentation" href="index.html"/>
+        <link rel="up" title="FabricCloud Package" href="fabriccloud.html"/>
         <link rel="prev" title="fabriccloud.provider package" href="fabriccloud.provider.html"/> 
 
   
@@ -44,7 +44,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
-        <a href="index.html" class="fa fa-home"> manage</a>
+        <a href="index.html" class="fa fa-home"> Simple Application Framework</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -57,11 +57,20 @@
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         
         
-            <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="fabfile.html">fabfile module</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="fabriccloud.html">fabriccloud package</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="fabriccloud.html#subpackages">Subpackages</a></li>
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-0-setup-a-remote-machine">Step 0: Setup a remote machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-1-provision-the-machine-with-core-components">Step 1: Provision the machine with core components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-2-install-additional-components">Step 2: Install additional components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-3-add-components-for-python-apps">Step 3: Add components for python apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-4-adding-an-app-from-git-and-running">Step 4: Adding an app from git and running</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="fabriccloud.html">FabricCloud Package</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="fabriccloud.html#module-fabriccloud">Module contents</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="fabriccloud.html#subpackages">Subpackages</a></li>
 </ul>
 </li>
 </ul>
@@ -76,7 +85,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">manage</a>
+        <a href="index.html">Simple Application Framework</a>
       </nav>
 
 
@@ -87,7 +96,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-          <li><a href="fabriccloud.html">fabriccloud package</a> &raquo;</li>
+          <li><a href="fabriccloud.html">FabricCloud Package</a> &raquo;</li>
       
     <li>fabriccloud.system package</li>
       <li class="wy-breadcrumbs-aside">
@@ -104,6 +113,26 @@
 <h1>fabriccloud.system package<a class="headerlink" href="#fabriccloud-system-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-fabriccloud.system">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fabriccloud.system" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fabriccloud.system.addApp">
+<tt class="descclassname">fabriccloud.system.</tt><tt class="descname">addApp</tt><big>(</big><em>appname</em>, <em>giturl</em><big>)</big><a class="reference internal" href="_modules/fabriccloud/system.html#addApp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.system.addApp" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>appname</strong> &#8211; </li>
+<li><strong>giturl</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="fabriccloud.system.configureNginx">
 <tt class="descclassname">fabriccloud.system.</tt><tt class="descname">configureNginx</tt><big>(</big><em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/fabriccloud/system.html#configureNginx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.system.configureNginx" title="Permalink to this definition">¶</a></dt>
@@ -123,12 +152,6 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="fabriccloud.system.installAnaconda">
-<tt class="descclassname">fabriccloud.system.</tt><tt class="descname">installAnaconda</tt><big>(</big><em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/fabriccloud/system.html#installAnaconda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.system.installAnaconda" title="Permalink to this definition">¶</a></dt>
-<dd><p>Installs python dependencies for anaconda tools to ~/miniconda/envs/server</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="fabriccloud.system.installApache">
 <tt class="descclassname">fabriccloud.system.</tt><tt class="descname">installApache</tt><big>(</big><em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/fabriccloud/system.html#installApache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.system.installApache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Installs apache 2 + mod_wsgi for serving python apps</p>
@@ -138,12 +161,6 @@
 <dt id="fabriccloud.system.installConda">
 <tt class="descclassname">fabriccloud.system.</tt><tt class="descname">installConda</tt><big>(</big><em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/fabriccloud/system.html#installConda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.system.installConda" title="Permalink to this definition">¶</a></dt>
 <dd><p>Installs miniconda installation (requires user interaction)</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="fabriccloud.system.installCondaBase">
-<tt class="descclassname">fabriccloud.system.</tt><tt class="descname">installCondaBase</tt><big>(</big><em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/fabriccloud/system.html#installCondaBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.system.installCondaBase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a new server environment to ~/miniconda/envs/server</p>
 </dd></dl>
 
 <dl class="function">
@@ -165,6 +182,21 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="fabriccloud.system.installPythonCore">
+<tt class="descclassname">fabriccloud.system.</tt><tt class="descname">installPythonCore</tt><big>(</big><em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/fabriccloud/system.html#installPythonCore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.system.installPythonCore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbose</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="fabriccloud.system.installRabbitMQ">
 <tt class="descclassname">fabriccloud.system.</tt><tt class="descname">installRabbitMQ</tt><big>(</big><em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/fabriccloud/system.html#installRabbitMQ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.system.installRabbitMQ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Installs RabbitMQ</p>
@@ -183,9 +215,23 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="fabriccloud.system.updateConda">
-<tt class="descclassname">fabriccloud.system.</tt><tt class="descname">updateConda</tt><big>(</big><em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/fabriccloud/system.html#updateConda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.system.updateConda" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the packages in the base anaconda environment</p>
+<dt id="fabriccloud.system.updateApp">
+<tt class="descclassname">fabriccloud.system.</tt><tt class="descname">updateApp</tt><big>(</big><em>appname</em><big>)</big><a class="reference internal" href="_modules/fabriccloud/system.html#updateApp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.system.updateApp" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>appname</strong> &#8211; </li>
+<li><strong>giturl</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

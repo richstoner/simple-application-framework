@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fabriccloud.system &mdash; manage  documentation</title>
+  <title>fabriccloud.system &mdash; Simple Application Framework  documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   
 
   
-    <link rel="top" title="manage  documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
+    <link rel="top" title="Simple Application Framework  documentation" href="../../index.html"/>
+        <link rel="up" title="fabriccloud" href="../fabriccloud.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -43,7 +43,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
-        <a href="../../index.html" class="fa fa-home"> manage</a>
+        <a href="../../index.html" class="fa fa-home"> Simple Application Framework</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -57,10 +57,19 @@
         
         
             <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../fabfile.html">fabfile module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../fabriccloud.html">fabriccloud package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../fabriccloud.html#subpackages">Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#step-0-setup-a-remote-machine">Step 0: Setup a remote machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#step-1-provision-the-machine-with-core-components">Step 1: Provision the machine with core components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#step-2-install-additional-components">Step 2: Install additional components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#step-3-add-components-for-python-apps">Step 3: Add components for python apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#step-4-adding-an-app-from-git-and-running">Step 4: Adding an app from git and running</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../fabriccloud.html">FabricCloud Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../fabriccloud.html#module-fabriccloud">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fabriccloud.html#subpackages">Subpackages</a></li>
 </ul>
 </li>
 </ul>
@@ -75,7 +84,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">manage</a>
+        <a href="../../index.html">Simple Application Framework</a>
       </nav>
 
 
@@ -87,6 +96,8 @@
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
           <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../fabriccloud.html">fabriccloud</a> &raquo;</li>
       
     <li>fabriccloud.system</li>
       <li class="wy-breadcrumbs-aside">
@@ -103,6 +114,8 @@
 <span class="kn">from</span> <span class="nn">fabric.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">fabric.colors</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">fabric.contrib.files</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">fabric.context_managers</span> <span class="kn">import</span> <span class="n">shell_env</span>
 
 <span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -175,35 +188,36 @@
     <span class="n">run</span><span class="p">(</span><span class="s">&#39;./Miniconda-latest-Linux-x86_64.sh -b&#39;</span><span class="p">)</span>
 
 
+
 <span class="k">def</span> <span class="nf">testConda</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
 <div class="viewcode-block" id="testConda"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.testConda">[docs]</a>    <span class="sd">&#39;&#39;&#39; Verifies the conda installation is correct</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;export&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
     <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;which python&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;conda info&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;conda info&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">installCondaBase</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
-<div class="viewcode-block" id="installCondaBase"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.installCondaBase">[docs]</a>    <span class="sd">&#39;&#39;&#39; Creates a new server environment to ~/miniconda/envs/server</span>
+<span class="k">def</span> <span class="nf">installPythonCore</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="installPythonCore"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.installPythonCore">[docs]</a>    <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    :param verbose:</span>
+<span class="sd">    :return:</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;conda create -n py27 server &#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;conda install --yes anaconda&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;conda install --yes opencv&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;conda install --yes pip&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">installAnaconda</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
-<div class="viewcode-block" id="installAnaconda"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.installAnaconda">[docs]</a>    <span class="sd">&#39;&#39;&#39; Installs python dependencies for anaconda tools to ~/miniconda/envs/server</span>
-<span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;conda create -n server anaconda&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">updateConda</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
-<div class="viewcode-block" id="updateConda"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.updateConda">[docs]</a>    <span class="sd">&#39;&#39;&#39; Updates the packages in the base anaconda environment</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-
-    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;conda update conda&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;conda update anaconda&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+<span class="c">#</span>
+<span class="c"># def updateConda(verbose=False):</span>
+<span class="c">#     &#39;&#39;&#39; Updates the packages in the base anaconda environment</span>
+<span class="c">#     &#39;&#39;&#39;</span>
+<span class="c">#</span>
+<span class="c">#     _python_cmd(&#39;conda update conda&#39;, verbose)</span>
+<span class="c">#     _python_cmd(&#39;conda update anaconda&#39;, verbose)</span>
 
 
 
@@ -251,6 +265,57 @@
         <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.deb&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
         <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;dpkg -i elasticsearch-1.0.1.deb&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
         <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo service elasticsearch start&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+
+
+<span class="k">def</span> <span class="nf">addApp</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="n">giturl</span><span class="p">):</span></div>
+<div class="viewcode-block" id="addApp"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.addApp">[docs]</a>    <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    :param appname:</span>
+<span class="sd">    :param giturl:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/vagrant/server&#39;</span><span class="p">,</span> <span class="s">&#39;apps&#39;</span><span class="p">,</span> <span class="n">appname</span><span class="p">)):</span>
+
+        <span class="c"># run git pull</span>
+        <span class="k">with</span> <span class="n">cd</span><span class="p">(</span><span class="s">&#39;/vagrant/server/apps/</span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">appname</span><span class="p">)):</span>
+
+            <span class="n">pullstring</span> <span class="o">=</span> <span class="s">&#39;git pull origin master&#39;</span>
+
+            <span class="n">run</span><span class="p">(</span><span class="n">pullstring</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="c"># run git clone</span>
+
+        <span class="n">clonestring</span> <span class="o">=</span> <span class="s">&#39;git clone </span><span class="si">%s</span><span class="s"> /vagrant/server/apps/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">giturl</span><span class="p">,</span> <span class="n">appname</span><span class="p">)</span>
+
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="n">clonestring</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">updateApp</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span></div>
+<div class="viewcode-block" id="updateApp"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.updateApp">[docs]</a>    <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    :param appname:</span>
+<span class="sd">    :param giturl:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/vagrant/server&#39;</span><span class="p">,</span> <span class="s">&#39;apps&#39;</span><span class="p">,</span> <span class="n">appname</span><span class="p">)):</span>
+
+        <span class="c"># run git pull</span>
+        <span class="k">with</span> <span class="n">cd</span><span class="p">(</span><span class="s">&#39;/vagrant/server/apps/</span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">appname</span><span class="p">)):</span>
+
+            <span class="n">pullstring</span> <span class="o">=</span> <span class="s">&#39;git pull origin master&#39;</span>
+
+            <span class="n">run</span><span class="p">(</span><span class="n">pullstring</span><span class="p">)</span>
+
+
+
+
+
 
 
 
@@ -369,7 +434,7 @@
 
 <span class="k">def</span> <span class="nf">_python_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
-    <span class="k">with</span> <span class="n">prefix</span><span class="p">(</span><span class="s">&#39;export PATH=&quot;/root/miniconda/envs/server/bin:$PATH&quot;&#39;</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">shell_env</span><span class="p">(</span><span class="n">PATH</span><span class="o">=</span><span class="s">&quot;/home/flaskuser/miniconda/bin:$PATH&quot;</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
@@ -379,6 +444,8 @@
 
             <span class="k">with</span> <span class="n">hide</span><span class="p">(</span><span class="s">&#39;output&#39;</span><span class="p">,</span><span class="s">&#39;running&#39;</span><span class="p">,</span><span class="s">&#39;warnings&#39;</span><span class="p">,</span> <span class="s">&#39;stdout&#39;</span><span class="p">,</span> <span class="s">&#39;stderr&#39;</span><span class="p">),</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">pty</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+
 
 
 

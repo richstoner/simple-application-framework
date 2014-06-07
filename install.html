@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Install Instructions &mdash; Simple Application Framework  documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Simple Application Framework  documentation" href="index.html"/>
+        <link rel="next" title="FabricCloud Package" href="fabriccloud.html"/>
+        <link rel="prev" title="Simple Application Framework Documentation" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> Simple Application Framework</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Install Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-0-setup-a-remote-machine">Step 0: Setup a remote machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-provision-the-machine-with-core-components">Step 1: Provision the machine with core components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-install-additional-components">Step 2: Install additional components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-add-components-for-python-apps">Step 3: Add components for python apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-adding-an-app-from-git-and-running">Step 4: Adding an app from git and running</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fabriccloud.html">FabricCloud Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fabriccloud.html#module-fabriccloud">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabriccloud.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Simple Application Framework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Install Instructions</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/install.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="install-instructions">
+<h1>Install Instructions<a class="headerlink" href="#install-instructions" title="Permalink to this headline">¶</a></h1>
+<p>The current version of this framework requires several manual steps to provision a remote host. These steps could be
+aggregated into a single superscript. By keeping them discrete, it provides the user with a better understanding of
+what is being installed where.</p>
+<div class="section" id="step-0-setup-a-remote-machine">
+<h2>Step 0: Setup a remote machine<a class="headerlink" href="#step-0-setup-a-remote-machine" title="Permalink to this headline">¶</a></h2>
+<p>You, the target audience, should be comfortable in creating a new virtual machine, either on the cloud or in vagrant. Once started, you will need to configure the appropriate host name, default user, and associated authentication mechanisms. Currently this framework supports vagrant, AWS, and digital ocean.</p>
+</div>
+<div class="section" id="step-1-provision-the-machine-with-core-components">
+<h2>Step 1: Provision the machine with core components<a class="headerlink" href="#step-1-provision-the-machine-with-core-components" title="Permalink to this headline">¶</a></h2>
+<p>You will need to have a local installation of fabric, a python module that allows us to run the remote
+commands. To install fabric, follow instructions from here: <a class="reference external" href="http://www.fabfile.org/">http://www.fabfile.org/</a></p>
+<p><em>All of the following commands should be run from the `manage` folder</em></p>
+<p><strong>1) Verify a working fabric installation and get a list of available commands:</strong></p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">--list</span></tt></p>
+<blockquote>
+<div>This should return a long list of commands available through fabric</div></blockquote>
+<p><strong>2) Verify your host settings are correct</strong></p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">provider:do</span> <span class="pre">info</span></tt></p>
+<blockquote>
+<div>This should return a list of server stats, including ubuntu release #</div></blockquote>
+<p><strong>3) Save this information to a local variable to simplify the fabric calls</strong></p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">provider:do</span> <span class="pre">info</span> <span class="pre">save</span></tt></p>
+<blockquote>
+<div>We now have a file (last.ini) with the most recent working settings. We can now run the equivalent command:</div></blockquote>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">info</span></tt></p>
+<blockquote>
+<div>And get the same result as before.</div></blockquote>
+<p><strong>4) Run the standard updates via apt</strong></p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">update:v</span></tt></p>
+<blockquote>
+<div>This command introduces the verbose flag. Most commands will surpress their output unless a value is passed with their call. Here we pass &#8216;:v&#8217;. This actual value is ignored, we simply test for absense or presence of.</div></blockquote>
+<p><strong>5) Install some base tools and configure them</strong></p>
+<p>What you&#8217;ll have when done: build-essential, subversion, git, unzip, supervisor</p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">installBase:v</span> <span class="pre">installNginx:v</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">rsync</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">configureNginx:v</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">configureSupervisor:v</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">restartAll:</span></tt></p>
+<p>You should now be able to visit the host domain.</p>
+<p>Going to <a class="reference external" href="http://hostdomain:9999">http://hostdomain:9999</a> should land you at the Supervisor control panel.</p>
+</div>
+<div class="section" id="step-2-install-additional-components">
+<h2>Step 2: Install additional components<a class="headerlink" href="#step-2-install-additional-components" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Install a database (mongodb)</li>
+</ol>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">installMongoDB:v</span></tt></p>
+<ol class="arabic simple" start="2">
+<li>Install a task queue (RabbitMQ)</li>
+</ol>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">installRabbitMQ:v</span></tt></p>
+</div>
+<div class="section" id="step-3-add-components-for-python-apps">
+<h2>Step 3: Add components for python apps<a class="headerlink" href="#step-3-add-components-for-python-apps" title="Permalink to this headline">¶</a></h2>
+<p>The following commands will add the remaining components needed to host multiple python web applications with a common set of share modules. We use anaconda (<a class="reference external" href="https://store.continuum.io/cshop/anaconda/">https://store.continuum.io/cshop/anaconda/</a>) to handle package management (with pip as needed).</p>
+<ol class="arabic simple">
+<li>We&#8217;ll create a user &amp; home directory to store the python distribution</li>
+</ol>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">addUser:flaskuser</span></tt></p>
+<ol class="arabic simple" start="2">
+<li>Install miniconda (the anaconda base installer)</li>
+</ol>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">user:flaskuser</span> <span class="pre">installConda:v</span></tt></p>
+<blockquote>
+<div>This command introduces the user:&lt;username&gt; inline parameter. It works how you&#8217;d expect it to work.</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>Install python dependencies like OpenCV, numpy, scipy, flask, etc</li>
+</ol>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">user:flaskuser</span> <span class="pre">installPythonCore:v</span></tt></p>
+<p>We now have everything we need to run apps!</p>
+</div>
+<div class="section" id="step-4-adding-an-app-from-git-and-running">
+<h2>Step 4: Adding an app from git and running<a class="headerlink" href="#step-4-adding-an-app-from-git-and-running" title="Permalink to this headline">¶</a></h2>
+<p><strong>What is an app (in this context)?</strong></p>
+<p>An app bundle is a directory containing key configuration files and all necessary source code &amp; resources. You&#8217;ll notice the requirements.txt, nginx.conf, supervisor.conf in the repo above. The management framework takes this information and uses it to deploy individual applications. Each application is managed via the supervisord http interface for simplicity.</p>
+<p>A simple app: <a class="reference external" href="https://github.com/richstoner/simple_app">https://github.com/richstoner/simple_app</a></p>
+<p>A complex app: <a class="reference external" href="https://github.com/richstoner/isic_annotator">https://github.com/richstoner/isic_annotator</a></p>
+<p>Installation of an app is done by pointing the hosting framework to a git repository and giving the app a name.</p>
+<p><strong>We&#8217;ll use the simple app for this example.</strong></p>
+<p><em>Still running commands from `manage`</em></p>
+<ol class="arabic simple">
+<li>Register the app with the framework</li>
+</ol>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">addApp:appname=simple,giturl=https://github.com/richstoner/simple_app.git</span></tt></p>
+<ol class="arabic simple" start="2">
+<li>Enable the app</li>
+</ol>
+<p>This links the nginx &amp; supervisor config files, and installs any additional python dependencies via pip</p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">enableApp:simple</span></tt></p>
+<p>You can now start this app via the supervisor configuration, available at <a class="reference external" href="http://hostdomain:9999">http://hostdomain:9999</a></p>
+<p><strong>To update the app from git after enabled:</strong></p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">updateApp:simple</span></tt></p>
+<p><tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">restartAll</span></tt> (this could be more elegant!)</p>
+<p>Have a look at the config files. An ideal next step would be to build a skeleton generator for the nginx/supervisor configuration files.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="fabriccloud.html" class="btn btn-neutral float-right" title="FabricCloud Package"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Simple Application Framework Documentation"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Author.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
