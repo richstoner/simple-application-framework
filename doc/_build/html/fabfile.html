@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fabfile module &mdash; manage  documentation</title>
+  <title>fabfile module &mdash; Simple Application Framework  documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   
 
   
-    <link rel="top" title="manage  documentation" href="index.html"/>
+    <link rel="top" title="Simple Application Framework  documentation" href="index.html"/>
         <link rel="next" title="fabriccloud package" href="fabriccloud.html"/>
         <link rel="prev" title="Welcome to manage’s documentation!" href="index.html"/> 
 
@@ -44,7 +44,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
-        <a href="index.html" class="fa fa-home"> manage</a>
+        <a href="index.html" class="fa fa-home"> Simple Application Framework</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,7 +76,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">manage</a>
+        <a href="index.html">Simple Application Framework</a>
       </nav>
 
 
@@ -98,18 +98,23 @@
 </div>
           <div role="main">
             
-  <div class="section" id="module-fabfile">
-<span id="fabfile-module"></span><h1>fabfile module<a class="headerlink" href="#module-fabfile" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+  <div class="section" id="fabfile-module">
+<h1>fabfile module<a class="headerlink" href="#fabfile-module" title="Permalink to this headline">¶</a></h1>
+<p>A few utility methods to make the fabric hosts easier to use.</p>
+<span class="target" id="module-fabfile"></span><dl class="function">
 <dt id="fabfile.last">
 <tt class="descclassname">fabfile.</tt><tt class="descname">last</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fabfile.html#last"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabfile.last" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use the last target configuration saved</p>
+<dd><p>inline argument, uses the last host saved by the user</p>
+<p>This host is defined in the last.ini file, located in the same directory as the fabfile.py</p>
+<p>e.g. <tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">somecommand</span></tt></p>
 </dd></dl>
 
 <dl class="function">
 <dt id="fabfile.save">
 <tt class="descclassname">fabfile.</tt><tt class="descname">save</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fabfile.html#save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabfile.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the target configuration</p>
+<dd><p>inline argument, saves the host information to a file for later use</p>
+<p>The host &amp; user information are stored in the last.ini file, located in the same directory as the fabfile.py</p>
+<p>e.g. <tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">provider:aws</span> <span class="pre">somecommand</span> <span class="pre">save</span></tt></p>
 </dd></dl>
 
 </div>

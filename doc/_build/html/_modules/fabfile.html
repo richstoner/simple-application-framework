@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fabfile &mdash; manage  documentation</title>
+  <title>fabfile &mdash; Simple Application Framework  documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   
 
   
-    <link rel="top" title="manage  documentation" href="../index.html"/>
+    <link rel="top" title="Simple Application Framework  documentation" href="../index.html"/>
         <link rel="up" title="Module code" href="index.html"/> 
 
   
@@ -43,7 +43,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
-        <a href="../index.html" class="fa fa-home"> manage</a>
+        <a href="../index.html" class="fa fa-home"> Simple Application Framework</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -58,6 +58,8 @@
         
             <ul>
 <li class="toctree-l1"><a class="reference internal" href="../fabfile.html">fabfile module</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../fabriccloud.html">fabriccloud package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../fabriccloud.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fabriccloud.html#module-fabriccloud">Module contents</a></li>
@@ -75,7 +77,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">manage</a>
+        <a href="../index.html">Simple Application Framework</a>
       </nav>
 
 
@@ -108,7 +110,13 @@
 
 
 <div class="viewcode-block" id="last"><a class="viewcode-back" href="../fabfile.html#fabfile.last">[docs]</a><span class="k">def</span> <span class="nf">last</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39; Use the last target configuration saved</span>
+    <span class="sd">&#39;&#39;&#39; inline argument, uses the last host saved by the user</span>
+
+<span class="sd">    This host is defined in the last.ini file, located in the same directory as the fabfile.py</span>
+
+<span class="sd">    e.g. :code:`fab last somecommand`</span>
+
+
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="kn">from</span> <span class="nn">ConfigParser</span> <span class="kn">import</span> <span class="n">SafeConfigParser</span>
@@ -123,7 +131,12 @@
 
 </div>
 <div class="viewcode-block" id="save"><a class="viewcode-back" href="../fabfile.html#fabfile.save">[docs]</a><span class="k">def</span> <span class="nf">save</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39; Save the target configuration</span>
+    <span class="sd">&#39;&#39;&#39; inline argument, saves the host information to a file for later use</span>
+
+<span class="sd">    The host &amp; user information are stored in the last.ini file, located in the same directory as the fabfile.py</span>
+
+<span class="sd">    e.g. :code:`fab provider:aws somecommand save`</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="kn">from</span> <span class="nn">ConfigParser</span> <span class="kn">import</span> <span class="n">SafeConfigParser</span>

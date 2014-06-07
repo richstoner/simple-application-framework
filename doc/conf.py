@@ -48,7 +48,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'manage'
+project = u'Simple Application Framework'
 copyright = u'2014, Author'
 
 # The version info for the project you're documenting, acts as replacement for

@@ -8,7 +8,13 @@ from fabriccloud import *
 
 
 def last():
-    ''' Use the last target configuration saved
+    ''' inline argument, uses the last host saved by the user
+
+    This host is defined in the last.ini file, located in the same directory as the fabfile.py
+
+    e.g. :code:`fab last somecommand`
+
+
     '''
 
     from ConfigParser import SafeConfigParser
@@ -23,7 +29,12 @@ def last():
 
 
 def save():
-    ''' Save the target configuration
+    ''' inline argument, saves the host information to a file for later use
+
+    The host & user information are stored in the last.ini file, located in the same directory as the fabfile.py
+
+    e.g. :code:`fab provider:aws somecommand save`
+
     '''
 
     from ConfigParser import SafeConfigParser

@@ -5,6 +5,9 @@ from boto import ec2
 
 
 def setDefaults():
+    ''' Configures the fabric environment to support an aws environment.
+
+    '''
     env.user = 'ubuntu'
     env.hosts = ['54.211.81.188']
 
@@ -24,10 +27,17 @@ def setDefaults():
 
 
 def sync():
+    ''' unimplemented
+
+    '''
     pass
 
 
 def printssh():
+    ''' prints an easy-to-use ssh string to console (and mac's clipboard)
+
+    '''
+
     if env.key_filename:
         print 'ssh -i %s ubuntu@%s' % (env.key_filename, env.host_string)
         local('echo "ssh -i %s ubuntu@%s" | pbcopy ' % (env.key_filename, env.host_string))
@@ -37,15 +47,24 @@ def printssh():
 
 
 def printhttp():
+    ''' prints an easy-to-use http string to console (and mac's clipboard)
+
+    '''
+
     print 'http://%s' % (env.host_string)
     local('echo "http://%s" | pbcopy ' % (env.host_string))
 
 
 def systemInformation():
+    ''' unimplemented
+    '''
     pass
 
 
 def mountStatus():
+    ''' unused
+
+    '''
     with settings(warn_only=True):
 
         v_to_mount = ''
@@ -65,6 +84,8 @@ def mountStatus():
                 print 'Volume attached with status: %s' % v_to_mount.attachment_state()
         else:
             print 'volume not found'
+
+
 
             # def terminate():
 # 	#terminate_instances

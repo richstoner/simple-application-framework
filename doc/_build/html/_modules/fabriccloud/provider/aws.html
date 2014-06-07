@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fabriccloud.provider.aws &mdash; manage  documentation</title>
+  <title>fabriccloud.provider.aws &mdash; Simple Application Framework  documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   
 
   
-    <link rel="top" title="manage  documentation" href="../../../index.html"/>
+    <link rel="top" title="Simple Application Framework  documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -43,7 +43,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
-        <a href="../../../index.html" class="fa fa-home"> manage</a>
+        <a href="../../../index.html" class="fa fa-home"> Simple Application Framework</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -58,6 +58,8 @@
         
             <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../fabfile.html">fabfile module</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../fabriccloud.html">fabriccloud package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../fabriccloud.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../fabriccloud.html#module-fabriccloud">Module contents</a></li>
@@ -75,7 +77,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">manage</a>
+        <a href="../../../index.html">Simple Application Framework</a>
       </nav>
 
 
@@ -105,6 +107,9 @@
 
 
 <div class="viewcode-block" id="setDefaults"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.setDefaults">[docs]</a><span class="k">def</span> <span class="nf">setDefaults</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39; Configures the fabric environment to support an aws environment.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">env</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="s">&#39;ubuntu&#39;</span>
     <span class="n">env</span><span class="o">.</span><span class="n">hosts</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;54.211.81.188&#39;</span><span class="p">]</span>
 
@@ -124,10 +129,17 @@
 
 </div>
 <div class="viewcode-block" id="sync"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.sync">[docs]</a><span class="k">def</span> <span class="nf">sync</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39; unimplemented</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">pass</span>
 
 </div>
 <div class="viewcode-block" id="printssh"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.printssh">[docs]</a><span class="k">def</span> <span class="nf">printssh</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39; prints an easy-to-use ssh string to console (and mac&#39;s clipboard)</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
     <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">key_filename</span><span class="p">:</span>
         <span class="k">print</span> <span class="s">&#39;ssh -i </span><span class="si">%s</span><span class="s"> ubuntu@</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">key_filename</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">)</span>
         <span class="n">local</span><span class="p">(</span><span class="s">&#39;echo &quot;ssh -i </span><span class="si">%s</span><span class="s"> ubuntu@</span><span class="si">%s</span><span class="s">&quot; | pbcopy &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">key_filename</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">))</span>
@@ -137,15 +149,24 @@
 
 </div>
 <div class="viewcode-block" id="printhttp"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.printhttp">[docs]</a><span class="k">def</span> <span class="nf">printhttp</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39; prints an easy-to-use http string to console (and mac&#39;s clipboard)</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
     <span class="k">print</span> <span class="s">&#39;http://</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">)</span>
     <span class="n">local</span><span class="p">(</span><span class="s">&#39;echo &quot;http://</span><span class="si">%s</span><span class="s">&quot; | pbcopy &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">))</span>
 
 </div>
 <div class="viewcode-block" id="systemInformation"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.systemInformation">[docs]</a><span class="k">def</span> <span class="nf">systemInformation</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39; unimplemented</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">pass</span>
 
 </div>
 <div class="viewcode-block" id="mountStatus"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.mountStatus">[docs]</a><span class="k">def</span> <span class="nf">mountStatus</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39; unused</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
 
         <span class="n">v_to_mount</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
@@ -165,6 +186,8 @@
                 <span class="k">print</span> <span class="s">&#39;Volume attached with status: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">v_to_mount</span><span class="o">.</span><span class="n">attachment_state</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&#39;volume not found&#39;</span>
+
+
 
             <span class="c"># def terminate():</span>
 <span class="c"># 	#terminate_instances</span>
