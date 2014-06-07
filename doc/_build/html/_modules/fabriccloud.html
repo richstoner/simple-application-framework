@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fabfile &mdash; Simple Application Framework  documentation</title>
+  <title>fabriccloud &mdash; Simple Application Framework  documentation</title>
   
 
   
@@ -57,12 +57,19 @@
         
         
             <ul>
-<li class="toctree-l1"><a class="reference internal" href="../fabfile.html">fabfile module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#step-0-setup-a-remote-machine">Step 0: Setup a remote machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#step-1-provision-the-machine-with-core-components">Step 1: Provision the machine with core components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#step-2-install-additional-components">Step 2: Install additional components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#step-3-add-components-for-python-apps">Step 3: Add components for python apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#step-4-adding-an-app-from-git-and-running">Step 4: Adding an app from git and running</a></li>
+</ul>
+</li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../fabriccloud.html">fabriccloud package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../fabriccloud.html#subpackages">Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fabriccloud.html">FabricCloud Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../fabriccloud.html#module-fabriccloud">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fabriccloud.html#subpackages">Subpackages</a></li>
 </ul>
 </li>
 </ul>
@@ -90,7 +97,7 @@
       
           <li><a href="index.html">Module code</a> &raquo;</li>
       
-    <li>fabfile</li>
+    <li>fabriccloud</li>
       <li class="wy-breadcrumbs-aside">
         
       </li>
@@ -99,17 +106,15 @@
 </div>
           <div role="main">
             
-  <h1>Source code for fabfile</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+  <h1>Source code for fabriccloud</h1><div class="highlight"><pre>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;stonerri&#39;</span>
 
-<span class="kn">from</span> <span class="nn">fabric.api</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">fabric.contrib.console</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">fabric.contrib.files</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="kn">from</span> <span class="nn">fabriccloud</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.system</span> <span class="kn">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="last"><a class="viewcode-back" href="../fabfile.html#fabfile.last">[docs]</a><span class="k">def</span> <span class="nf">last</span><span class="p">():</span>
+
+<div class="viewcode-block" id="last"><a class="viewcode-back" href="../fabriccloud.html#fabriccloud.last">[docs]</a><span class="k">def</span> <span class="nf">last</span><span class="p">():</span>
     <span class="sd">&#39;&#39;&#39; inline argument, uses the last host saved by the user</span>
 
 <span class="sd">    This host is defined in the last.ini file, located in the same directory as the fabfile.py</span>
@@ -130,7 +135,7 @@
 
 
 </div>
-<div class="viewcode-block" id="save"><a class="viewcode-back" href="../fabfile.html#fabfile.save">[docs]</a><span class="k">def</span> <span class="nf">save</span><span class="p">():</span>
+<div class="viewcode-block" id="save"><a class="viewcode-back" href="../fabriccloud.html#fabriccloud.save">[docs]</a><span class="k">def</span> <span class="nf">save</span><span class="p">():</span>
     <span class="sd">&#39;&#39;&#39; inline argument, saves the host information to a file for later use</span>
 
 <span class="sd">    The host &amp; user information are stored in the last.ini file, located in the same directory as the fabfile.py</span>

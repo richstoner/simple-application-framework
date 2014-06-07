@@ -101,13 +101,13 @@ def installPythonCore(verbose=False):
 
 
 
-
-def updateConda(verbose=False):
-    ''' Updates the packages in the base anaconda environment
-    '''
-
-    _python_cmd('conda update conda', verbose)
-    _python_cmd('conda update anaconda', verbose)
+#
+# def updateConda(verbose=False):
+#     ''' Updates the packages in the base anaconda environment
+#     '''
+#
+#     _python_cmd('conda update conda', verbose)
+#     _python_cmd('conda update anaconda', verbose)
 
 
 

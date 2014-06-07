@@ -29,7 +29,7 @@
 
   
     <link rel="top" title="Simple Application Framework  documentation" href="#"/>
-        <link rel="next" title="fabfile module" href="fabfile.html"/> 
+        <link rel="next" title="Install Instructions" href="install.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -57,12 +57,19 @@
         
         
             <ul>
-<li class="toctree-l1"><a class="reference internal" href="fabfile.html">fabfile module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-0-setup-a-remote-machine">Step 0: Setup a remote machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-1-provision-the-machine-with-core-components">Step 1: Provision the machine with core components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-2-install-additional-components">Step 2: Install additional components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-3-add-components-for-python-apps">Step 3: Add components for python apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-4-adding-an-app-from-git-and-running">Step 4: Adding an app from git and running</a></li>
+</ul>
+</li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="fabriccloud.html">fabriccloud package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="fabriccloud.html#subpackages">Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fabriccloud.html">FabricCloud Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fabriccloud.html#module-fabriccloud">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabriccloud.html#subpackages">Subpackages</a></li>
 </ul>
 </li>
 </ul>
@@ -104,21 +111,25 @@
 <p>The simple application framework is a set of tools to make the deployment and hosting of a moderately complex
 python-based application simple. It uses nginx, supervisor, and anaconda as core components. It can be extended to
 include a database like mongo or elasticsearch, a task queue like celery, and other more specialized components.</p>
-<p>This project consists of two parts:</p>
-<div class="section" id="the-fabric-file">
-<h2>1. The fabric file<a class="headerlink" href="#the-fabric-file" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="fabfile.html">fabfile module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-0-setup-a-remote-machine">Step 0: Setup a remote machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-1-provision-the-machine-with-core-components">Step 1: Provision the machine with core components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-2-install-additional-components">Step 2: Install additional components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-3-add-components-for-python-apps">Step 3: Add components for python apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-4-adding-an-app-from-git-and-running">Step 4: Adding an app from git and running</a></li>
+</ul>
+</li>
 </ul>
 </div>
-</div>
 <div class="section" id="the-fabriccloud-package">
-<h2>2. The fabriccloud package<a class="headerlink" href="#the-fabriccloud-package" title="Permalink to this headline">¶</a></h2>
-<p>a set of tools to provision and manage the hosting framework</p>
+<h2>The fabriccloud package<a class="headerlink" href="#the-fabriccloud-package" title="Permalink to this headline">¶</a></h2>
+<p>The tools that provision and manage the hosting framework</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="fabriccloud.html">fabriccloud package</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="fabriccloud.html">FabricCloud Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fabriccloud.html#module-fabriccloud">Module contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fabriccloud.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fabriccloud.base.html">fabriccloud.base package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fabriccloud.base.html#module-fabriccloud.base">Module contents</a></li>
@@ -138,11 +149,16 @@ include a database like mongo or elasticsearch, a task queue like celery, and ot
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="fabriccloud.html#module-fabriccloud">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
+</div>
+<div class="section" id="the-fabfile">
+<h2>The fabfile<a class="headerlink" href="#the-fabfile" title="Permalink to this headline">¶</a></h2>
+<p>To expose the fabriccloud commands through the fabric interface, we have a fabfile that simply imports the package.
+The entire contents of the fabfile.py is simply:</p>
+<p><tt class="code docutils literal"><span class="pre">from</span> <span class="pre">fabriccloud</span> <span class="pre">import</span> <span class="pre">*</span></tt></p>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -160,7 +176,7 @@ include a database like mongo or elasticsearch, a task queue like celery, and ot
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="fabfile.html" class="btn btn-neutral float-right" title="fabfile module"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="install.html" class="btn btn-neutral float-right" title="Install Instructions"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fabriccloud package &mdash; Simple Application Framework  documentation</title>
+  <title>FabricCloud Package &mdash; Simple Application Framework  documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
     <link rel="top" title="Simple Application Framework  documentation" href="index.html"/>
         <link rel="next" title="fabriccloud.base package" href="fabriccloud.base.html"/>
-        <link rel="prev" title="fabfile module" href="fabfile.html"/> 
+        <link rel="prev" title="Install Instructions" href="install.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -58,12 +58,19 @@
         
         
             <ul>
-<li class="toctree-l1"><a class="reference internal" href="fabfile.html">fabfile module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-0-setup-a-remote-machine">Step 0: Setup a remote machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-1-provision-the-machine-with-core-components">Step 1: Provision the machine with core components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-2-install-additional-components">Step 2: Install additional components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-3-add-components-for-python-apps">Step 3: Add components for python apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#step-4-adding-an-app-from-git-and-running">Step 4: Adding an app from git and running</a></li>
+</ul>
+</li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">fabriccloud package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">FabricCloud Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-fabriccloud">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a></li>
 </ul>
 </li>
 </ul>
@@ -89,7 +96,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>fabriccloud package</li>
+    <li>FabricCloud Package</li>
       <li class="wy-breadcrumbs-aside">
         
           <a href="_sources/fabriccloud.txt" rel="nofollow"> View page source</a>
@@ -101,7 +108,26 @@
           <div role="main">
             
   <div class="section" id="fabriccloud-package">
-<h1>fabriccloud package<a class="headerlink" href="#fabriccloud-package" title="Permalink to this headline">¶</a></h1>
+<h1>FabricCloud Package<a class="headerlink" href="#fabriccloud-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-fabriccloud">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fabriccloud" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fabriccloud.last">
+<tt class="descclassname">fabriccloud.</tt><tt class="descname">last</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fabriccloud.html#last"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.last" title="Permalink to this definition">¶</a></dt>
+<dd><p>inline argument, uses the last host saved by the user</p>
+<p>This host is defined in the last.ini file, located in the same directory as the fabfile.py</p>
+<p>e.g. <tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">last</span> <span class="pre">somecommand</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fabriccloud.save">
+<tt class="descclassname">fabriccloud.</tt><tt class="descname">save</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/fabriccloud.html#save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fabriccloud.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>inline argument, saves the host information to a file for later use</p>
+<p>The host &amp; user information are stored in the last.ini file, located in the same directory as the fabfile.py</p>
+<p>e.g. <tt class="code docutils literal"><span class="pre">fab</span> <span class="pre">provider:aws</span> <span class="pre">somecommand</span> <span class="pre">save</span></tt></p>
+</dd></dl>
+
+</div>
 <div class="section" id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -125,9 +151,6 @@
 </ul>
 </div>
 </div>
-<div class="section" id="module-fabriccloud">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fabriccloud" title="Permalink to this headline">¶</a></h2>
-</div>
 </div>
 
 
@@ -139,7 +162,7 @@
         <a href="fabriccloud.base.html" class="btn btn-neutral float-right" title="fabriccloud.base package"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="fabfile.html" class="btn btn-neutral" title="fabfile module"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install.html" class="btn btn-neutral" title="Install Instructions"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

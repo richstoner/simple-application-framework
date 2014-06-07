@@ -1,5 +1,14 @@
-fabriccloud package
+FabricCloud Package
 ===================
+
+Module contents
+---------------
+
+.. automodule:: fabriccloud
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Subpackages
 -----------
@@ -10,10 +19,3 @@ Subpackages
     fabriccloud.provider
     fabriccloud.system
 
-Module contents
----------------
-
-.. automodule:: fabriccloud
-    :members:
-    :undoc-members:
-    :show-inheritance:
