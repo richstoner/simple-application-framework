@@ -14,7 +14,7 @@ def installConda(verbose=False):
 
     run('wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh')
     run('chmod +x Miniconda-latest-Linux-x86_64.sh')
-    run('./Miniconda-latest-Linux-x86_64.sh')
+    run('./Miniconda-latest-Linux-x86_64.sh -b')
 
 
 def testConda(verbose=False):
@@ -157,7 +157,7 @@ def enableApp(appname):
 
             sudo('supervisorctl reread')
             sudo('supervisorctl add %s' % appname)
-            sudo('supervisorctl stop %s' % appname)
+            sudo('supervisorctl stop %s:' % appname)
 
         #endregion
 
@@ -177,11 +177,11 @@ def disableApp(appname):
 
     links_to_remove = [nginx_sites_avail, nginx_sites_enable, supervisor_enable]
 
-    sudo('supervisorctl stop %s' % appname)
+    sudo('supervisorctl stop %s:*' % appname)
     sudo('supervisorctl remove %s' % appname)
 
     for link in links_to_remove:
-        sudo('rm %s' % link)
+        sudo('rm %s*' % link)
 
     run('sudo service nginx configtest')
     run('sudo service nginx restart')

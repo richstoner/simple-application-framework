@@ -1,27 +1,72 @@
 __author__ = 'stonerri'
 
 from fabric.api import *
+from boto import ec2
+
 
 def setDefaults():
-    env.user = 'root'
-    env.hosts = ['192.241.156.224']
+    env.user = 'ubuntu'
+    env.hosts = ['54.211.81.188']
+
+    import csv
+
+    access_key = ''
+    access_secret = ''
+    csv_in = csv.reader(open('credentials.csv', 'r'))
+    for line in csv_in:
+        if line[0] is not 'User Name':
+            access_key = line[1]
+            access_secret = line[2]
+
+    env.aws_access_key_id = access_key
+    env.aws_secret_access_key = access_secret
+    # env.key_filename = '/Users/stonerri/.ssh/richstoner-satra-west.pem'
 
 
 def sync():
-
     pass
 
 
-#
-# def printssh():
-# 	print 'ssh -i %s ubuntu@%s' % (localkeypath, env.host_string)
-# 	local('echo "ssh -i %s ubuntu@%s" | pbcopy ' % (localkeypath, env.host_string))
-#
-# def printhttp():
-# 	print 'http://%s' % (env.host_string)
-# 	local('echo "http://%s" | pbcopy ' % (env.host_string))
-#
-# def terminate():
+def printssh():
+    if env.key_filename:
+        print 'ssh -i %s ubuntu@%s' % (env.key_filename, env.host_string)
+        local('echo "ssh -i %s ubuntu@%s" | pbcopy ' % (env.key_filename, env.host_string))
+    else:
+        print 'ssh ubuntu@%s' % (env.host_string)
+        local('echo "ssh -i %s ubuntu@%s" | pbcopy ' % (env.key_filename, env.host_string))
+
+
+def printhttp():
+    print 'http://%s' % (env.host_string)
+    local('echo "http://%s" | pbcopy ' % (env.host_string))
+
+
+def systemInformation():
+    pass
+
+
+def mountStatus():
+    with settings(warn_only=True):
+
+        v_to_mount = ''
+        conn = ec2.EC2Connection(env.aws_access_key_id, env.aws_secret_access_key)
+        vol = conn.get_all_volumes()
+        volid = 'vol-8317a983'
+        for v in vol:
+            print v
+            if v.id == volid:
+                v_to_mount = v
+
+        if v_to_mount:
+
+            if v_to_mount.attachment_state() == None:
+                print 'Volume not attached'
+            else:
+                print 'Volume attached with status: %s' % v_to_mount.attachment_state()
+        else:
+            print 'volume not found'
+
+            # def terminate():
 # 	#terminate_instances
 # 	with settings(warn_only = True):
 # 		print 'killing last instance'
@@ -94,22 +139,8 @@ def sync():
 # 		print 'ssh -i %s ubuntu@%s' % (localkeypath, instance.__dict__['public_dns_name'])
 #
 #
-# def mountstatus():
-#
-# 	with settings(warn_only=True):
-#
-# 		v_to_mount = ''
-# 		conn = ec2.EC2Connection(aws_access_key_id, aws_secret_access_key)
-# 		vol = conn.get_all_volumes()
-# 		for v in vol:
-# 			if v.id == volid:
-# 				v_to_mount = v
-#
-# 		if v_to_mount.attachment_state() == None:
-# 			print 'Volume not attached'
-# 		else:
-# 			print 'Volume attached with status: %s' % v_to_mount.attachment_state()
-#
+
+
 #
 # def attachebs():
 #

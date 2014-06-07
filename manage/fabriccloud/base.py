@@ -115,13 +115,12 @@ def printssh():
 
     if env.key_filename:
 
-
-        print 'ssh -i %s root@%s' % (env.key_filename, env.host_string)
-        local('echo "ssh -i %s root@%s" | pbcopy ' % (env.key_filename, env.host_string))
+        print 'ssh -i %s %s@%s' % (env.key_filename, env.user, env.host_string)
+        local('echo "ssh -i %s %s@%s" | pbcopy ' % (env.key_filename, env.user, env.host_string))
 
     else:
-        print 'ssh root@%s' % (env.host_string)
-        local('echo "ssh root@%s" | pbcopy ' % (env.host_string))
+        print 'ssh %s@%s' % (env.user, env.host_string)
+        local('echo "ssh %s@%s" | pbcopy ' % (env.user, env.host_string))
 
 
 
@@ -168,6 +167,7 @@ def _systemInformation():
     print(green(_remote_cmd('whoami')))
     print(red(_remote_cmd('uname -a')))
     print(blue(_remote_cmd('lsb_release -a')))
+    print(yellow(_remote_cmd('df -h')))
 
     if 'p' in env.keys():
         env.p.systemInformation()
@@ -191,6 +191,12 @@ def _importProvider(provider_name):
         from fabriccloud import vagrant as p
 
     return p
+
+
+def mountStatus():
+
+    if 'p' in env.keys():
+        env.p.mountStatus()
 
 
 #endregion
