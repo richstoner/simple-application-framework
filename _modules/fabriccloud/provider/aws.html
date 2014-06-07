@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fabriccloud.provider.aws &mdash; manage  documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="manage  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../index.html" class="fa fa-home"> manage</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../fabfile.html">fabfile module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../fabriccloud.html">fabriccloud package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../fabriccloud.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fabriccloud.html#module-fabriccloud">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">manage</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>fabriccloud.provider.aws</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for fabriccloud.provider.aws</h1><div class="highlight"><pre>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;stonerri&#39;</span>
+
+<span class="kn">from</span> <span class="nn">fabric.api</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">boto</span> <span class="kn">import</span> <span class="n">ec2</span>
+
+
+<div class="viewcode-block" id="setDefaults"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.setDefaults">[docs]</a><span class="k">def</span> <span class="nf">setDefaults</span><span class="p">():</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="s">&#39;ubuntu&#39;</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">hosts</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;54.211.81.188&#39;</span><span class="p">]</span>
+
+    <span class="kn">import</span> <span class="nn">csv</span>
+
+    <span class="n">access_key</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">access_secret</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">csv_in</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;credentials.csv&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">csv_in</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s">&#39;User Name&#39;</span><span class="p">:</span>
+            <span class="n">access_key</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">access_secret</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">aws_access_key_id</span> <span class="o">=</span> <span class="n">access_key</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">aws_secret_access_key</span> <span class="o">=</span> <span class="n">access_secret</span>
+    <span class="c"># env.key_filename = &#39;/Users/stonerri/.ssh/richstoner-satra-west.pem&#39;</span>
+
+</div>
+<div class="viewcode-block" id="sync"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.sync">[docs]</a><span class="k">def</span> <span class="nf">sync</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+</div>
+<div class="viewcode-block" id="printssh"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.printssh">[docs]</a><span class="k">def</span> <span class="nf">printssh</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">key_filename</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;ssh -i </span><span class="si">%s</span><span class="s"> ubuntu@</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">key_filename</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">)</span>
+        <span class="n">local</span><span class="p">(</span><span class="s">&#39;echo &quot;ssh -i </span><span class="si">%s</span><span class="s"> ubuntu@</span><span class="si">%s</span><span class="s">&quot; | pbcopy &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">key_filename</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;ssh ubuntu@</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">)</span>
+        <span class="n">local</span><span class="p">(</span><span class="s">&#39;echo &quot;ssh -i </span><span class="si">%s</span><span class="s"> ubuntu@</span><span class="si">%s</span><span class="s">&quot; | pbcopy &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">key_filename</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="printhttp"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.printhttp">[docs]</a><span class="k">def</span> <span class="nf">printhttp</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&#39;http://</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">)</span>
+    <span class="n">local</span><span class="p">(</span><span class="s">&#39;echo &quot;http://</span><span class="si">%s</span><span class="s">&quot; | pbcopy &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="systemInformation"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.systemInformation">[docs]</a><span class="k">def</span> <span class="nf">systemInformation</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+</div>
+<div class="viewcode-block" id="mountStatus"><a class="viewcode-back" href="../../../fabriccloud.provider.html#fabriccloud.provider.aws.mountStatus">[docs]</a><span class="k">def</span> <span class="nf">mountStatus</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+        <span class="n">v_to_mount</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">ec2</span><span class="o">.</span><span class="n">EC2Connection</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">aws_access_key_id</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">aws_secret_access_key</span><span class="p">)</span>
+        <span class="n">vol</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_all_volumes</span><span class="p">()</span>
+        <span class="n">volid</span> <span class="o">=</span> <span class="s">&#39;vol-8317a983&#39;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vol</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">v</span>
+            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">volid</span><span class="p">:</span>
+                <span class="n">v_to_mount</span> <span class="o">=</span> <span class="n">v</span>
+
+        <span class="k">if</span> <span class="n">v_to_mount</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">v_to_mount</span><span class="o">.</span><span class="n">attachment_state</span><span class="p">()</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;Volume not attached&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;Volume attached with status: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">v_to_mount</span><span class="o">.</span><span class="n">attachment_state</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;volume not found&#39;</span>
+
+            <span class="c"># def terminate():</span>
+<span class="c"># 	#terminate_instances</span>
+<span class="c"># 	with settings(warn_only = True):</span>
+<span class="c"># 		print &#39;killing last instance&#39;</span>
+<span class="c"># 		conn = ec2.EC2Connection(aws_access_key_id, aws_secret_access_key)</span>
+<span class="c"># 		conn.terminate_instances(env.last_instance)</span>
+<span class="c"># 		time.sleep(1)</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c"># def createXL():</span>
+<span class="c"># 	_create(&#39;m3.xlarge&#39;)</span>
+<span class="c">#</span>
+<span class="c"># def createL():</span>
+<span class="c"># 	_create(&#39;m1.large&#39;)</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c"># def createCustom():</span>
+<span class="c"># 	&#39;&#39;&#39;usage: fab --set ec2=m2.xlarge createCustom &#39;&#39;&#39;</span>
+<span class="c"># 	_create(env.ec2)</span>
+<span class="c">#</span>
+<span class="c"># def createS():</span>
+<span class="c"># 	_create(&#39;m1.small&#39;)</span>
+<span class="c">#</span>
+<span class="c"># def createXXL():</span>
+<span class="c"># 	_create(&#39;m2.2xlarge&#39;)</span>
+<span class="c">#</span>
+<span class="c"># def _create(size):</span>
+<span class="c"># 	&#39;&#39;&#39;Creates a new large instance on ec2&#39;&#39;&#39;</span>
+<span class="c"># 	with settings(warn_only = True):</span>
+<span class="c"># 		conn = ec2.EC2Connection(aws_access_key_id, aws_secret_access_key)</span>
+<span class="c">#</span>
+<span class="c"># 		time.sleep(1)</span>
+<span class="c"># 		reservation = conn.run_instances(precise_12_04_2, instance_type=size, placement=&#39;us-east-1d&#39;, key_name=ec2keypairname, security_groups=[&#39;default&#39;, &#39;irods-web&#39;])</span>
+<span class="c"># 		time.sleep(1)</span>
+<span class="c"># 		instance = reservation.instances[0]</span>
+<span class="c"># 		time.sleep(1)</span>
+<span class="c">#</span>
+<span class="c"># 		print &#39;Starting instance %s&#39; %(instance)</span>
+<span class="c"># 		while not instance.update() == &#39;running&#39;:</span>
+<span class="c"># 			time.sleep(1)</span>
+<span class="c">#</span>
+<span class="c"># 		instance.add_tag(&#39;Name&#39;, &#39;ipython-deploy&#39;)</span>
+<span class="c">#</span>
+<span class="c"># 		time.sleep(1)</span>
+<span class="c">#</span>
+<span class="c"># 		print &#39;Instance started: %s&#39; % instance.__dict__[&#39;id&#39;]</span>
+<span class="c"># 		print &#39;Private DNS: %s&#39; % instance.__dict__[&#39;private_dns_name&#39;]</span>
+<span class="c"># 		print &#39;Private IP: %s&#39; % instance.__dict__[&#39;private_ip_address&#39;]</span>
+<span class="c"># 		print &#39;Public DNS: %s&#39; % instance.__dict__[&#39;public_dns_name&#39;]</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c"># 		# write temporary settings in case something goes wrong mid-configuration</span>
+<span class="c"># 		import ConfigParser</span>
+<span class="c"># 		import sys</span>
+<span class="c">#</span>
+<span class="c"># 		parser = ConfigParser.SafeConfigParser()</span>
+<span class="c"># 		parser.add_section(&#39;lastLaunch&#39;)</span>
+<span class="c"># 		parser.set(&#39;lastLaunch&#39;, &#39;host_string&#39;, str(instance.__dict__[&#39;public_dns_name&#39;]))</span>
+<span class="c"># 		parser.set(&#39;lastLaunch&#39;, &#39;keypath&#39;, localkeypath)</span>
+<span class="c"># 		parser.set(&#39;lastLaunch&#39;, &#39;username&#39;, &#39;ubuntu&#39;)</span>
+<span class="c"># 		parser.set(&#39;lastLaunch&#39;, &#39;instance&#39;, instance.__dict__[&#39;id&#39;])</span>
+<span class="c"># 		parser.write(open(&#39;lastLaunch.ini&#39;, &#39;w&#39;))</span>
+<span class="c">#</span>
+<span class="c"># 		env.user = &#39;ubuntu&#39;</span>
+<span class="c"># 		env.host_string = instance.__dict__[&#39;public_dns_name&#39;]</span>
+<span class="c"># 		env.key_filename = [localkeypath]</span>
+<span class="c">#</span>
+<span class="c"># 		print &#39;Instance has been launched successfully&#39;</span>
+<span class="c"># 		print &#39;To access, open a browser to http://%s&#39; % (instance.__dict__[&#39;public_dns_name&#39;])</span>
+<span class="c"># 		print &#39;ssh -i %s ubuntu@%s&#39; % (localkeypath, instance.__dict__[&#39;public_dns_name&#39;])</span>
+<span class="c">#</span>
+<span class="c">#</span>
+
+
+<span class="c">#</span>
+<span class="c"># def attachebs():</span>
+<span class="c">#</span>
+<span class="c"># 	with settings(warn_only=True):</span>
+<span class="c">#</span>
+<span class="c"># 		v_to_mount = &#39;&#39;</span>
+<span class="c"># 		conn = ec2.EC2Connection(aws_access_key_id, aws_secret_access_key)</span>
+<span class="c"># 		vol = conn.get_all_volumes()</span>
+<span class="c"># 		for v in vol:</span>
+<span class="c"># 			if v.id == volid:</span>
+<span class="c"># 				v_to_mount = v</span>
+<span class="c">#</span>
+<span class="c"># 		print &#39;trying to attach volume %s to instance %s&#39; % (v_to_mount, env.last_instance)</span>
+<span class="c">#</span>
+<span class="c"># 		if v_to_mount.attachment_state() == None:</span>
+<span class="c"># 			print &#39;volume not attached, continuing&#39;</span>
+<span class="c"># 			result = v_to_mount.attach(env.last_instance, &#39;/dev/xvdf&#39;)</span>
+<span class="c">#</span>
+<span class="c"># 		else:</span>
+<span class="c"># 			print v_to_mount.attachment_state()</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c"># def mountebs():</span>
+<span class="c">#</span>
+<span class="c"># 	with settings(warn_only=True):</span>
+<span class="c">#</span>
+<span class="c"># 		if not exists(&#39;/vol&#39;):</span>
+<span class="c"># 			sudo(&#39;mkdir -m 000 /vol&#39;)</span>
+<span class="c"># 			sudo(&#39;mount /dev/xvdf /vol&#39;)</span>
+<span class="c">#</span>
+<span class="c"># 		# # sudo mkfs.ext4 /dev/xvdf</span>
+<span class="c">#</span>
+<span class="c"># def unmountebs():</span>
+<span class="c">#</span>
+<span class="c"># 	with settings(warn_only=True):</span>
+<span class="c">#</span>
+<span class="c"># 		sudo(&#39;umount /dev/xvdf&#39;)</span>
+<span class="c">#</span>
+<span class="c"># 		v_to_unmount = &#39;&#39;</span>
+<span class="c"># 		conn = ec2.EC2Connection(aws_access_key_id, aws_secret_access_key)</span>
+<span class="c"># 		vol = conn.get_all_volumes()</span>
+<span class="c"># 		for v in vol:</span>
+<span class="c"># 			if v.id == volid:</span>
+<span class="c"># 				v_to_unmount = v</span>
+<span class="c">#</span>
+<span class="c"># 		result = v_to_unmount.detach(force=True)</span>
+<span class="c"># 		if result == True:</span>
+<span class="c"># 			print &#39;volume detached successfully&#39;</span>
+<span class="c"># 		else:</span>
+<span class="c"># 			print &#39;volume not attached successfully&#39;</span>
+<span class="c"># 		print v_to_unmount.attachment_state()</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Author.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
