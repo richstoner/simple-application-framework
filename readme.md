@@ -10,7 +10,7 @@
     fab last configureSupervisor:v
     fab last startNginx:v
     fab last configureNginx:v
-    fab last installMongoDB:vre
+    fab last installMongoDB:v
 
     fab last user:flaskuser installConda:v
     fab last user:flaskuser testConda:v

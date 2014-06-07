@@ -5,6 +5,8 @@ from fabric.api import *
 from fabric.colors import *
 from fabric.contrib.files import *
 
+from fabric.context_managers import shell_env
+
 from ..base import *
 
 #region external commands - exposed to fabric
@@ -76,35 +78,36 @@ def installConda(verbose=False):
     run('./Miniconda-latest-Linux-x86_64.sh -b')
 
 
+
 def testConda(verbose=False):
     ''' Verifies the conda installation is correct
     '''
 
     _remote_cmd('export', verbose)
     _remote_cmd('which python', verbose)
-    _remote_cmd('conda info', verbose)
+    _python_cmd('conda info', verbose)
 
 
-def installCondaBase(verbose=False):
-    ''' Creates a new server environment to ~/miniconda/envs/server
+def installPythonCore(verbose=False):
     '''
 
-    _remote_cmd('conda create -n py27 server ', verbose)
-
-
-def installAnaconda(verbose=False):
-    ''' Installs python dependencies for anaconda tools to ~/miniconda/envs/server
+    :param verbose:
+    :return:
     '''
 
-    _remote_cmd('conda create -n server anaconda', verbose)
+    _python_cmd('conda install --yes anaconda', verbose)
+    _python_cmd('conda install --yes opencv', verbose)
+    _python_cmd('conda install --yes pip', verbose)
+
+
 
 
 def updateConda(verbose=False):
     ''' Updates the packages in the base anaconda environment
     '''
 
-    _remote_cmd('conda update conda', verbose)
-    _remote_cmd('conda update anaconda', verbose)
+    _python_cmd('conda update conda', verbose)
+    _python_cmd('conda update anaconda', verbose)
 
 
 
@@ -152,6 +155,57 @@ def installElasticsearch(verbose=False):
         _remote_cmd('wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.deb', verbose)
         _remote_cmd('dpkg -i elasticsearch-1.0.1.deb', verbose)
         _remote_cmd('sudo service elasticsearch start', verbose)
+
+
+
+
+def addApp(appname, giturl):
+    '''
+
+    :param appname:
+    :param giturl:
+    :return:
+    '''
+
+    if exists(os.path.join('/vagrant/server', 'apps', appname)):
+
+        # run git pull
+        with cd('/vagrant/server/apps/%s'%(appname)):
+
+            pullstring = 'git pull origin master'
+
+            run(pullstring)
+
+    else:
+
+        # run git clone
+
+        clonestring = 'git clone %s /vagrant/server/apps/%s' % (giturl, appname)
+
+        _remote_cmd(clonestring)
+
+
+def updateApp(appname):
+    '''
+
+    :param appname:
+    :param giturl:
+    :return:
+    '''
+
+    if exists(os.path.join('/vagrant/server', 'apps', appname)):
+
+        # run git pull
+        with cd('/vagrant/server/apps/%s'%(appname)):
+
+            pullstring = 'git pull origin master'
+
+            run(pullstring)
+
+
+
+
+
 
 
 
@@ -270,7 +324,7 @@ def _remote_cmd(cmd, verbose=False):
 
 def _python_cmd(cmd, verbose=False):
 
-    with prefix('export PATH="/root/miniconda/envs/server/bin:$PATH"'):
+    with shell_env(PATH="/home/flaskuser/miniconda/bin:$PATH"):
 
         if verbose:
             with settings(warn_only=True):
@@ -280,6 +334,8 @@ def _python_cmd(cmd, verbose=False):
 
             with hide('output','running','warnings', 'stdout', 'stderr'), settings(warn_only=True):
                 return run(cmd, pty = True)
+
+
 
 
 

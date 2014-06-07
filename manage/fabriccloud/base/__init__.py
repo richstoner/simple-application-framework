@@ -172,19 +172,19 @@ def _systemInformation():
 def _importProvider(provider_name):
     if provider_name == 'do':
         print(green('Using digital ocean as provider'))
-        from fabriccloud import digitalocean as p
+        from ..provider import digitalocean as p
 
     elif provider_name == 'vagrant':
         print(green('Using vagrant as provider'))
-        from fabriccloud import vagrant as p
+        from ..provider import vagrant as p
 
     elif provider_name == 'aws':
         print(green('Using AWS as provider'))
-        from fabriccloud import aws as p
+        from ..provider import aws as p
 
     else:
         print(yellow('No provider specified, using vagrant as default'))
-        from fabriccloud import vagrant as p
+        from ..provider  import vagrant as p
 
     return p
 

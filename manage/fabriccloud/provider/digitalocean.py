@@ -1,6 +1,7 @@
 __author__ = 'stonerri'
 
 from fabric.contrib.project import rsync_project
+from fabric.api import *
 
 def setDefaults():
     ''' Configures fabric to use DO user and hostname
@@ -11,7 +12,7 @@ def setDefaults():
     env.user = 'root'
 
     # set your digital ocean hostname here (hardcoded for convenience)
-    env.hosts = ['192.241.196.151']
+    env.hosts = ['192.241.156.224']
 
 def systemInformation():
 
@@ -28,6 +29,9 @@ def sync():
         'manage/.git/',
         'manage/.vagrant/',
         'manage/.idea/',
+        '_build',
+        '_sources',
+        '_templates',
         'manage/.DS_Store',
         'server/apps/annotator/venv'
     ]

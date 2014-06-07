@@ -4,7 +4,8 @@ from fabric.api import *
 from fabric.contrib.console import *
 from fabric.contrib.files import *
 
-import fabriccloud
+from fabriccloud import *
+
 
 def last():
     ''' Use the last target configuration saved
