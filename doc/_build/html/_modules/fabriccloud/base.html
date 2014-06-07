@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fabriccloud.base &mdash; manage  documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="manage  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> manage</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../fabfile.html">fabfile module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fabriccloud.html">fabriccloud package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../fabriccloud.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fabriccloud.html#module-fabriccloud">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">manage</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>fabriccloud.base</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for fabriccloud.base</h1><div class="highlight"><pre>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;stonerri&#39;</span>
+
+<span class="kn">from</span> <span class="nn">fabric.api</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fabric.colors</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c">#region fabric methods</span>
+
+<div class="viewcode-block" id="update"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.update">[docs]</a><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Runs update &amp; upgrade for system packages</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_updatePackages</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_upgradePackages</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="rsync"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.rsync">[docs]</a><span class="k">def</span> <span class="nf">rsync</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Synchronizes the root folder with /vagrant on the remote host (emulates a vagrant config)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="s">&#39;p&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">_importProvider</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="s">&#39;vagrant&#39;</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">setDefaults</span><span class="p">()</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">sync</span><span class="p">()</span>
+
+
+
+</div>
+<div class="viewcode-block" id="info"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.info">[docs]</a><span class="k">def</span> <span class="nf">info</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39; Returns information about the system</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_systemInformation</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="provider"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.provider">[docs]</a><span class="k">def</span> <span class="nf">provider</span><span class="p">(</span><span class="n">_provider</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Specify the provider : aws, do, vagrant, other?</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">_importProvider</span><span class="p">(</span><span class="n">_provider</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="n">_provider</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">setDefaults</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="user"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.user">[docs]</a><span class="k">def</span> <span class="nf">user</span><span class="p">(</span><span class="n">_user</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Set a specific user for the action</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="s">&#39;p&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">_importProvider</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="s">&#39;vagrant&#39;</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">setDefaults</span><span class="p">()</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">_user</span>
+
+    <span class="k">print</span> <span class="s">&#39;Setting user to </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">_user</span>
+
+</div>
+<div class="viewcode-block" id="addUser"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.addUser">[docs]</a><span class="k">def</span> <span class="nf">addUser</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Creates a non-root user to use for serving applications</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;useradd -m </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">username</span><span class="p">)</span>
+    <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;passwd </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">username</span><span class="p">)</span>
+
+
+
+</div>
+<div class="viewcode-block" id="installBase"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.installBase">[docs]</a><span class="k">def</span> <span class="nf">installBase</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Installs some of the core components needed: python, git, build-essential, unzip</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+        <span class="n">packages</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">&#39;build-essential&#39;</span><span class="p">,</span>
+            <span class="s">&#39;subversion&#39;</span><span class="p">,</span>
+            <span class="s">&#39;git&#39;</span><span class="p">,</span>
+            <span class="s">&#39;unzip&#39;</span><span class="p">,</span>
+            <span class="s">&#39;supervisor&#39;</span>
+        <span class="p">]</span>
+
+        <span class="n">packagelist</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages</span><span class="p">)</span>
+
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">packagelist</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="configureSupervisor"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.configureSupervisor">[docs]</a><span class="k">def</span> <span class="nf">configureSupervisor</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Updates the supervisor config file to provide the web interface on port 9999</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+        <span class="n">put</span><span class="p">(</span><span class="s">&#39;config/supervisord.conf.web&#39;</span><span class="p">,</span> <span class="s">&#39;supervisord.conf&#39;</span><span class="p">)</span>
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo mv supervisord.conf /etc/supervisor/supervisord.conf&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo service supervisor stop&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo service supervisor start&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+</div>
+<div class="viewcode-block" id="restartAll"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.restartAll">[docs]</a><span class="k">def</span> <span class="nf">restartAll</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Restarts nginx and supervisor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">run</span><span class="p">(</span><span class="s">&#39;sudo service nginx restart&#39;</span><span class="p">)</span>
+    <span class="n">run</span><span class="p">(</span><span class="s">&#39;sudo supervisorctl reload&#39;</span><span class="p">)</span>
+
+
+</div>
+<div class="viewcode-block" id="printssh"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.printssh">[docs]</a><span class="k">def</span> <span class="nf">printssh</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39; prints a simple ssh command to terminal &amp; the clipboard</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">key_filename</span><span class="p">:</span>
+
+        <span class="k">print</span> <span class="s">&#39;ssh -i </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">@</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">key_filename</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">)</span>
+        <span class="n">local</span><span class="p">(</span><span class="s">&#39;echo &quot;ssh -i </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">@</span><span class="si">%s</span><span class="s">&quot; | pbcopy &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">key_filename</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;ssh </span><span class="si">%s</span><span class="s">@</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">)</span>
+        <span class="n">local</span><span class="p">(</span><span class="s">&#39;echo &quot;ssh </span><span class="si">%s</span><span class="s">@</span><span class="si">%s</span><span class="s">&quot; | pbcopy &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">))</span>
+
+
+</div>
+<div class="viewcode-block" id="printhttp"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.printhttp">[docs]</a><span class="k">def</span> <span class="nf">printhttp</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39; prints a simple http command to terminal &amp; the clipboard</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">print</span> <span class="s">&#39;http://</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">)</span>
+    <span class="n">local</span><span class="p">(</span><span class="s">&#39;echo &quot;http://</span><span class="si">%s</span><span class="s">&quot; | pbcopy &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">host_string</span><span class="p">))</span>
+
+
+<span class="c">#endregion</span>
+
+<span class="c">#region internal methods</span>
+</div>
+<span class="k">def</span> <span class="nf">_updatePackages</span><span class="p">(</span><span class="n">verbose</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Runs system update commands</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y update&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_upgradePackages</span><span class="p">(</span><span class="n">verbose</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Runs system upgrade commands</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y upgrade&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_remote_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">pty</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="k">with</span> <span class="n">hide</span><span class="p">(</span><span class="s">&#39;output&#39;</span><span class="p">,</span><span class="s">&#39;running&#39;</span><span class="p">,</span><span class="s">&#39;warnings&#39;</span><span class="p">,</span> <span class="s">&#39;stdout&#39;</span><span class="p">,</span> <span class="s">&#39;stderr&#39;</span><span class="p">),</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">pty</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_systemInformation</span><span class="p">():</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">green</span><span class="p">(</span><span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;whoami&#39;</span><span class="p">)))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">red</span><span class="p">(</span><span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;uname -a&#39;</span><span class="p">)))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">blue</span><span class="p">(</span><span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;lsb_release -a&#39;</span><span class="p">)))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">yellow</span><span class="p">(</span><span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;df -h&#39;</span><span class="p">)))</span>
+
+    <span class="k">if</span> <span class="s">&#39;p&#39;</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">systemInformation</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">_importProvider</span><span class="p">(</span><span class="n">provider_name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">provider_name</span> <span class="o">==</span> <span class="s">&#39;do&#39;</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">green</span><span class="p">(</span><span class="s">&#39;Using digital ocean as provider&#39;</span><span class="p">))</span>
+        <span class="kn">from</span> <span class="nn">..provider</span> <span class="kn">import</span> <span class="n">digitalocean</span> <span class="k">as</span> <span class="n">p</span>
+
+    <span class="k">elif</span> <span class="n">provider_name</span> <span class="o">==</span> <span class="s">&#39;vagrant&#39;</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">green</span><span class="p">(</span><span class="s">&#39;Using vagrant as provider&#39;</span><span class="p">))</span>
+        <span class="kn">from</span> <span class="nn">..provider</span> <span class="kn">import</span> <span class="n">vagrant</span> <span class="k">as</span> <span class="n">p</span>
+
+    <span class="k">elif</span> <span class="n">provider_name</span> <span class="o">==</span> <span class="s">&#39;aws&#39;</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">green</span><span class="p">(</span><span class="s">&#39;Using AWS as provider&#39;</span><span class="p">))</span>
+        <span class="kn">from</span> <span class="nn">..provider</span> <span class="kn">import</span> <span class="n">aws</span> <span class="k">as</span> <span class="n">p</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">yellow</span><span class="p">(</span><span class="s">&#39;No provider specified, using vagrant as default&#39;</span><span class="p">))</span>
+        <span class="kn">from</span> <span class="nn">..provider</span>  <span class="kn">import</span> <span class="n">vagrant</span> <span class="k">as</span> <span class="n">p</span>
+
+    <span class="k">return</span> <span class="n">p</span>
+
+
+<div class="viewcode-block" id="mountStatus"><a class="viewcode-back" href="../../fabriccloud.base.html#fabriccloud.base.mountStatus">[docs]</a><span class="k">def</span> <span class="nf">mountStatus</span><span class="p">():</span>
+
+    <span class="k">if</span> <span class="s">&#39;p&#39;</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">mountStatus</span><span class="p">()</span>
+
+
+<span class="c">#endregion</span>
+</pre></div></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Author.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

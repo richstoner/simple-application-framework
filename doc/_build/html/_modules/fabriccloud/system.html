@@ -1,0 +1,500 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fabriccloud.system &mdash; manage  documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="manage  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> manage</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../fabfile.html">fabfile module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fabriccloud.html">fabriccloud package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../fabriccloud.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fabriccloud.html#module-fabriccloud">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">manage</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>fabriccloud.system</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for fabriccloud.system</h1><div class="highlight"><pre>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;stonerri&#39;</span>
+
+<span class="kn">from</span> <span class="nn">fabric.api</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fabric.colors</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fabric.contrib.files</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">fabric.context_managers</span> <span class="kn">import</span> <span class="n">shell_env</span>
+
+<span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c">#region external commands - exposed to fabric</span>
+
+<span class="k">def</span> <span class="nf">installNginx</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="installNginx"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.installNginx">[docs]</a>    <span class="sd">&#39;&#39;&#39; Installs nginx + extras</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+        <span class="n">packages</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">&#39;nginx-extras&#39;</span>
+        <span class="p">]</span>
+
+        <span class="n">packagelist</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages</span><span class="p">)</span>
+
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">packagelist</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">startNginx</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="startNginx"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.startNginx">[docs]</a>    <span class="sd">&#39;&#39;&#39; Starts nginx</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo service nginx start&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">configureNginx</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="configureNginx"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.configureNginx">[docs]</a>    <span class="sd">&#39;&#39;&#39; Configures nginx to use the configuration file in ./manage/config</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo mv /etc/nginx/nginx.conf /etc/nginx/conf.old&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo ln -s /vagrant/manage/config/nginx.conf.default /etc/nginx/nginx.conf&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">installApache</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="installApache"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.installApache">[docs]</a>    <span class="sd">&#39;&#39;&#39; Installs apache 2 + mod_wsgi for serving python apps</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+        <span class="n">packages</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">&#39;apache2&#39;</span><span class="p">,</span>
+            <span class="s">&#39;libapache2-mod-wsgi&#39;</span>
+        <span class="p">]</span>
+
+        <span class="n">packagelist</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages</span><span class="p">)</span>
+
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">packagelist</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+        <span class="c"># configure apache</span>
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;a2enmod headers&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;a2enmod wsgi&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+
+
+
+<span class="c">#endregion</span>
+
+
+<span class="c">#region externals</span>
+
+<span class="k">def</span> <span class="nf">installConda</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="installConda"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.installConda">[docs]</a>    <span class="sd">&#39;&#39;&#39; Installs miniconda installation (requires user interaction)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">run</span><span class="p">(</span><span class="s">&#39;wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh&#39;</span><span class="p">)</span>
+    <span class="n">run</span><span class="p">(</span><span class="s">&#39;chmod +x Miniconda-latest-Linux-x86_64.sh&#39;</span><span class="p">)</span>
+    <span class="n">run</span><span class="p">(</span><span class="s">&#39;./Miniconda-latest-Linux-x86_64.sh -b&#39;</span><span class="p">)</span>
+
+
+
+<span class="k">def</span> <span class="nf">testConda</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="testConda"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.testConda">[docs]</a>    <span class="sd">&#39;&#39;&#39; Verifies the conda installation is correct</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;export&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;which python&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;conda info&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">installPythonCore</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="installPythonCore"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.installPythonCore">[docs]</a>    <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    :param verbose:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;conda install --yes anaconda&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;conda install --yes opencv&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;conda install --yes pip&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+
+
+<span class="k">def</span> <span class="nf">updateConda</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="updateConda"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.updateConda">[docs]</a>    <span class="sd">&#39;&#39;&#39; Updates the packages in the base anaconda environment</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;conda update conda&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+    <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;conda update anaconda&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+
+<span class="k">def</span> <span class="nf">installRabbitMQ</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="installRabbitMQ"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.installRabbitMQ">[docs]</a>    <span class="sd">&#39;&#39;&#39; Installs RabbitMQ</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+        <span class="n">packages</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">&#39;rabbitmq-server&#39;</span>
+        <span class="p">]</span>
+
+        <span class="n">packagelist</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages</span><span class="p">)</span>
+
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">packagelist</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+
+<span class="k">def</span> <span class="nf">installMongoDB</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="installMongoDB"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.installMongoDB">[docs]</a>    <span class="sd">&#39;&#39;&#39; Installs MongoDB with default authentication</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+        <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10&#39;</span><span class="p">)</span>
+        <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;echo &quot;deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen&quot; | tee -a /etc/apt/sources.list.d/10gen.list&#39;</span><span class="p">)</span>
+        <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;apt-get update&#39;</span><span class="p">)</span>
+        <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;apt-get install mongodb-10gen&#39;</span><span class="p">)</span>
+
+
+
+<span class="k">def</span> <span class="nf">installElasticsearch</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+<div class="viewcode-block" id="installElasticsearch"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.installElasticsearch">[docs]</a>    <span class="sd">&#39;&#39;&#39; Installs elasticsearch</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+        <span class="n">packages</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">&#39;openjdk-7-jre-headless&#39;</span>
+        <span class="p">]</span>
+
+        <span class="n">packagelist</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages</span><span class="p">)</span>
+
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">packagelist</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.deb&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;dpkg -i elasticsearch-1.0.1.deb&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="s">&#39;sudo service elasticsearch start&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+
+
+
+<span class="k">def</span> <span class="nf">addApp</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="n">giturl</span><span class="p">):</span></div>
+<div class="viewcode-block" id="addApp"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.addApp">[docs]</a>    <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    :param appname:</span>
+<span class="sd">    :param giturl:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/vagrant/server&#39;</span><span class="p">,</span> <span class="s">&#39;apps&#39;</span><span class="p">,</span> <span class="n">appname</span><span class="p">)):</span>
+
+        <span class="c"># run git pull</span>
+        <span class="k">with</span> <span class="n">cd</span><span class="p">(</span><span class="s">&#39;/vagrant/server/apps/</span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">appname</span><span class="p">)):</span>
+
+            <span class="n">pullstring</span> <span class="o">=</span> <span class="s">&#39;git pull origin master&#39;</span>
+
+            <span class="n">run</span><span class="p">(</span><span class="n">pullstring</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="c"># run git clone</span>
+
+        <span class="n">clonestring</span> <span class="o">=</span> <span class="s">&#39;git clone </span><span class="si">%s</span><span class="s"> /vagrant/server/apps/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">giturl</span><span class="p">,</span> <span class="n">appname</span><span class="p">)</span>
+
+        <span class="n">_remote_cmd</span><span class="p">(</span><span class="n">clonestring</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">updateApp</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span></div>
+<div class="viewcode-block" id="updateApp"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.updateApp">[docs]</a>    <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    :param appname:</span>
+<span class="sd">    :param giturl:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/vagrant/server&#39;</span><span class="p">,</span> <span class="s">&#39;apps&#39;</span><span class="p">,</span> <span class="n">appname</span><span class="p">)):</span>
+
+        <span class="c"># run git pull</span>
+        <span class="k">with</span> <span class="n">cd</span><span class="p">(</span><span class="s">&#39;/vagrant/server/apps/</span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">appname</span><span class="p">)):</span>
+
+            <span class="n">pullstring</span> <span class="o">=</span> <span class="s">&#39;git pull origin master&#39;</span>
+
+            <span class="n">run</span><span class="p">(</span><span class="n">pullstring</span><span class="p">)</span>
+
+
+
+
+
+
+
+
+<span class="k">def</span> <span class="nf">enableApp</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span></div>
+<div class="viewcode-block" id="enableApp"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.enableApp">[docs]</a>    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes an app located in the server/apps folder and configures nginx, supervisor, and pip to run it</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/vagrant/server&#39;</span><span class="p">,</span> <span class="s">&#39;apps&#39;</span><span class="p">,</span> <span class="n">appname</span><span class="p">)):</span>
+
+        <span class="c">#region nginx configuration</span>
+
+        <span class="c"># link nginx site to sites-available &amp; sites-enabled</span>
+        <span class="n">nginx_source_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/vagrant/server&#39;</span><span class="p">,</span> <span class="s">&#39;apps&#39;</span><span class="p">,</span> <span class="n">appname</span><span class="p">,</span> <span class="s">&#39;nginx.conf&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">nginx_source_path</span><span class="p">):</span>
+
+            <span class="n">nginx_sites_avail</span> <span class="o">=</span> <span class="s">&#39;/etc/nginx/sites-available/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">appname</span>
+            <span class="n">nginx_sites_enable</span> <span class="o">=</span> <span class="s">&#39;/etc/nginx/sites-enabled/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">appname</span>
+
+            <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">nginx_sites_enable</span><span class="p">)</span> <span class="ow">or</span> <span class="n">exists</span><span class="p">(</span><span class="n">nginx_sites_avail</span><span class="p">):</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">red</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> already enabled&#39;</span> <span class="o">%</span><span class="n">appname</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">run</span><span class="p">(</span><span class="s">&#39;sudo ln -s </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nginx_source_path</span><span class="p">,</span> <span class="n">nginx_sites_avail</span><span class="p">))</span>
+                <span class="n">run</span><span class="p">(</span><span class="s">&#39;sudo ln -s </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nginx_source_path</span><span class="p">,</span> <span class="n">nginx_sites_enable</span><span class="p">))</span>
+
+            <span class="n">run</span><span class="p">(</span><span class="s">&#39;sudo service nginx configtest&#39;</span><span class="p">)</span>
+            <span class="n">run</span><span class="p">(</span><span class="s">&#39;sudo service nginx restart&#39;</span><span class="p">)</span>
+
+        <span class="c">#endregion</span>
+
+
+
+        <span class="c">#region pip configuration</span>
+
+        <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/vagrant/server&#39;</span><span class="p">,</span> <span class="s">&#39;apps&#39;</span><span class="p">,</span> <span class="n">appname</span><span class="p">,</span> <span class="s">&#39;requirements.txt&#39;</span><span class="p">)):</span>
+
+            <span class="n">_python_cmd</span><span class="p">(</span><span class="s">&#39;pip install -r </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/vagrant/server&#39;</span><span class="p">,</span> <span class="s">&#39;apps&#39;</span><span class="p">,</span> <span class="n">appname</span><span class="p">,</span> <span class="s">&#39;requirements.txt&#39;</span><span class="p">),</span>
+                        <span class="bp">True</span><span class="p">)</span>
+
+
+        <span class="c">#endregion</span>
+
+
+
+        <span class="c">#region supervisor configuration</span>
+
+        <span class="n">supervisor_config</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/vagrant/server&#39;</span><span class="p">,</span> <span class="s">&#39;apps&#39;</span><span class="p">,</span> <span class="n">appname</span><span class="p">,</span> <span class="s">&#39;supervisor.conf&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">supervisor_config</span><span class="p">):</span>
+
+            <span class="n">supervisor_enable</span> <span class="o">=</span> <span class="s">&#39;/etc/supervisor/conf.d/</span><span class="si">%s</span><span class="s">.conf&#39;</span> <span class="o">%</span> <span class="n">appname</span>
+
+            <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">supervisor_enable</span><span class="p">):</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">red</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> super config already enabled&#39;</span> <span class="o">%</span> <span class="n">appname</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">run</span><span class="p">(</span><span class="s">&#39;sudo ln -s </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">supervisor_config</span><span class="p">,</span> <span class="n">supervisor_enable</span><span class="p">))</span>
+
+            <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;supervisorctl reread&#39;</span><span class="p">)</span>
+            <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;supervisorctl add </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">appname</span><span class="p">)</span>
+            <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;supervisorctl stop </span><span class="si">%s</span><span class="s">:&#39;</span> <span class="o">%</span> <span class="n">appname</span><span class="p">)</span>
+
+        <span class="c">#endregion</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;invalid app name&#39;</span>
+
+
+
+<span class="k">def</span> <span class="nf">disableApp</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span></div>
+<div class="viewcode-block" id="disableApp"><a class="viewcode-back" href="../../fabriccloud.system.html#fabriccloud.system.disableApp">[docs]</a>    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Disables an app, provided as by parameter</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">nginx_sites_avail</span> <span class="o">=</span> <span class="s">&#39;/etc/nginx/sites-available/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">appname</span>
+    <span class="n">nginx_sites_enable</span> <span class="o">=</span> <span class="s">&#39;/etc/nginx/sites-enabled/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">appname</span>
+    <span class="n">supervisor_enable</span> <span class="o">=</span> <span class="s">&#39;/etc/supervisor/conf.d/</span><span class="si">%s</span><span class="s">.conf&#39;</span> <span class="o">%</span> <span class="n">appname</span>
+
+    <span class="n">links_to_remove</span> <span class="o">=</span> <span class="p">[</span><span class="n">nginx_sites_avail</span><span class="p">,</span> <span class="n">nginx_sites_enable</span><span class="p">,</span> <span class="n">supervisor_enable</span><span class="p">]</span>
+
+    <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;supervisorctl stop </span><span class="si">%s</span><span class="s">:*&#39;</span> <span class="o">%</span> <span class="n">appname</span><span class="p">)</span>
+    <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;supervisorctl remove </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">appname</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links_to_remove</span><span class="p">:</span>
+        <span class="n">sudo</span><span class="p">(</span><span class="s">&#39;rm </span><span class="si">%s</span><span class="s">*&#39;</span> <span class="o">%</span> <span class="n">link</span><span class="p">)</span>
+
+    <span class="n">run</span><span class="p">(</span><span class="s">&#39;sudo service nginx configtest&#39;</span><span class="p">)</span>
+    <span class="n">run</span><span class="p">(</span><span class="s">&#39;sudo service nginx restart&#39;</span><span class="p">)</span>
+
+
+
+
+
+<span class="c">#endregion</span>
+
+
+
+
+<span class="c">#region internals</span>
+
+<span class="k">def</span> <span class="nf">_remote_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span></div>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">pty</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="k">with</span> <span class="n">hide</span><span class="p">(</span><span class="s">&#39;output&#39;</span><span class="p">,</span><span class="s">&#39;running&#39;</span><span class="p">,</span><span class="s">&#39;warnings&#39;</span><span class="p">,</span> <span class="s">&#39;stdout&#39;</span><span class="p">,</span> <span class="s">&#39;stderr&#39;</span><span class="p">),</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">pty</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_python_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+    <span class="k">with</span> <span class="n">shell_env</span><span class="p">(</span><span class="n">PATH</span><span class="o">=</span><span class="s">&quot;/home/flaskuser/miniconda/bin:$PATH&quot;</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">pty</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">with</span> <span class="n">hide</span><span class="p">(</span><span class="s">&#39;output&#39;</span><span class="p">,</span><span class="s">&#39;running&#39;</span><span class="p">,</span><span class="s">&#39;warnings&#39;</span><span class="p">,</span> <span class="s">&#39;stdout&#39;</span><span class="p">,</span> <span class="s">&#39;stderr&#39;</span><span class="p">),</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">pty</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+
+
+
+
+
+<span class="c">#endregion</span>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Author.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
