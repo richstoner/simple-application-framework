@@ -182,9 +182,15 @@ def _importProvider(provider_name):
         print(green('Using AWS as provider'))
         from ..provider import aws as p
 
+    elif provider_name == 'azure':
+        print(green('Using Azure as provider'))
+        from ..provider import azure as p
+
     else:
         print(yellow('No provider specified, using vagrant as default'))
         from ..provider  import vagrant as p
+
+
 
     return p
 

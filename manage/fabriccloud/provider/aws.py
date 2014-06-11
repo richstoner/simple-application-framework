@@ -2,6 +2,9 @@ __author__ = 'stonerri'
 
 from fabric.api import *
 from boto import ec2
+from fabric.contrib.project import rsync_project
+from fabric.contrib.files import *
+from fabric.api import *
 
 
 def setDefaults():
@@ -9,28 +12,54 @@ def setDefaults():
 
     '''
     env.user = 'ubuntu'
-    env.hosts = ['54.211.81.188']
+    env.hosts = ['54.225.144.91']
 
     import csv
 
-    access_key = ''
-    access_secret = ''
-    csv_in = csv.reader(open('credentials.csv', 'r'))
-    for line in csv_in:
-        if line[0] is not 'User Name':
-            access_key = line[1]
-            access_secret = line[2]
+    # access_key = ''
+    # access_secret = ''
+    # csv_in = csv.reader(open('credentials.csv', 'r'))
+    # for line in csv_in:
+    #     if line[0] is not 'User Name':
+    #         access_key = line[1]
+    #         access_secret = line[2]
 
-    env.aws_access_key_id = access_key
-    env.aws_secret_access_key = access_secret
-    # env.key_filename = '/Users/stonerri/.ssh/richstoner-satra-west.pem'
+    # env.aws_access_key_id = access_key
+    # env.aws_secret_access_key = access_secret
+    env.key_filename = '/Users/stonerri/.ssh/rich-stoner-mskcc-hackathon.pem'
+
 
 
 def sync():
-    ''' unimplemented
 
-    '''
-    pass
+    if not exists('/vagrant'):
+        sudo('mkdir /vagrant')
+        sudo('chown ubuntu:ubuntu /vagrant')
+        
+    exclude_list = [
+        '.git',
+        '.vagrant',
+        'Vagrantfile',
+        'readme.md',
+        '.idea',
+        'last.ini',
+        'fabfile.py',
+        'fabriccloud',
+        '.DS_Store',
+        'manage/.git/',
+        'doc',
+        'manage/.vagrant/',
+        'manage/.idea/',
+        '_build',
+        '_sources',
+        '_templates',
+        'manage/.DS_Store',
+        'server/apps/annotator/venv'
+    ]
+
+    rsync_project('/vagrant', local_dir='../', exclude=exclude_list)
+
+
 
 
 def printssh():
@@ -39,7 +68,7 @@ def printssh():
     '''
 
     if env.key_filename:
-        print 'ssh -i %s ubuntu@%s' % (env.key_filename, env.host_string)
+        print 'ssh -i %s %s@%s' % (env.key_filename, env.user, env.host_string)
         local('echo "ssh -i %s ubuntu@%s" | pbcopy ' % (env.key_filename, env.host_string))
     else:
         print 'ssh ubuntu@%s' % (env.host_string)
