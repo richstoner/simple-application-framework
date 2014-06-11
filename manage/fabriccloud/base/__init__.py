@@ -186,6 +186,10 @@ def _importProvider(provider_name):
         print(green('Using Azure as provider'))
         from ..provider import azure as p
 
+    elif provider_name == 'linode':
+        print(green('Using Linode  as provider'))
+        from ..provider import linode as p
+
     else:
         print(yellow('No provider specified, using vagrant as default'))
         from ..provider  import vagrant as p
