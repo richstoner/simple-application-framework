@@ -78,6 +78,16 @@ def installConda(verbose=False):
     run('./Miniconda-latest-Linux-x86_64.sh -b')
 
 
+def installCondaAsUser(_user='flaskuser', verbose=False):
+    ''' Installs miniconda installation (requires user interaction)
+    '''
+
+    # sudo('whoami', user=_user)
+    with cd('/home/%s' % (_user)):
+        sudo('wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh', user=_user)
+        sudo('chmod +x Miniconda-latest-Linux-x86_64.sh', user=_user)
+        sudo('/home/%s/Miniconda-latest-Linux-x86_64.sh -b' % (_user), user=_user)
+
 
 def testConda(verbose=False):
     ''' Verifies the conda installation is correct
@@ -235,8 +245,8 @@ def enableApp(appname):
                 run('sudo ln -s %s %s' % (nginx_source_path, nginx_sites_avail))
                 run('sudo ln -s %s %s' % (nginx_source_path, nginx_sites_enable))
 
-            run('sudo service nginx configtest')
-            run('sudo service nginx restart')
+            sudo('service nginx configtest')
+            sudo(' service nginx restart')
 
         #endregion
 
@@ -304,8 +314,6 @@ def disableApp(appname):
 
 
 #endregion
-
-
 
 
 #region internals

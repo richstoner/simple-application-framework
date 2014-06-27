@@ -12,7 +12,7 @@ def setDefaults():
 
     '''
     env.user = 'ubuntu'
-    env.hosts = ['54.225.144.91']
+    env.hosts = ['uda2study.com']
 
     import csv
 
@@ -26,7 +26,7 @@ def setDefaults():
 
     # env.aws_access_key_id = access_key
     # env.aws_secret_access_key = access_secret
-    env.key_filename = '/Users/stonerri/.ssh/rich-stoner-mskcc-hackathon.pem'
+    env.key_filename = '/Users/stonerri/.ssh/isic-archive-keypair.pem'
 
 
 
