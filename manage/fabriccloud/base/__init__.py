@@ -9,7 +9,7 @@ from ..base import *
 
 #region fabric methods
 
-default_app_path = '/home/cdsaadmin/apps'
+default_app_path = '/vagrant/apps'
 
 def update(verbose=False):
     ''' Runs update & upgrade for system packages
@@ -288,9 +288,12 @@ def installPythonCore(verbose=False):
     :return:
     '''
 
-    _python_cmd('conda install --yes anaconda', verbose)
+    # _python_cmd('conda install --yes anaconda', verbose)
     _python_cmd('conda install --yes opencv', verbose)
     _python_cmd('conda install --yes pip', verbose)
+    _python_cmd('conda install --yes pillow', verbose)
+    _python_cmd('conda install --yes numpy', verbose)
+    _python_cmd('conda install --yes scipy', verbose)
 
 
 

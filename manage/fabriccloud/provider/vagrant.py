@@ -1,5 +1,8 @@
 __author__ = 'stonerri'
 
+from fabric.contrib.project import rsync_project
+from fabric.api import *
+
 def setDefaults():
 
     env.user = 'vagrant'
