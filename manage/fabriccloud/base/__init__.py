@@ -9,7 +9,7 @@ from ..base import *
 
 #region fabric methods
 
-default_app_path = '/vagrant/apps'
+default_app_path = '/home/ubuntu/apps'
 
 def update(verbose=False):
     ''' Runs update & upgrade for system packages
@@ -288,12 +288,9 @@ def installPythonCore(verbose=False):
     :return:
     '''
 
-    # _python_cmd('conda install --yes anaconda', verbose)
+    _python_cmd('conda install --yes anaconda', verbose)
     _python_cmd('conda install --yes opencv', verbose)
     _python_cmd('conda install --yes pip', verbose)
-    _python_cmd('conda install --yes pillow', verbose)
-    _python_cmd('conda install --yes numpy', verbose)
-    _python_cmd('conda install --yes scipy', verbose)
 
 
 
@@ -301,7 +298,6 @@ def installPythonCore(verbose=False):
 # def updateConda(verbose=False):
 #     ''' Updates the packages in the base anaconda environment
 #     '''
-#
 #     _python_cmd('conda update conda', verbose)
 #     _python_cmd('conda update anaconda', verbose)
 
@@ -446,7 +442,7 @@ def enableApp(appname):
 
         if exists(os.path.join(default_app_path, appname, 'requirements.txt')):
 
-            _python_cmd('pip install --upgrade --no-use-wheel -r %s' % os.path.join(default_app_path, appname, 'requirements.txt'),
+            _python_cmd('pip install --no-use-wheel -r %s' % os.path.join(default_app_path, appname, 'requirements.txt'),
                         True)
 
 
@@ -456,7 +452,12 @@ def enableApp(appname):
 
         #region supervisor configuration
 
+        supervisor_template = os.path.join(default_app_path, appname, 'supervisor.saf')
+
         supervisor_config = os.path.join(default_app_path, appname, 'supervisor.conf')
+
+        run('rm -vf %s' % supervisor_config)
+        run('cp %s %s' % (supervisor_template, supervisor_config))
 
         sed(supervisor_config, '##SAFUSER##', env.user)
         sed(supervisor_config, '##SAFAPPS##', default_app_path)
