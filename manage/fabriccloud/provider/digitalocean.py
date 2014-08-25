@@ -12,14 +12,13 @@ def setDefaults():
     env.user = 'root'
 
     # set your digital ocean hostname here (hardcoded for convenience)
-    env.hosts = ['192.241.156.224']
+    env.hosts = ['107.170.194.205']
+
 
 def systemInformation():
-
     pass
 
-
-def sync():
+def sync(path='/'):
 
     exclude_list = [
         '.git',
@@ -29,14 +28,13 @@ def sync():
         'manage/.git/',
         'manage/.vagrant/',
         'manage/.idea/',
+        'manage/.DS_Store',
         '_build',
         '_sources',
         '_templates',
-        'manage/.DS_Store',
-        'server/apps/annotator/venv'
     ]
 
-    rsync_project('/vagrant', local_dir='../', exclude=exclude_list)
+    rsync_project(path, local_dir='../apps', exclude=exclude_list)
 
 
 

@@ -9,13 +9,57 @@ from ..base import *
 
 #region fabric methods
 
-default_app_path = '/home/ubuntu/apps'
+from ConfigParser import SafeConfigParser
+
+parser = SafeConfigParser()
+parser.read('server.ini')
+
+app_path = parser.get('path', 'apppath')
+conda_path = parser.get('path', 'condapath')
+sync_path = parser.get('path', 'syncpath')
+
+base_user = parser.get('general', 'safuser')
+
 
 def update(verbose=False):
     ''' Runs update & upgrade for system packages
     '''
     _updatePackages(verbose)
     _upgradePackages(verbose)
+
+
+def configureSystem(verbose=False):
+    ''' Creates user + home directory, adds to sudo
+    :param verbose:
+    :return:
+    '''
+
+    _newuser(base_user, base_user)
+
+
+def _newuser(admin_username, admin_password):
+
+    # Create the admin group and add it to the sudoers file
+    admin_group = 'admin'
+    run('addgroup {group}'.format(group=admin_group))
+    run('echo "%{group} ALL=(ALL) ALL" >> /etc/sudoers'.format(
+        group=admin_group))
+
+    # Create the new admin user (default group=username); add to admin group
+    run('adduser {username} --disabled-password --gecos ""'.format(
+        username=admin_username))
+    run('adduser {username} {group}'.format(
+        username=admin_username,
+        group=admin_group))
+
+    # Set the password for the new admin user
+    run('echo "{username}:{password}" | chpasswd'.format(
+        username=admin_username,
+        password=admin_password))
+
+
+
+
 
 
 def rsync(verbose=False):
@@ -26,7 +70,7 @@ def rsync(verbose=False):
         env.provider = 'vagrant'
         env.p.setDefaults()
 
-    env.p.sync()
+    env.p.sync(sync_path)
 
 
 
@@ -46,9 +90,12 @@ def provider(_provider):
     env.p.setDefaults()
 
 
-def user(_user):
+def user(_user=None):
     ''' Set a specific user for the action
     '''
+
+    if _user is None:
+        _user = base_user
 
     if 'p' not in env.keys():
         env.p = _importProvider('')
@@ -67,6 +114,15 @@ def addUser(username):
     sudo('useradd -m %s' % username)
     sudo('passwd %s' % username)
 
+
+
+def installSAF(verbose=False):
+
+    installBase(verbose)
+    installNginx(verbose)
+    configureSupervisor(verbose)
+    configureNginx(verbose)
+    restartAll()
 
 
 
@@ -177,6 +233,10 @@ def _remote_sudo(cmd, verbose=False):
             return sudo(cmd, pty = True)
 
 
+
+
+
+
 def _python_cmd(cmd, verbose=False):
 
     with shell_env(PATH="/home/%s/miniconda/bin:$PATH" % (env.user)):
@@ -185,6 +245,19 @@ def _python_cmd(cmd, verbose=False):
             with settings(warn_only=True):
                 return run(cmd, pty = True)
 
+        else:
+
+            with hide('output','running','warnings', 'stdout', 'stderr'), settings(warn_only=True):
+                return run(cmd, pty = True)
+
+
+def _python_root_cmd(cmd, verbose=False):
+
+    with shell_env(PATH="/miniconda/bin:$PATH"):
+
+        if verbose:
+            with settings(warn_only=True):
+                return run(cmd, pty = True)
         else:
 
             with hide('output','running','warnings', 'stdout', 'stderr'), settings(warn_only=True):
@@ -259,6 +332,15 @@ def installConda(verbose=False):
     run('wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh')
     run('chmod +x Miniconda-latest-Linux-x86_64.sh')
     run('./Miniconda-latest-Linux-x86_64.sh -b')
+
+
+def installPythonCoreRoot(verbose=True):
+
+    _python_root_cmd('conda install --yes anaconda', verbose)
+    _python_root_cmd('conda install --yes opencv', verbose)
+    _python_root_cmd('conda install --yes pip', verbose)
+
+
 
 
 def installCondaAsUser(_user='flaskuser', verbose=False):
@@ -406,15 +488,14 @@ def enableApp(appname):
     Takes an app located in the server/apps folder and configures nginx, supervisor, and pip to run it
     """
 
+    if exists(os.path.join(app_path, appname)):
 
-    if exists(os.path.join(default_app_path, appname)):
-
-        _python_cmd('pip uninstall cherrypy', True)
+        # _python_cmd('pip uninstall cherrypy', True)
 
         #region nginx configuration
 
         # link nginx site to sites-available & sites-enabled
-        nginx_source_path = os.path.join(default_app_path, appname, 'nginx.conf')
+        nginx_source_path = os.path.join(app_path, appname, 'nginx.conf')
 
         if exists(nginx_source_path):
 
@@ -423,9 +504,7 @@ def enableApp(appname):
 
             if exists(nginx_sites_enable) or exists(nginx_sites_avail):
                 print(red('%s already enabled' %appname))
-
             else:
-
                 sudo('ln -s %s %s' % (nginx_source_path, nginx_sites_avail))
                 sudo('ln -s %s %s' % (nginx_source_path, nginx_sites_enable))
 
@@ -440,10 +519,13 @@ def enableApp(appname):
 
         
 
-        if exists(os.path.join(default_app_path, appname, 'requirements.txt')):
+        if exists(os.path.join(app_path, appname, 'requirements.txt')):
 
-            _python_cmd('pip install --no-use-wheel -r %s' % os.path.join(default_app_path, appname, 'requirements.txt'),
-                        True)
+            # if env.user == 'root':
+            #     _python_root_cmd('pip install --no-use-wheel -r %s' % os.path.join(app_path, appname, 'requirements.txt'), True)
+            #
+            # else:
+            _python_cmd('pip install --no-use-wheel -r %s' % os.path.join(app_path, appname, 'requirements.txt'), True)
 
 
         #endregion
@@ -452,15 +534,15 @@ def enableApp(appname):
 
         #region supervisor configuration
 
-        supervisor_template = os.path.join(default_app_path, appname, 'supervisor.saf')
+        supervisor_template = os.path.join(app_path, appname, 'supervisor.saf')
 
-        supervisor_config = os.path.join(default_app_path, appname, 'supervisor.conf')
+        supervisor_config = os.path.join(app_path, appname, 'supervisor.conf')
 
-        run('rm -vf %s' % supervisor_config)
-        run('cp %s %s' % (supervisor_template, supervisor_config))
+        sudo('rm -vf %s' % supervisor_config)
+        sudo('cp %s %s' % (supervisor_template, supervisor_config))
 
         sed(supervisor_config, '##SAFUSER##', env.user)
-        sed(supervisor_config, '##SAFAPPS##', default_app_path)
+        sed(supervisor_config, '##SAFAPPS##', app_path)
 
         if exists(supervisor_config):
 
@@ -479,7 +561,7 @@ def enableApp(appname):
         #endregion
 
     else:
-        print 'invalid app name'
+        print('invalid app name')
 
 
 
