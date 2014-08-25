@@ -1,7 +1,7 @@
 __author__ = 'stonerri'
 
 from fabric.api import *
-from boto import ec2
+#from boto import ec2
 from fabric.contrib.project import rsync_project
 from fabric.contrib.files import *
 from fabric.api import *

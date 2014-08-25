@@ -41,19 +41,19 @@ def _newuser(admin_username, admin_password):
 
     # Create the admin group and add it to the sudoers file
     admin_group = 'admin'
-    run('addgroup {group}'.format(group=admin_group))
-    run('echo "%{group} ALL=(ALL) ALL" >> /etc/sudoers'.format(
+    sudo('addgroup {group}'.format(group=admin_group))
+    sudo('echo "%{group} ALL=(ALL) ALL" >> /etc/sudoers'.format(
         group=admin_group))
 
     # Create the new admin user (default group=username); add to admin group
-    run('adduser {username} --disabled-password --gecos ""'.format(
+    sudo('adduser {username} --disabled-password --gecos ""'.format(
         username=admin_username))
-    run('adduser {username} {group}'.format(
+    sudo('adduser {username} {group}'.format(
         username=admin_username,
         group=admin_group))
 
     # Set the password for the new admin user
-    run('echo "{username}:{password}" | chpasswd'.format(
+    sudo('echo "{username}:{password}" | chpasswd'.format(
         username=admin_username,
         password=admin_password))
 

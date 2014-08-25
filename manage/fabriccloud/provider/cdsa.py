@@ -10,9 +10,9 @@ def setDefaults():
     ''' Configures the fabric environment to support an aws environment.
 
     '''
-    env.user = 'cdsaadmin'
+    env.user = 'rstoner'
     env.hosts = ['digitalslidearchive.emory.edu']
-    env.password = 'cdsar0ckz!'
+    env.password = ''
 
     import csv
 
@@ -30,34 +30,23 @@ def setDefaults():
 
 
 
-def sync():
+def sync(path='/'):
 
-    if not exists('/vagrant'):
-        sudo('mkdir /vagrant')
-        sudo('chown cdsaadmin:cdsaadmin /vagrant')
-        
     exclude_list = [
         '.git',
         '.vagrant',
-        'Vagrantfile',
-        'readme.md',
         '.idea',
-        'last.ini',
-        'fabfile.py',
-        'fabriccloud',
         '.DS_Store',
         'manage/.git/',
-        'doc',
         'manage/.vagrant/',
         'manage/.idea/',
+        'manage/.DS_Store',
         '_build',
         '_sources',
         '_templates',
-        'manage/.DS_Store',
-        'server/apps/annotator/venv'
     ]
 
-    rsync_project('/vagrant', local_dir='../', exclude=exclude_list)
+    rsync_project(path, local_dir='../apps', exclude=exclude_list)
 
 
 
