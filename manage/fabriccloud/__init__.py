@@ -2,6 +2,7 @@ __author__ = 'stonerri'
 
 from .base import *
 
+
 def last():
     ''' inline argument, uses the last host saved by the user
 
@@ -41,3 +42,6 @@ def save():
     parser.set('last', 'provider', env.provider)
     parser.write(open('last.ini', 'w'))
 
+# enable last host by default
+if len(env.hosts) == 0:
+    last()
