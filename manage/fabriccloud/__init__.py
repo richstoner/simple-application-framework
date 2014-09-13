@@ -1,9 +1,6 @@
 __author__ = 'stonerri'
 
 from .base import *
-from .system import *
-
-
 
 def last():
     ''' inline argument, uses the last host saved by the user

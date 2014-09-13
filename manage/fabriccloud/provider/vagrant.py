@@ -18,5 +18,5 @@ def systemInformation():
     pass
 
 
-def sync():
+def sync(path='/'):
     print 'vagrant gets sync for free'

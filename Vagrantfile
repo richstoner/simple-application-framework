@@ -6,14 +6,13 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.box = "ubuntu/trusty"
+  config.vm.box = "ubuntu/trusty64"
 
   config.vm.hostname = "uda2study.dev"
 
   config.landrush.enabled = true
 
-  config.vm.synced_folder "../data", "/data"
-  config.vm.synced_folder ".", "/vagrant"
+  config.vm.synced_folder "../applications", "/applications"
 
 end
 
