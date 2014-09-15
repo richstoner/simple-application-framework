@@ -373,7 +373,7 @@ def installIIP():
     with settings(warn_only=True):
 
         run('svn checkout svn://svn.code.sf.net/p/iipimage/code/ iipimage-code')
-        with cd('iipimage-code/iipsrv'):
+        with cd('iipimage-code/iipsrv/trunk'):
             run('autoreconf -i')
             run('./configure --with-tiff-includes=/usr/local/include --with-tiff-libraries=/usr/local/lib')
             run('make')
