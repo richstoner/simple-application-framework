@@ -337,6 +337,13 @@ def installTiff():
 
 
 
+def installOpenSlide():
+
+    run('git clone git://github.com/openslide/openslide.git')
+    with cd('openslide'):
+        run('autoreconf -i')
+        run('make -j 4')
+        sudo('make install')
 
 
 
