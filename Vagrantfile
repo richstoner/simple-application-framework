@@ -6,13 +6,27 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.box = "ubuntu/trusty64"
+	# base instance = ubuntu 12.04 LTS
 
-  config.vm.hostname = "uda2study.dev"
+	config.vm.box = "hashicorp/precise64"
 
-  config.landrush.enabled = true
+	# landrush configuratino -> dynamic dns
 
-  config.vm.synced_folder "../applications", "/applications"
+	config.landrush.enabled = true
+	config.landrush.tld = 'uda2study.dev'
+	config.landrush.guest_redirect_dns = false
+
+	config.vm.hostname = "uda2study.dev"
+
+	# mapped folders
+
+	config.vm.synced_folder "../applications", "/applications"
+
+	# useful for figuring out safeboot issues, also nice to have
+
+	config.vm.provider :virtualbox do |vb|
+	  vb.gui = true
+	end
 
 end
 

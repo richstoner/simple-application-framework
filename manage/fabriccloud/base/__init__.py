@@ -7,55 +7,309 @@ from fabric.context_managers import shell_env
 
 from ..base import *
 
-#region fabric methods
-
 from ConfigParser import SafeConfigParser
 
 parser = SafeConfigParser()
 parser.read('server.ini')
 
+# we replace config variables with these
 app_path = parser.get('path', 'apppath')
 conda_path = parser.get('path', 'condapath')
 sync_path = parser.get('path', 'syncpath')
+saf_host_name = parser.get('general', 'safhost')
+saf_user = parser.get('general', 'safuser')
 
-base_user = parser.get('general', 'safuser')
+mongo_root_password = parser.get('database', 'rootpassword')
+mongo_user_password = parser.get('database', 'girderpass')
 
 
-def update(verbose=False):
-    ''' Runs update & upgrade for system packages
-    '''
+def debug():
+    verbose = True
+    # configure supervisord
+
+
+    path = os.path.join(os.path.abspath(os.curdir), 'config/mongodb.girder.conf')
+    put(path)
+
+    _remote_sudo('mv /etc/mongodb.conf /etc/mongodb.conf.old', verbose)
+    _remote_sudo('mv mongodb.girder.conf /etc/mongodb.conf', verbose)
+
+    sudo('service mongodb stop')
+    sudo('service mongodb start')
+
+
+
+def installFramework():
+
+    verbose = True
+
+    # apt get things
     _updatePackages(verbose)
+
+    # apt-get upgrade things
     _upgradePackages(verbose)
 
+    # create user to run all things
+    # Creates user + home directory, adds to sudo
 
-def configureSystem(verbose=False):
-    ''' Creates user + home directory, adds to sudo
+    if saf_user != 'vagrant':
+        _newuser(saf_user, saf_user)
+
+    # installs core apt things
+    _installBase(verbose)
+
+    # installs nginx things
+    _installNginx(verbose)
+
+    # restarts nginx and supervisor
+    _restartBase(verbose)
+
+
+#region Install Framework Methods
+
+def _updatePackages(verbose):
+    ''' Runs system update commands
+    '''
+    _remote_cmd('sudo apt-get -y update', verbose)
+
+def _upgradePackages(verbose):
+    ''' Runs system upgrade commands
+    '''
+    _remote_sudo('apt-get -y upgrade', verbose)
+
+def _newuser(admin_username, admin_password):
+
+    with settings(warn_only=True):
+
+        # Create the admin group and add it to the sudoers file
+        admin_group = 'admin'
+        sudo('addgroup {group}'.format(group=admin_group))
+        sudo('echo "%{group} ALL=(ALL) ALL" >> /etc/sudoers'.format(
+            group=admin_group))
+
+        # Create the new admin user (default group=username); add to admin group
+        sudo('adduser {username} --disabled-password --gecos ""'.format(
+            username=admin_username))
+        sudo('adduser {username} {group}'.format(
+            username=admin_username,
+            group=admin_group))
+
+        # Set the password for the new admin user
+        sudo('echo "{username}:{password}" | chpasswd'.format(
+            username=admin_username,
+            password=admin_password))
+
+
+
+def _installBase(verbose=False):
+    ''' Installs some of the core components needed: python, git, build-essential, unzip
+    '''
+
+    with settings(warn_only=True):
+
+        packages = [
+            'build-essential',
+            'subversion',
+            'git',
+            'unzip',
+            'supervisor',
+            'libffi-dev'
+        ]
+
+        packagelist = ' '.join(packages)
+
+        _remote_sudo('apt-get -y install %s' % packagelist, verbose)
+
+        # configure supervisord
+
+        put('config/supervisord.conf.web', 'supervisord.conf')
+        _remote_sudo('mv supervisord.conf /etc/supervisor/supervisord.conf', verbose)
+        _remote_sudo('service supervisor stop', verbose)
+        _remote_sudo('service supervisor start', verbose)
+
+
+
+
+
+
+
+
+def _installNginx(verbose=False):
+    ''' Installs nginx + extras
+    '''
+
+    with settings(warn_only=True):
+
+        packages = [
+            'nginx-extras'
+        ]
+
+        packagelist = ' '.join(packages)
+
+        _remote_sudo('apt-get -y install %s' % packagelist, verbose)
+
+        path = os.path.join(os.path.abspath(os.curdir), 'config/nginx.conf.default')
+        put(path)
+
+        sed('nginx.conf.default', '##SAFHOST##', saf_host_name)
+
+        _remote_sudo('mv /etc/nginx/nginx.conf /etc/nginx/conf.old', verbose)
+        _remote_sudo('mv nginx.conf.default /etc/nginx/nginx.conf', verbose)
+
+        _remote_sudo('service nginx stop', verbose)
+        _remote_sudo('service nginx start', verbose)
+
+
+def _restartBase(verbose=True):
+    """ Restarts nginx and supervisor
+    """
+
+    _remote_sudo('service nginx restart', verbose)
+    _remote_sudo('supervisorctl reload', verbose)
+
+
+
+
+
+
+
+#endregion
+
+
+def installPython():
+
+    verbose = True
+
+    env.user = saf_user
+
+    _installConda(verbose)
+
+    _installPythonCore(verbose)
+
+    _testConda(verbose)
+
+
+#region Install Python methods
+
+
+def _installConda(verbose=False):
+    ''' Installs miniconda installation (requires user interaction)
+    '''
+
+    run('wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh')
+    run('chmod +x Miniconda-latest-Linux-x86_64.sh')
+    run('./Miniconda-latest-Linux-x86_64.sh -b')
+
+
+
+
+def _installPythonCore(verbose=False):
+    '''
     :param verbose:
     :return:
     '''
 
-    _newuser(base_user, base_user)
+    _python_cmd('conda install --yes anaconda', verbose)
+    _python_cmd('conda install --yes opencv', verbose)
+    _python_cmd('conda install --yes cffi', verbose)
+    _python_cmd('conda install --yes pip', verbose)
 
 
-def _newuser(admin_username, admin_password):
 
-    # Create the admin group and add it to the sudoers file
-    admin_group = 'admin'
-    sudo('addgroup {group}'.format(group=admin_group))
-    sudo('echo "%{group} ALL=(ALL) ALL" >> /etc/sudoers'.format(
-        group=admin_group))
+def _testConda(verbose=False):
+    ''' Verifies the conda installation is correct
+    '''
 
-    # Create the new admin user (default group=username); add to admin group
-    sudo('adduser {username} --disabled-password --gecos ""'.format(
-        username=admin_username))
-    sudo('adduser {username} {group}'.format(
-        username=admin_username,
-        group=admin_group))
+    _remote_cmd('export', verbose)
+    _remote_cmd('which python', verbose)
+    _python_cmd('conda info', verbose)
 
-    # Set the password for the new admin user
-    sudo('echo "{username}:{password}" | chpasswd'.format(
-        username=admin_username,
-        password=admin_password))
+
+
+def _python_cmd(cmd, verbose=False):
+
+
+
+    with shell_env(PATH="/%s/bin:$PATH" % (conda_path)):
+
+        if verbose:
+            with settings(warn_only=True):
+                return run(cmd, pty = True)
+
+        else:
+            with hide('output','running','warnings', 'stdout', 'stderr'), settings(warn_only=True):
+                return run(cmd, pty = True)
+
+
+#endregion
+
+
+
+
+
+def installMongo():
+
+    _installMongoDB()
+
+
+def _installMongoDB(verbose=False):
+
+    ''' Installs MongoDB with default authentication
+    '''
+
+    with settings(warn_only=True):
+
+        sudo('apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10')
+        sudo('echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | tee -a /etc/apt/sources.list.d/10gen.list')
+        sudo('apt-get update')
+        sudo('apt-get install mongodb-org')
+
+        sudo('mkdir -p /mongo/db')
+        sudo('mkdir -p /mongo/log')
+
+        sudo('chown -R mongodb:mongodb /mongo/db')
+        sudo('chown -R mongodb:mongodb /mongo/log')
+
+
+        # move mongo db into right place
+
+        path = os.path.join(os.path.abspath(os.curdir), 'config/mongodb.girder.conf')
+        put(path)
+
+        _remote_sudo('mv -v /etc/mongod.conf /etc/mongod.conf.old', True)
+        _remote_sudo('mv -v ./mongodb.girder.conf /etc/mongod.conf', True)
+
+        sudo('service mongod stop')
+        sudo('service mongod start')
+
+
+        path = os.path.join(os.path.abspath(os.curdir), 'config/mongo_config.js')
+        put(path, '.')
+
+        path = os.path.join(os.path.abspath(os.curdir), 'config/mongo_root_config.js')
+        put(path, '.')
+
+        sed('mongo_root_config.js', '##SAFROOTPASS##', mongo_root_password)
+        sed('mongo_config.js', '##SAFGIRDERPASS##', mongo_user_password)
+
+        sudo('mongo admin mongo_root_config.js')
+        sudo('mongo girder mongo_config.js')
+
+
+
+
+
+
+def installGirder():
+
+    sudo('mkdir -p /assetstore')
+    sudo('chown -R %s:%s /assetstore' % (saf_user, saf_user))
+
+
+
+
+
+
 
 
 
@@ -72,6 +326,22 @@ def rsync(verbose=False):
 
     env.p.sync(sync_path)
 
+
+
+
+
+def _installRabbitMQ(verbose=False):
+    ''' Installs RabbitMQ
+    '''
+    with settings(warn_only=True):
+
+        packages = [
+            'rabbitmq-server'
+        ]
+
+        packagelist = ' '.join(packages)
+
+        _remote_sudo('apt-get -y install %s' % packagelist, verbose)
 
 
 
@@ -95,7 +365,7 @@ def user(_user=None):
     '''
 
     if _user is None:
-        _user = base_user
+        _user = saf_user
 
     if 'p' not in env.keys():
         env.p = _importProvider('')
@@ -107,64 +377,9 @@ def user(_user=None):
     print 'Setting user to %s' % _user
 
 
-def addUser(username):
-    ''' Creates a non-root user to use for serving applications
-    '''
-
-    sudo('useradd -m %s' % username)
-    sudo('passwd %s' % username)
 
 
 
-def installSAF(verbose=False):
-
-    installBase(verbose)
-    installNginx(verbose)
-    configureSupervisor(verbose)
-    configureNginx(verbose)
-    restartAll()
-
-
-
-def installBase(verbose=False):
-    ''' Installs some of the core components needed: python, git, build-essential, unzip
-    '''
-
-    with settings(warn_only=True):
-
-        packages = [
-            'build-essential',
-            'subversion',
-            'git',
-            'unzip',
-            'supervisor',
-            'libffi-dev'
-        ]
-
-        packagelist = ' '.join(packages)
-
-        _remote_sudo('apt-get -y install %s' % packagelist, verbose)
-
-
-def configureSupervisor(verbose=False):
-    ''' Updates the supervisor config file to provide the web interface on port 9999
-    '''
-
-    with settings(warn_only=True):
-
-        put('config/supervisord.conf.web', 'supervisord.conf')
-        _remote_sudo('mv supervisord.conf /etc/supervisor/supervisord.conf', verbose)
-        _remote_sudo('service supervisor stop', verbose)
-        _remote_sudo('service supervisor start', verbose)
-
-
-
-def restartAll():
-    """ Restarts nginx and supervisor
-    """
-
-    _remote_sudo('service nginx restart')
-    _remote_sudo('supervisorctl reload')
 
 
 
@@ -191,23 +406,8 @@ def printhttp():
     local('echo "http://%s" | pbcopy ' % (env.host_string))
 
 
-#endregion
 
 #region internal methods
-
-def _updatePackages(verbose):
-    ''' Runs system update commands
-    '''
-
-    _remote_cmd('sudo apt-get -y update', verbose)
-
-
-def _upgradePackages(verbose):
-    ''' Runs system upgrade commands
-    '''
-
-    _remote_sudo('apt-get -y upgrade', verbose)
-
 
 def _remote_cmd(cmd, verbose=False):
 
@@ -237,84 +437,21 @@ def _remote_sudo(cmd, verbose=False):
 
 
 
-def _python_cmd(cmd, verbose=False):
-
-    with shell_env(PATH="/home/%s/miniconda/bin:$PATH" % (env.user)):
-
-        if verbose:
-            with settings(warn_only=True):
-                return run(cmd, pty = True)
-
-        else:
-
-            with hide('output','running','warnings', 'stdout', 'stderr'), settings(warn_only=True):
-                return run(cmd, pty = True)
 
 
-def _python_root_cmd(cmd, verbose=False):
+# def _python_root_cmd(cmd, verbose=False):
+#
+#     with shell_env(PATH="/miniconda/bin:$PATH"):
+#
+#         if verbose:
+#             with settings(warn_only=True):
+#                 return run(cmd, pty = True)
+#         else:
+#
+#             with hide('output','running','warnings', 'stdout', 'stderr'), settings(warn_only=True):
+#                 return run(cmd, pty = True)
+#
 
-    with shell_env(PATH="/miniconda/bin:$PATH"):
-
-        if verbose:
-            with settings(warn_only=True):
-                return run(cmd, pty = True)
-        else:
-
-            with hide('output','running','warnings', 'stdout', 'stderr'), settings(warn_only=True):
-                return run(cmd, pty = True)
-
-
-
-def installNginx(verbose=False):
-    ''' Installs nginx + extras
-    '''
-
-    with settings(warn_only=True):
-
-        packages = [
-            'nginx-extras'
-        ]
-
-        packagelist = ' '.join(packages)
-
-        _remote_sudo('apt-get -y install %s' % packagelist, verbose)
-
-
-def startNginx(verbose=False):
-    ''' Starts nginx
-    '''
-
-    _remote_sudo('service nginx start', verbose)
-
-
-def configureNginx(verbose=False):
-    ''' Configures nginx to use the configuration file in ./manage/config
-    '''
-
-    path = os.path.join(os.path.abspath(os.curdir), 'config/nginx.conf.default')
-    put(path)
-    _remote_sudo('mv /etc/nginx/nginx.conf /etc/nginx/conf.old', verbose)
-    _remote_sudo('mv nginx.conf.default /etc/nginx/nginx.conf', verbose)
-
-
-def installApache(verbose=False):
-    ''' Installs apache 2 + mod_wsgi for serving python apps
-    '''
-
-    with settings(warn_only=True):
-
-        packages = [
-            'apache2',
-            'libapache2-mod-wsgi'
-        ]
-
-        packagelist = ' '.join(packages)
-
-        _remote_sudo('apt-get -y install %s' % packagelist, verbose)
-
-        # configure apache
-        _remote_sudo('a2enmod headers', verbose)
-        _remote_sudo('a2enmod wsgi', verbose)
 
 
 
@@ -325,54 +462,35 @@ def installApache(verbose=False):
 
 #region externals
 
-def installConda(verbose=False):
-    ''' Installs miniconda installation (requires user interaction)
-    '''
-
-    run('wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh')
-    run('chmod +x Miniconda-latest-Linux-x86_64.sh')
-    run('./Miniconda-latest-Linux-x86_64.sh -b')
 
 
-def installPythonCoreRoot(verbose=True):
-
-    _python_root_cmd('conda install --yes anaconda', verbose)
-    _python_root_cmd('conda install --yes opencv', verbose)
-    _python_root_cmd('conda install --yes pip', verbose)
+# def installPythonCoreRoot(verbose=True):
+#
+#     _python_root_cmd('conda install --yes anaconda', verbose)
+#     _python_root_cmd('conda install --yes opencv', verbose)
+#     _python_root_cmd('conda install --yes pip', verbose)
+#
 
 
 
+# def installCondaAsUser(_user='flaskuser', verbose=False):
+#     ''' Installs miniconda installation (requires user interaction)
+#     '''
+#
+#     # sudo('whoami', user=_user)
+#     with cd('/home/%s' % (_user)):
+#         sudo('wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh', user=_user)
+#         sudo('chmod +x Miniconda-latest-Linux-x86_64.sh', user=_user)
+#         sudo('/home/%s/Miniconda-latest-Linux-x86_64.sh -b' % (_user), user=_user)
 
-def installCondaAsUser(_user='flaskuser', verbose=False):
-    ''' Installs miniconda installation (requires user interaction)
-    '''
-
-    # sudo('whoami', user=_user)
-    with cd('/home/%s' % (_user)):
-        sudo('wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh', user=_user)
-        sudo('chmod +x Miniconda-latest-Linux-x86_64.sh', user=_user)
-        sudo('/home/%s/Miniconda-latest-Linux-x86_64.sh -b' % (_user), user=_user)
-
-
-def testConda(verbose=False):
-    ''' Verifies the conda installation is correct
-    '''
-
-    _remote_cmd('export', verbose)
-    _remote_cmd('which python', verbose)
-    _python_cmd('conda info', verbose)
-
-
-def installPythonCore(verbose=False):
-    '''
-
-    :param verbose:
-    :return:
-    '''
-
-    _python_cmd('conda install --yes anaconda', verbose)
-    _python_cmd('conda install --yes opencv', verbose)
-    _python_cmd('conda install --yes pip', verbose)
+#
+# def testConda(verbose=False):
+#     ''' Verifies the conda installation is correct
+#     '''
+#
+#     _remote_cmd('export', verbose)
+#     _remote_cmd('which python', verbose)
+#     _python_cmd('conda info', verbose)
 
 
 
@@ -385,51 +503,25 @@ def installPythonCore(verbose=False):
 
 
 
-def installRabbitMQ(verbose=False):
-    ''' Installs RabbitMQ
-    '''
-    with settings(warn_only=True):
-
-        packages = [
-            'rabbitmq-server'
-        ]
-
-        packagelist = ' '.join(packages)
-
-        _remote_sudo('apt-get -y install %s' % packagelist, verbose)
 
 
-
-def installMongoDB(verbose=False):
-    ''' Installs MongoDB with default authentication
-    '''
-
-    with settings(warn_only=True):
-
-        sudo('apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10')
-        sudo('echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | tee -a /etc/apt/sources.list.d/10gen.list')
-        sudo('apt-get update')
-        sudo('apt-get install mongodb-10gen')
-
-
-
-def installElasticsearch(verbose=False):
-    ''' Installs elasticsearch
-    '''
-
-    with settings(warn_only=True):
-
-        packages = [
-            'openjdk-7-jre-headless'
-        ]
-
-        packagelist = ' '.join(packages)
-
-        _remote_cmd('sudo apt-get -y install %s' % packagelist, verbose)
-        _remote_cmd('wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.deb', verbose)
-        _remote_cmd('dpkg -i elasticsearch-1.0.1.deb', verbose)
-        _remote_cmd('sudo service elasticsearch start', verbose)
-
+# def installElasticsearch(verbose=False):
+#     ''' Installs elasticsearch
+#     '''
+#
+#     with settings(warn_only=True):
+#
+#         packages = [
+#             'openjdk-7-jre-headless'
+#         ]
+#
+#         packagelist = ' '.join(packages)
+#
+#         _remote_cmd('sudo apt-get -y install %s' % packagelist, verbose)
+#         _remote_cmd('wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.deb', verbose)
+#         _remote_cmd('dpkg -i elasticsearch-1.0.1.deb', verbose)
+#         _remote_cmd('sudo service elasticsearch start', verbose)
+#
 
 
 
@@ -459,98 +551,69 @@ def addApp(appname, giturl):
         _remote_cmd(clonestring)
 
 
-def updateApp(appname):
-    '''
-
-    :param appname:
-    :param giturl:
-    :return:
-    '''
-
-    if exists(os.path.join(default_app_path, appname)):
-
-        # run git pull
-        with cd('%s/%s'%(default_app_path, appname)):
-
-            pullstring = 'git pull origin master'
-
-            run(pullstring)
 
 
 
 
-
-
-
-
-def enableApp(appname):
+def enable(appname):
     """
     Takes an app located in the server/apps folder and configures nginx, supervisor, and pip to run it
     """
 
+    env.user = saf_user
+
     if exists(os.path.join(app_path, appname)):
 
-        # _python_cmd('pip uninstall cherrypy', True)
-
-        #region nginx configuration
 
         # link nginx site to sites-available & sites-enabled
-        nginx_source_path = os.path.join(app_path, appname, 'nginx.conf')
+
+        nginx_source_path = os.path.join(app_path, appname, 'nginx.saf')
+        nginx_config_path = os.path.join(app_path, appname, 'nginx.conf')
 
         if exists(nginx_source_path):
+
+            if exists(nginx_config_path):
+                sudo('rm -vf %s' % nginx_config_path)
+
+            sudo('cp %s %s' % (nginx_source_path, nginx_config_path))
 
             nginx_sites_avail = '/etc/nginx/sites-available/%s' % appname
             nginx_sites_enable = '/etc/nginx/sites-enabled/%s' % appname
 
+            sed(nginx_config_path, '##SAFHOST##', saf_host_name)
+
             if exists(nginx_sites_enable) or exists(nginx_sites_avail):
                 print(red('%s already enabled' %appname))
             else:
-                sudo('ln -s %s %s' % (nginx_source_path, nginx_sites_avail))
-                sudo('ln -s %s %s' % (nginx_source_path, nginx_sites_enable))
+                sudo('ln -s %s %s' % (nginx_config_path, nginx_sites_avail))
+                sudo('ln -s %s %s' % (nginx_config_path, nginx_sites_enable))
 
             sudo('service nginx configtest')
             sudo('service nginx restart')
 
-        #endregion
 
 
-
-        #region pip configuration
-
-        
+        #pip configuration
 
         if exists(os.path.join(app_path, appname, 'requirements.txt')):
-
-            # if env.user == 'root':
-            #     _python_root_cmd('pip install --no-use-wheel -r %s' % os.path.join(app_path, appname, 'requirements.txt'), True)
-            #
-            # else:
             _python_cmd('pip install --no-use-wheel -r %s' % os.path.join(app_path, appname, 'requirements.txt'), True)
 
-
-        #endregion
-
-
-
-        #region supervisor configuration
-
+        # supervisor config
         supervisor_template = os.path.join(app_path, appname, 'supervisor.saf')
-
         supervisor_config = os.path.join(app_path, appname, 'supervisor.conf')
 
         sudo('rm -vf %s' % supervisor_config)
         sudo('cp %s %s' % (supervisor_template, supervisor_config))
 
-        sed(supervisor_config, '##SAFUSER##', env.user)
+        sed(supervisor_config, '##SAFUSER##', saf_user)
         sed(supervisor_config, '##SAFAPPS##', app_path)
+        sed(supervisor_config, '##SAFAPPNAME##', appname)
 
         if exists(supervisor_config):
 
             supervisor_enable = '/etc/supervisor/conf.d/%s.conf' % appname
-
             if exists(supervisor_enable):
                 print(red('%s super config already enabled' % appname))
-
             else:
                 sudo('ln -s %s %s' % (supervisor_config, supervisor_enable))
 
@@ -565,7 +628,7 @@ def enableApp(appname):
 
 
 
-def disableApp(appname):
+def disable(appname):
     """
     Disables an app, provided as by parameter
     """

@@ -2,14 +2,12 @@ __author__ = 'stonerri'
 
 from .base import *
 
-
 def last():
     ''' inline argument, uses the last host saved by the user
 
     This host is defined in the last.ini file, located in the same directory as the fabfile.py
 
     e.g. :code:`fab last somecommand`
-
 
     '''
 
@@ -43,5 +41,5 @@ def save():
     parser.write(open('last.ini', 'w'))
 
 # enable last host by default
-if len(env.hosts) == 0:
-    last()
+# if len(env.hosts) == 0:
+#     last()
