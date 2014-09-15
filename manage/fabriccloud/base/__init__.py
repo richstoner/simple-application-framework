@@ -333,7 +333,7 @@ def installTiff():
         sudo('make install')
 
     sudo('echo "/usr/local/lib/" >> /etc/ld.so.conf.d/local.conf')
-
+    sudo('ldconfig')
 
 
 
@@ -342,9 +342,27 @@ def installOpenSlide():
     run('git clone git://github.com/openslide/openslide.git')
     with cd('openslide'):
         run('autoreconf -i')
+        run('./configure')
         run('make -j 4')
         sudo('make install')
 
+
+def installVips():
+    run('wget http://www.vips.ecs.soton.ac.uk/supported/current/vips-7.40.4.tar.gz')
+    run('tar xvzf vips-7.40.4.tar.gz')
+    with cd('vips-7.40.4'):
+        run('./configure')
+        run('make -j 4')
+        sudo('make install')
+
+
+def installIIP():
+    run('svn checkout svn://svn.code.sf.net/p/iipimage/code/ iipimage-code')
+    with cd('iipimage-code'):
+        with cd('iipsrv'):
+            run('autoreconf -i')
+            run('./configure --with-tiff-includes=/usr/local/include --with-tiff-libraries=/usr/local/lib')
+            run('make')
 
 
 
