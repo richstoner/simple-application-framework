@@ -297,19 +297,23 @@ def _installMongoDB(verbose=False):
 
 def installGirderDepends():
 
-    sudo('sudo apt-get install python-software-properties')
 
-    sudo('mkdir -p /assetstore')
-    sudo('chown -R %s:%s /assetstore' % (saf_user, saf_user))
+    with settings(warn_only=True):
 
-    sudo('add-apt-repository ppa:chris-lea/node.js')
-    sudo('apt-get update')
-    sudo('apt-get install nodejs')
-    # sudo('npm install -g grunt grunt-cli')
 
-    with cd('%s/girder' % (app_path)):
-        run('npm install')
-        run('grunt')
+        sudo('sudo apt-get install python-software-properties')
+
+        sudo('mkdir -p /assetstore')
+        sudo('chown -R %s:%s /assetstore' % (saf_user, saf_user))
+
+        sudo('add-apt-repository ppa:chris-lea/node.js')
+        sudo('apt-get update')
+        sudo('apt-get install nodejs')
+        # sudo('npm install -g grunt grunt-cli')
+
+        with cd('%s/girder' % (app_path)):
+            run('npm install')
+            run('grunt')
 
 
 
@@ -323,46 +327,55 @@ def installTiff():
     :return:
     '''
 
-    sudo('apt-get install autoconf automake libtool pkg-config libgtk2.0-dev libxml2-dev libjpeg-dev liblzma-dev liblz-dev zlib1g-dev lzma libmatio-dev libexif-dev libfftw3-dev swig python-dev liborc-0.4-dev libopenjpeg-dev spawn-fcgi libsqlite3-dev')
+    with settings(warn_only=True):
 
-    run('wget ftp://ftp.remotesensing.org/pub/libtiff/tiff-4.0.3.tar.gz')
-    run('tar xvzf tiff-4.0.3.tar.gz')
-    with cd('tiff-4.0.3'):
-        run('./configure')
-        run('make -j 4')
-        sudo('make install')
+        sudo('apt-get install autoconf automake libtool pkg-config libgtk2.0-dev libxml2-dev libjpeg-dev liblzma-dev liblz-dev zlib1g-dev lzma libmatio-dev libexif-dev libfftw3-dev swig python-dev liborc-0.4-dev libopenjpeg-dev spawn-fcgi libsqlite3-dev')
 
-    sudo('echo "/usr/local/lib/" >> /etc/ld.so.conf.d/local.conf')
-    sudo('ldconfig')
+        run('wget ftp://ftp.remotesensing.org/pub/libtiff/tiff-4.0.3.tar.gz')
+        run('tar xvzf tiff-4.0.3.tar.gz')
+        with cd('tiff-4.0.3'):
+            run('./configure')
+            run('make -j 4')
+            sudo('make install')
+
+        sudo('echo "/usr/local/lib/" >> /etc/ld.so.conf.d/local.conf')
+        sudo('ldconfig')
 
 
 
 def installOpenSlide():
 
-    run('git clone git://github.com/openslide/openslide.git')
-    with cd('openslide'):
-        run('autoreconf -i')
-        run('./configure')
-        run('make -j 4')
-        sudo('make install')
+    with settings(warn_only=True):
+
+        run('git clone git://github.com/openslide/openslide.git')
+        with cd('openslide'):
+            run('autoreconf -i')
+            run('./configure')
+            run('make -j 4')
+            sudo('make install')
 
 
 def installVips():
-    run('wget http://www.vips.ecs.soton.ac.uk/supported/current/vips-7.40.4.tar.gz')
-    run('tar xvzf vips-7.40.4.tar.gz')
-    with cd('vips-7.40.4'):
-        run('./configure')
-        run('make -j 4')
-        sudo('make install')
+    with settings(warn_only=True):
+
+        run('wget http://www.vips.ecs.soton.ac.uk/supported/current/vips-7.40.4.tar.gz')
+        run('tar xvzf vips-7.40.4.tar.gz')
+        with cd('vips-7.40.4'):
+            run('./configure')
+            run('make -j 4')
+            sudo('make install')
 
 
 def installIIP():
-    run('svn checkout svn://svn.code.sf.net/p/iipimage/code/ iipimage-code')
-    with cd('iipimage-code'):
-        with cd('iipsrv'):
-            run('autoreconf -i')
-            run('./configure --with-tiff-includes=/usr/local/include --with-tiff-libraries=/usr/local/lib')
-            run('make')
+
+    with settings(warn_only=True):
+
+        run('svn checkout svn://svn.code.sf.net/p/iipimage/code/ iipimage-code')
+        with cd('iipimage-code'):
+            with cd('iipsrv'):
+                run('autoreconf -i')
+                run('./configure --with-tiff-includes=/usr/local/include --with-tiff-libraries=/usr/local/lib')
+                run('make')
 
 
 
