@@ -318,6 +318,22 @@ def installGirderDepends():
 
 
 
+def installTiff():
+    ''' Experimental tiff build
+    :return:
+    '''
+
+    sudo('apt-get install autoconf automake libtool pkg-config libgtk2.0-dev libxml2-dev libjpeg-dev liblzma-dev liblz-dev zlib1g-dev lzma libmatio-dev libexif-dev libfftw3-dev swig python-dev liborc-0.4-dev libopenjpeg-dev spawn-fcgi libsqlite3-dev')
+
+    run('wget ftp://ftp.remotesensing.org/pub/libtiff/tiff-4.0.3.tar.gz')
+    run('tar xvzf tiff-4.0.3.tar.gz')
+    with cd('tiff-4.0.3'):
+        run('./configure')
+        run('make -j 4')
+        sudo('make install')
+
+    sudo('echo "/usr/local/lib/" >> /etc/ld.so.conf.d/local.conf')
+
 
 
 
