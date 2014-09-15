@@ -27,15 +27,8 @@ def debug():
     verbose = True
     # configure supervisord
 
-
-    path = os.path.join(os.path.abspath(os.curdir), 'config/mongodb.girder.conf')
-    put(path)
-
-    _remote_sudo('mv /etc/mongodb.conf /etc/mongodb.conf.old', verbose)
-    _remote_sudo('mv mongodb.girder.conf /etc/mongodb.conf', verbose)
-
-    sudo('service mongodb stop')
-    sudo('service mongodb start')
+    sudo('mkdir /applications')
+    sudo('chown -R %s:%s /applications' % (saf_user, saf_user))
 
 
 
@@ -300,10 +293,13 @@ def _installMongoDB(verbose=False):
 
 
 
+
+
 def installGirder():
 
     sudo('mkdir -p /assetstore')
     sudo('chown -R %s:%s /assetstore' % (saf_user, saf_user))
+
 
 
 
@@ -525,7 +521,7 @@ def _remote_sudo(cmd, verbose=False):
 
 
 
-def addApp(appname, giturl):
+def addApp(appname, giturl, branch='master'):
     '''
 
     :param appname:
@@ -533,21 +529,21 @@ def addApp(appname, giturl):
     :return:
     '''
 
-    if not exists(os.path.join(default_app_path)):
-        run('mkdir -p %s' % (default_app_path))
+    if not exists(os.path.join(app_path)):
+        run('mkdir -p %s' % (app_path))
 
-    if exists(os.path.join(default_app_path, appname)):
+    if exists(os.path.join(app_path, appname)):
 
         # run git pull
-        with cd('%s/%s'%(default_app_path, appname)):
+        with cd('%s/%s'%(app_path, appname)):
 
-            pullstring = 'git pull origin master'
+            pullstring = 'git pull origin %s' % branch
             run(pullstring)
 
     else:
 
         # run git clone
-        clonestring = 'git clone %s %s/%s' % (giturl, default_app_path, appname)
+        clonestring = 'git clone %s %s/%s -b %s' % (giturl, app_path, appname, branch)
         _remote_cmd(clonestring)
 
 
