@@ -354,6 +354,7 @@ def installOpenSlide():
             run('make -j 4')
             sudo('make install')
 
+        sudo('ldconfig')
 
 def installVips():
     with settings(warn_only=True):
@@ -365,6 +366,7 @@ def installVips():
             run('make -j 4')
             sudo('make install')
 
+        sudo('ldconfig')
 
 def installIIP():
 
@@ -377,6 +379,7 @@ def installIIP():
                 run('./configure --with-tiff-includes=/usr/local/include --with-tiff-libraries=/usr/local/lib')
                 run('make')
 
+        sudo('ldconfig')
 
 
 
