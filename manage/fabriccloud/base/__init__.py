@@ -297,6 +297,8 @@ def _installMongoDB(verbose=False):
 
 def installGirderDepends():
 
+    sudo('apt-get install software-properties-common')
+
     sudo('mkdir -p /assetstore')
     sudo('chown -R %s:%s /assetstore' % (saf_user, saf_user))
 
