@@ -254,8 +254,8 @@ def _installMongoDB(verbose=False):
 
         sudo('apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10')
         sudo('echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | tee -a /etc/apt/sources.list.d/10gen.list')
-        sudo('apt-get update')
-        sudo('apt-get install mongodb-org')
+        sudo('apt-get -y update')
+        sudo('apt-get -y install mongodb-org')
 
         sudo('mkdir -p /mongo/db')
         sudo('mkdir -p /mongo/log')
@@ -301,14 +301,14 @@ def installGirderDepends():
     with settings(warn_only=True):
 
 
-        sudo('sudo apt-get install python-software-properties')
+        sudo('sudo apt-get -y install python-software-properties')
 
         sudo('mkdir -p /assetstore')
         sudo('chown -R %s:%s /assetstore' % (saf_user, saf_user))
 
         sudo('add-apt-repository ppa:chris-lea/node.js')
-        sudo('apt-get update')
-        sudo('apt-get install nodejs')
+        sudo('apt-get -y update')
+        sudo('apt-get -y install nodejs')
         # sudo('npm install -g grunt grunt-cli')
 
         with cd('%s/girder' % (app_path)):
@@ -329,7 +329,7 @@ def installTiff():
 
     with settings(warn_only=True):
 
-        sudo('apt-get install autoconf automake libtool pkg-config libgtk2.0-dev libxml2-dev libjpeg-dev liblzma-dev liblz-dev zlib1g-dev lzma libmatio-dev libexif-dev libfftw3-dev swig python-dev liborc-0.4-dev libopenjpeg-dev spawn-fcgi libsqlite3-dev')
+        sudo('apt-get -y install autoconf automake libtool pkg-config libgtk2.0-dev libxml2-dev libjpeg-dev liblzma-dev liblz-dev zlib1g-dev lzma libmatio-dev libexif-dev libfftw3-dev swig python-dev liborc-0.4-dev libopenjpeg-dev spawn-fcgi libsqlite3-dev')
 
         run('wget ftp://ftp.remotesensing.org/pub/libtiff/tiff-4.0.3.tar.gz')
         run('tar xvzf tiff-4.0.3.tar.gz')
@@ -765,7 +765,7 @@ def _importProvider(provider_name):
 
     else:
         print(yellow('No provider specified, using vagrant as default'))
-        from ..provider  import vagrant as p
+        from ..provider import vagrant as p
 
 
 
