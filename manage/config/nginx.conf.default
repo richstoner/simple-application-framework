@@ -68,28 +68,31 @@ http {
 	# Virtual Host Configs
 	##
 
+	server {
+
+	    listen 80;
+
+	    server_name supervisor.##SAFHOST##;
+
+	    client_max_body_size 100M;
+
+	    location / {
+
+	        proxy_pass http://localhost:9999;
+	        proxy_http_version 1.1;
+	        proxy_set_header Upgrade $http_upgrade;
+	        proxy_set_header Connection "upgrade";
+	        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	        proxy_set_header Host $http_host;
+	        proxy_set_header Access-Control-Allow-Origin *;
+	        proxy_redirect off;
+
+	    }
+
+	}
+
+
 	include /etc/nginx/conf.d/*.conf;
 	include /etc/nginx/sites-enabled/*;
 }
 
-
-#mail {
-#	# See sample authentication script at:
-#	# http://wiki.nginx.org/ImapAuthenticateWithApachePhpScript
-# 
-#	# auth_http localhost/auth.php;
-#	# pop3_capabilities "TOP" "USER";
-#	# imap_capabilities "IMAP4rev1" "UIDPLUS";
-# 
-#	server {
-#		listen     localhost:110;
-#		protocol   pop3;
-#		proxy      on;
-#	}
-# 
-#	server {
-#		listen     localhost:143;
-#		protocol   imap;
-#		proxy      on;
-#	}
-#}
