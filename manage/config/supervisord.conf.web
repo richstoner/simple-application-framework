@@ -21,11 +21,22 @@ serverurl=unix:///var/run//supervisor.sock ; use a unix:// URL  for a unix socke
 [inet_http_server] ; run the webserver as well to control it
 port=*:9999
 
+
+; this is actually just a flask app!
+;[program:watchdog]
+;directory=/home/udauser
+;command=/home/udauser/miniconda/bin/python /home/udauser/safwatchdog.py
+;stderr_logfile = /tmp/watchdog-stderr.log
+;stdout_logfile = /tmp/watchdog-stdout.log
+;autostart=false
+;autorestart=false
+
 ; The [include] section can just contain the "files" setting.  This
 ; setting can list multiple files (separated by whitespace or
 ; newlines).  It can also contain wildcards.  The filenames are
 ; interpreted as relative to this file.  Included files *cannot*
 ; include files themselves.
+
 
 [include]
 files = /etc/supervisor/conf.d/*.conf
