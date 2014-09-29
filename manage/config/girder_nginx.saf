@@ -1,0 +1,48 @@
+server {
+
+    listen 443;
+
+    ssl on;
+    ssl_certificate /etc/ssl/certs/ssl-bundle.crt;
+    ssl_certificate_key /etc/ssl/private/uda2study_com.key;
+    #enables SSLv3/TLSv1, but not SSLv2 which is weak and should no longer be used.
+    ssl_protocols SSLv3 TLSv1;
+    #Disables all weak ciphers
+    ssl_ciphers ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM;
+
+
+    client_max_body_size 100M;
+
+    server_name uda2study.com;
+
+    location /fcgi-bin/iipsrv.fcgi {
+        fastcgi_pass    localhost:9000;
+        fastcgi_param   PATH_INFO $fastcgi_script_name;
+        fastcgi_param   REQUEST_METHOD $request_method;
+        fastcgi_param   QUERY_STRING $query_string;
+        fastcgi_param   CONTENT_TYPE $content_type;
+        fastcgi_param   CONTENT_LENGTH $content_length;
+    }
+
+
+    location / {
+
+        proxy_pass http://localhost:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header Access-Control-Allow-Origin *;
+        proxy_redirect off;
+
+    }
+
+
+}
+
+server {
+    listen         80;
+    server_name uda2study.com;
+    return 301 https://$host$request_uri;
+}

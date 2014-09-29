@@ -1,0 +1,46 @@
+; Main flask application
+
+[group:##SAFAPPNAME##]
+programs=##SAFAPPNAME##app
+
+; The main flask application
+
+[program:##SAFAPPNAME##app]
+directory=##SAFAPPS##/##SAFAPPNAME##
+user=##SAFUSER##
+command=/home/##SAFUSER##/miniconda/bin/python -m girder
+stderr_logfile = /tmp/##SAFAPPNAME##app-stderr.log
+stdout_logfile = /tmp/##SAFAPPNAME##app-stdout.log
+
+[program:##SAFAPPNAME##ipython]
+directory=##SAFAPPS##/##SAFAPPNAME##
+user=##SAFUSER##
+command=/home/##SAFUSER##/miniconda/bin/ipython2 notebook --ip=0.0.0.0 --port=8008
+;command=/home/safuser/miniconda/bin/ipython2 notebook --profile=girderconfig
+stderr_logfile = /tmp/##SAFAPPNAME##ipython-stderr.log
+stdout_logfile = /tmp/##SAFAPPNAME##ipython-stdout.log
+
+
+
+
+[fcgi-program:iipimage]
+command=/home/##SAFUSER##/iipimage-code/iipsrv/trunk/src/iipsrv.fcgi
+socket=tcp://localhost:9000
+process_name=%(program_name)s_%(process_num)02d
+numprocs=5
+priority=999
+autostart=false
+autorestart=unexpected
+startsecs=1
+startretries=3
+exitcodes=0,2
+stopsignal=QUIT
+stopwaitsecs=10
+;user=##SAFUSER##
+redirect_stderr=true
+stdout_logfile = /tmp/iipimage-stdout.log
+;stdout_logfile_maxbytes=1MB
+;stdout_logfile_backups=10
+stderr_logfile=/tmp/iipimage-stderr.log
+;stderr_logfile_maxbytes=1MB
+;stderr_logfile_backups
